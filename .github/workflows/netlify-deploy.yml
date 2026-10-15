@@ -1,0 +1,27 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Prepare the website folder (without git files)
+        run: |
+          mkdir -p site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'README*' ./ site/
+
+      - name: Publish to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: npx --yes netlify-cli@17 deploy --dir=site --prod --message "Commit ${GITHUB_SHA::7}"
