@@ -6371,7 +6371,12 @@ function grantFollow(p) {
   m.follow[p] = Date.now(); saveMeta(m); addCoins(FOLLOW_REWARD); renderCoins(); Sound.sfx('coin'); toast(T('+{n} عملة', { n: FOLLOW_REWARD }) + ' 🎁', 2600); renderFollow(); return true;
 }
 // tap the icon -> the channel opens; when the player comes back to the game the reward is given automatically
-document.querySelectorAll('.socbtn').forEach((a) => a.addEventListener('click', () => { Sound.sfx('click'); FOLLOW[a.dataset.p] = Date.now(); followAway = { p: a.dataset.p, hid: 0 }; }));
+// open the channel ourselves: inside the installed app a plain target="_blank" link often does nothing
+document.querySelectorAll('.socbtn').forEach((a) => a.addEventListener('click', (e) => {
+  e.preventDefault(); Sound.sfx('click'); FOLLOW[a.dataset.p] = Date.now(); followAway = { p: a.dataset.p, hid: 0 };
+  let w = null; try { w = window.open(a.href, '_blank'); } catch (x) { /* blocked */ }
+  if (!w) { try { location.href = a.href; } catch (x) { /* ignore */ } }
+}));
 function followLeft() { if (followAway && !followAway.hid) followAway.hid = Date.now(); }
 function followBack() {
   if (!followAway || !followAway.hid) return; const away = Date.now() - followAway.hid, p = followAway.p;
