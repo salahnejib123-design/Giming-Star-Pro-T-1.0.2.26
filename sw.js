@@ -1,5 +1,5 @@
 /* Giming star pro - service worker: offline-first app shell */
-const CACHE = 'giming-star-pro-1.0.2.33';
+const CACHE = 'giming-star-pro-1.0.2.34';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './favicon-48.png', './offline.html'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {
