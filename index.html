@@ -34,7 +34,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-.brand{position:relative}
+.brand{position:relative;padding-inline-end:84px}
 .topupbtn,.notifround{position:absolute;inset-inline-end:4px;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;padding:0;cursor:pointer;color:#fff;transition:transform .15s ease}
 .topupbtn{top:4px;border:2px solid #ffc83d;background:radial-gradient(circle at 30% 25%,#4a3800,#1d1600 70%);box-shadow:0 0 0 3px rgba(255,200,61,.18),0 10px 24px rgba(255,200,61,.35)}
 .notifround{top:66px;border:1px solid rgba(255,255,255,.45);background:radial-gradient(circle at 30% 25%,#8fb3ff,#4f5fe8 60%,#2c2fa8);box-shadow:0 10px 24px rgba(79,95,232,.4),inset 0 1px 0 rgba(255,255,255,.5)}
@@ -816,14 +816,14 @@ html[data-theme=night] .splash{background-color:#04061a}
     <div class="pav" aria-hidden="true"><svg viewBox="-1 -1 2 2"><circle r=".92" fill="#ffc21a" stroke="#fff" stroke-width=".12"/><circle cx="0" cy="-.2" r=".3" fill="#fff"/><path d="M-.52 .6 Q-.52 .15 0 .15 Q.52 .15 .52 .6Z" fill="#fff"/></svg></div>
     <div class="pinfo">
       <div class="row sb"><b id="whoami">مرحباً</b><span id="lvTitle" class="lvbadge">المستوى 1</span></div>
-      <div class="row sb"><small id="lvXp" class="muted">0 / 40 نقطة خبرة</small><span class="coinpill" id="coinMenu"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg><b class="coinval">0</b></span></div>
+      <div class="row sb"><small id="lvXp" class="muted">0 / 40 نقطة خبرة</small><span class="coinpill" id="coinMenu"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg><b class="coinval">0</b></span><span class="coinpill dia"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><path d="M-.9 -.2 L-.45 -.7 L.45 -.7 L.9 -.2 L0 .85Z" fill="#7ee8ff" stroke="#1f7fb0" stroke-width=".1" stroke-linejoin="round"/><path d="M-.9 -.2 L.9 -.2 M-.45 -.7 L-.2 -.2 L0 .85 L.2 -.2 L.45 -.7" fill="none" stroke="#dff9ff" stroke-width=".08"/></svg><b class="diacount">0</b></span></div>
       <div class="hv" style="--c:var(--gold)"><div class="bar"><b id="lvBar"></b></div></div>
     </div>
     <button class="gearbtn" id="btnSettings" aria-label="الإعدادات"><span class="ic" data-ic="gear"></span></button>
   </div>
   <div class="brand">
     <button class="topupbtn" id="btnTopup" type="button" aria-label="شحن" title="شحن"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="17.6" rx="7.6" ry="2.8" fill="#b97600"/><path d="M4.4 14.3v3.3c0 1.55 3.4 2.8 7.6 2.8s7.6-1.25 7.6-2.8v-3.3c0 1.55-3.4 2.8-7.6 2.8s-7.6-1.25-7.6-2.8z" fill="#e08f00"/><ellipse cx="12" cy="13.8" rx="7.6" ry="2.8" fill="#ffc83d"/><path d="M4.4 10.5v3.3c0 1.55 3.4 2.8 7.6 2.8s7.6-1.25 7.6-2.8v-3.3c0 1.55-3.4 2.8-7.6 2.8s-7.6-1.25-7.6-2.8z" fill="#f5b400"/><ellipse cx="12" cy="10" rx="7.6" ry="2.8" fill="#ffe27a"/><path d="M9.6 9.2h4.8M12 7.6v3.2" stroke="#8a5a00" stroke-width="1.2" stroke-linecap="round"/></svg></button>
-    <button class="notifround" id="btnNotif" type="button" aria-label="الإشعارات" title="الإشعارات"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 22a2.3 2.3 0 0 0 2.3-2.3H9.7A2.3 2.3 0 0 0 12 22zm7-6.2V11c0-3.2-1.7-5.8-4.6-6.5V3.8a2.4 2.4 0 0 0-4.8 0v.7C6.7 5.2 5 7.8 5 11v4.8L3 17.8V19h18v-1.2l-2-2z"/></svg><span class="nbadge" id="notifBadge" hidden>0</span></button>
+    <button class="notifround" id="btnNotif" type="button" aria-label="الإشعارات" title="الإشعارات"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.8h-15z"/><path d="M10 20.8a2.1 2.1 0 0 0 4 0"/></svg><span class="nbadge" id="notifBadge" hidden>0</span></button>
     <img class="logo" alt="" width="96" height="96">
     <h1 class="title name-en">Master Ludo</h1>
   </div>
@@ -1189,7 +1189,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-tips">
     <h2 id="t-tips">نصائح الاحتراف</h2>
     <div id="tipsBody" class="alist"></div>
-    <div class="credit"><span id="verTxt">Master Ludo · الإصدار 1.0.2.41</span><b dir="ltr">Salah.Nejb.650</b></div>
+    <div class="credit"><span id="verTxt">Master Ludo · الإصدار 1.0.2.42</span><b dir="ltr">Salah.Nejb.650</b></div>
     <button class="btn primary" data-close="m-tips">إغلاق</button>
   </div>
 </div>
@@ -1203,7 +1203,7 @@ html[data-theme=night] .splash{background-color:#04061a}
 
 <div class="modal" id="m-shop" hidden>
   <div class="card glass shopcard" role="dialog" aria-modal="true" aria-labelledby="t-shop">
-    <div class="row sb"><h2 id="t-shop" style="text-align:start">المتجر</h2><span class="coinpill" id="coinShop"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg><b class="coinval">0</b></span></div>
+    <div class="row sb"><h2 id="t-shop" style="text-align:start">المتجر</h2><span class="coinpill" id="coinShop"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg><b class="coinval">0</b></span><span class="coinpill dia"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><path d="M-.9 -.2 L-.45 -.7 L.45 -.7 L.9 -.2 L0 .85Z" fill="#7ee8ff" stroke="#1f7fb0" stroke-width=".1" stroke-linejoin="round"/><path d="M-.9 -.2 L.9 -.2 M-.45 -.7 L-.2 -.2 L0 .85 L.2 -.2 L.45 -.7" fill="none" stroke="#dff9ff" stroke-width=".08"/></svg><b class="diacount">0</b></span></div>
     <div id="shopBody" class="shopbody"></div>
     <button class="btn primary" data-close="m-shop">إغلاق</button>
   </div>
@@ -1619,7 +1619,7 @@ function checkInvariants(G) {
 if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newGame, nextActive, occ, canLand, legalMoves, bonusOptions, applyMove, swapTargets, applySwap, hasWon, progressPct, homeCount, engineRoll, engineEnd, botPick, botBonus, botSwap, danger, riskOf, evalPos, cloneG, AIW, checkInvariants };
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
-const APP_VERSION = '1.0.2.41';
+const APP_VERSION = '1.0.2.42';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -1923,6 +1923,7 @@ const Sound = {
 };
 
 /* ===== Wallet, coins, shop catalog and piece skins ===== */
+const DIA_SVG = '<svg viewBox="-1 -1 2 2" width="20" height="20" aria-hidden="true"><path d="M-.9 -.2 L-.45 -.7 L.45 -.7 L.9 -.2 L0 .85Z" fill="#7ee8ff" stroke="#1f7fb0" stroke-width=".1" stroke-linejoin="round"/><path d="M-.9 -.2 L.9 -.2 M-.45 -.7 L-.2 -.2 L0 .85 L.2 -.2 L.45 -.7" fill="none" stroke="#dff9ff" stroke-width=".08"/></svg>';
 const COIN_CAPTURE = 20, COIN_WIN = 20, COIN_LEVEL = 50, HINT_PRICE = 10;
 const COIN_SVG = '<svg viewBox="-1 -1 2 2" width="20" height="20" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg>';
 const SKINS = [
@@ -1940,13 +1941,20 @@ const SKINS = [
   { id: 'bolt', name: 'البرق', price: 500, cat: 'special' },
   { id: 'shield', name: 'الدرع', price: 550, cat: 'special' },
   { id: 'diamond', name: 'الماسة', price: 650, cat: 'special' },
-  { id: 'crown', name: 'التاج', price: 900, cat: 'special' }
+  { id: 'crown', name: 'التاج', price: 900, cat: 'special' },
+  { id: 'moon', name: 'الهلال', price: 60, cat: 'gems', cur: 'dia' },
+  { id: 'flame', name: 'اللهب', price: 90, cat: 'gems', cur: 'dia' },
+  { id: 'clover', name: 'ورقة البرسيم', price: 120, cat: 'gems', cur: 'dia' },
+  { id: 'gem', name: 'الجوهرة', price: 180, cat: 'gems', cur: 'dia' },
+  { id: 'hex', name: 'السداسي الذهبي', price: 250, cat: 'gems', cur: 'dia' }
 ];
 const CATS = [
   { id: 'free', title: 'المعرض المجاني', sub: 'قطع مجانية لجميع اللاعبين' },
   { id: 'chess', title: 'قطع الشطرنج', sub: 'تُشترى بالعملات' },
-  { id: 'special', title: 'قطع مميزة', sub: 'الأغلى والأندر' }
+  { id: 'special', title: 'قطع مميزة', sub: 'الأغلى والأندر' },
+  { id: 'gems', title: 'قطع الألماس', sub: 'تُشترى بالماس فقط' }
 ];
+const curOf = (s) => (s.cur === 'dia' ? 'dia' : 'coins');
 const SKIN_BY = {}; SKINS.forEach((s) => { SKIN_BY[s.id] = s; });
 const FREE_SKINS = SKINS.filter((s) => s.price === 0).map((s) => s.id);
 const HINT_PACKS = [{ n: 5, price: 40 }, { n: 15, price: 100 }, { n: 40, price: 220 }];
@@ -1969,6 +1977,7 @@ let shownCoins = null;
 function renderCoins() {
   const c = getWallet().coins;
   document.querySelectorAll('.coinval').forEach((n) => { n.textContent = c; });
+  document.querySelectorAll('.diacount').forEach((n) => { n.textContent = getWallet().dia || 0; });
   if (shownCoins != null && c > shownCoins) {
     document.querySelectorAll('.coinpill').forEach((p) => { p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump'); });
   }
@@ -1977,11 +1986,11 @@ function renderCoins() {
 function saveWallet(w) { store.set(walletKey(), w); renderCoins(); }
 function addCoins(n) { const w = getWallet(); w.coins += n; saveWallet(w); return w.coins; }
 function buySkin(id) {
-  const s = SKIN_BY[id], w = getWallet();
+  const s = SKIN_BY[id], w = getWallet(), cur = curOf(s);
   if (!s) return { ok: false, need: 0 };
   if (w.owned.includes(id)) return { ok: true, bought: false };
-  if (w.coins < s.price) return { ok: false, need: s.price - w.coins };
-  w.coins -= s.price; w.owned.push(id); saveWallet(w);
+  if (w[cur] < s.price) return { ok: false, need: s.price - w[cur], cur };
+  w[cur] -= s.price; w.owned.push(id); saveWallet(w);
   return { ok: true, bought: true };
 }
 function equipSkin(target, id) {
@@ -2069,6 +2078,26 @@ function drawSkin(parent, id, c) {
       el('rect', { x: -0.035, y: -0.48, width: 0.07, height: 0.2, fill: B }, g);
       el('rect', { x: -0.11, y: -0.42, width: 0.22, height: 0.06, fill: B }, g);
       shine(-0.06, -0.2, 0.04, 0.03); break;
+    case 'moon':
+      el('path', { d: 'M0 -.42 A.42 .42 0 1 0 .36 .24 A.34 .34 0 1 1 0 -.42Z', fill: H }, g);
+      shine(-0.16, -0.18, 0.05, 0.03); break;
+    case 'flame':
+      el('path', { d: 'M0 -.44 C.22 -.18 .34 -.02 .26 .18 C.2 .36 -.2 .36 -.26 .18 C-.32 -.02 -.14 -.12 -.1 -.26 C-.06 -.14 0 -.1 0 -.1 C0 -.24 -.02 -.34 0 -.44Z', fill: H }, g);
+      shine(-0.1, 0.06, 0.04, 0.07); break;
+    case 'clover':
+      [[-0.17, 0], [0.17, 0], [0, -0.17], [0, 0.17]].forEach(([x, y]) => el('circle', { cx: x, cy: y, r: 0.18, fill: H }, g));
+      el('circle', { cx: 0, cy: 0, r: 0.12, fill: B }, g);
+      shine(-0.22, -0.2, 0.05, 0.03); break;
+    case 'gem':
+      el('polygon', { points: '0,-.42 .34,-.1 0,.42 -.34,-.1', fill: H }, g);
+      el('path', { d: 'M-.34 -.1 L.34 -.1 M0 -.42 L-.14 -.1 L0 .42 L.14 -.1 Z', fill: 'none', 'stroke-opacity': 0.45, 'stroke-width': 0.025 }, g);
+      shine(-0.12, -0.26, 0.05, 0.03); break;
+    case 'hex': {
+      const pts = []; for (let k = 0; k < 6; k++) { const a = Math.PI / 6 + k * Math.PI / 3; pts.push((Math.cos(a) * 0.4).toFixed(3) + ',' + (Math.sin(a) * 0.4).toFixed(3)); }
+      el('polygon', { points: pts.join(' '), fill: B }, g);
+      el('circle', { cx: 0, cy: 0, r: 0.22, fill: H }, g);
+      shine(-0.06, -0.1, 0.04, 0.025); break;
+    }
     case 'star': {
       const pts = []; for (let k = 0; k < 10; k++) { const r = k % 2 ? 0.19 : 0.46, a = -Math.PI / 2 + k * Math.PI / 5; pts.push((Math.cos(a) * r).toFixed(3) + ',' + (Math.sin(a) * r + 0.02).toFixed(3)); }
       el('polygon', { points: pts.join(' '), fill: H }, g);
@@ -3099,14 +3128,14 @@ function renderShop() {
       const owned = w.owned.includes(s.id);
       const eq = shopTarget === 'all' ? w.equipped.every((x) => x === s.id) : w.equipped[shopTarget] === s.id;
       const armed = shopPending === s.id;
-      const b = h('button', 'item' + (owned ? ' owned' : '') + (eq ? ' eq' : '') + (armed ? ' arm' : '') + (!owned && w.coins < s.price ? ' poor' : ''));
+      const b = h('button', 'item' + (owned ? ' owned' : '') + (eq ? ' eq' : '') + (armed ? ' arm' : '') + (!owned && w[curOf(s)] < s.price ? ' poor' : ''));
       b.type = 'button'; b.dataset.skin = s.id;
       b.append(skinPreview(s.id, col), h('span', 'nm', T(s.name)));
       const st = h('span', 'st');
       if (eq) st.textContent = T('مُطبّقة ✓');
       else if (owned) st.textContent = T('تطبيق');
       else if (armed) st.textContent = T('اضغط للتأكيد');
-      else { st.insertAdjacentHTML('beforeend', COIN_SVG); st.appendChild(document.createTextNode(String(s.price))); }
+      else { st.insertAdjacentHTML('beforeend', s.cur === 'dia' ? DIA_SVG : COIN_SVG); st.appendChild(document.createTextNode(String(s.price))); }
       b.appendChild(st);
       b.addEventListener('click', () => onShopItem(s.id));
       grid.appendChild(b);
@@ -3160,16 +3189,17 @@ function renderShop() {
   body.scrollTop = top;
 }
 function onShopItem(id) {
-  const w = getWallet(), s = SKIN_BY[id];
+  const w = getWallet(), s = SKIN_BY[id], cur = curOf(s);
+  const tgt = shopTarget === 'all' ? T('كل القطع') : T('القطعة {n}', { n: shopTarget + 1 });
   if (w.owned.includes(id)) {
     equipSkin(shopTarget, id); shopPending = null; Sound.sfx('click');
-    toast(T('تم تطبيق «{s}» على {t}', { s: T(s.name), t: shopTarget === 'all' ? T('كل القطع') : T('القطعة {n}', { n: shopTarget + 1 }) }));
+    toast(T('تم تطبيق «{s}» على {t}', { s: T(s.name), t: tgt }));
     renderShop(); return;
   }
-  if (w.coins < s.price) { shopPending = null; Sound.sfx('err'); toast(T('تحتاج {n} عملة إضافية لشراء «{s}»', { n: s.price - w.coins, s: T(s.name) })); renderShop(); return; }
+  if (w[cur] < s.price) { shopPending = null; Sound.sfx('err'); toast(cur === 'dia' ? T('تحتاج {n} ماسة إضافية لشراء «{s}»', { n: s.price - w[cur], s: T(s.name) }) : T('تحتاج {n} عملة إضافية لشراء «{s}»', { n: s.price - w[cur], s: T(s.name) })); renderShop(); return; }
   if (shopPending !== id) { shopPending = id; Sound.sfx('click'); renderShop(); return; }
   const r = buySkin(id);
-  if (r.ok) { equipSkin(shopTarget, id); Sound.sfx('home'); toast(T('اشتريت «{s}» وطبّقتها على {t}', { s: T(s.name), t: shopTarget === 'all' ? T('كل القطع') : T('القطعة {n}', { n: shopTarget + 1 }) })); }
+  if (r.ok) { equipSkin(shopTarget, id); Sound.sfx('home'); toast(T('اشتريت «{s}» وطبّقتها على {t}', { s: T(s.name), t: tgt })); }
   shopPending = null; renderShop();
 }
 $('btnShop').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); shopTarget = 'all'; shopPending = null; renderShop(); openModal('m-shop'); });
@@ -7202,7 +7232,7 @@ checkUpdate();
 const PAY_NUMBER = '+22236797904';
 const PAY_KEY = 'gs_pay_pending', PAY_WAIT = 120000, PAY_REWARD = 1000, DIA_CODE = 500;
 const PAY_APPS = [
-  { id: 'bankily', name: 'بنكيلي', letter: 'ب', c: '#2f7bff', logo: 'assets/bankily.png', url: 'https://www.bankily.mr/ar/bankily-ar/' }
+  { id: 'bankily', name: 'Bankily', letter: 'B', c: '#2f7bff', pkg: 'mr.bpm.digitalbanking.consumer', url: 'https://www.bankily.mr/ar/bankily-ar/' }
 ];
 // SHA-256 of each code (codes are normalised: upper case, no spaces or dashes). The codes themselves are not in the game.
 const CODE_HASHES = [
@@ -7228,7 +7258,11 @@ const CODE_HASHES = [
   '2c067dea099237f2d2865e1938c05272cd9609c6c18bd79c6aec037911a66b34'
 ];
 // the official Bankily website (it opens in a new tab, or in place when a new tab is blocked)
-function payLink(a) { return a.url; }
+function payLink(a) {
+  const ua = navigator.userAgent || '';
+  if (/Android/i.test(ua) && a.pkg) return 'intent://#Intent;package=' + a.pkg + ';action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;S.browser_fallback_url=' + encodeURIComponent(a.url) + ';end';
+  return a.url;
+}
 const NOTIF_URL = 'notifications.json';
 function setPayPending(id) { try { localStorage.setItem(PAY_KEY, JSON.stringify({ id, t: Date.now() })); } catch (e) { /* ignore */ } }
 // the player came back: a visit of two minutes or more is rewarded once per app, a short visit is not
@@ -7253,6 +7287,7 @@ function renderPayApps() {
     b.addEventListener('click', () => {
       Sound.sfx('click'); setPayPending(a.id);
       const link = payLink(a);
+      if (link.indexOf('intent://') === 0) { location.href = link; return; }
       let w = null; try { w = window.open(link, '_blank'); } catch (e) { /* blocked */ }
       if (!w) location.href = link;
     });
@@ -7326,6 +7361,8 @@ Object.assign(I18N.en,{"شحن": "Top up", "شحن اللعبة": "Top up the ga
 Object.assign(I18N.fr,{"شحن": "Recharger", "شحن اللعبة": "Recharger le jeu", "كل شحن يمنحك 500 ماسة تستعملها في المتجر.": "Chaque recharge vous donne 500 diamants à utiliser dans la boutique.", "رقم الشحن": "Numéro de recharge", "نسخ الرقم": "Copier le numéro", "تم نسخ الرقم": "Numéro copié", "ادفع عبر أحد التطبيقات": "Payez avec l’une des applications", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Touchez une application : si elle est installée elle s’ouvre directement, sinon elle vous mène à sa page de téléchargement. Une fois la recharge faite, revenez au jeu.", "أدخل رمز الشحن": "Saisissez votre code de recharge", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "Après la recharge, vous recevez un code de l’équipe du jeu. Saisissez-le ici pour obtenir les diamants.", "تفعيل": "Activer", "رصيدك من الماس:": "Vos diamants :", "ماسة": "diamants", "طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Rechargez via l’application Bankily au numéro", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "Après la recharge, vous recevez un code de l’équipe. Saisissez-le dans la fenêtre « Recharger le jeu » pour obtenir 500 diamants.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiter une application de recharge rapporte 1000 pièces une seule fois par application, si vous revenez après au moins deux minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Les diamants viennent uniquement des recharges, jamais des pièces ou des visites.", "+{n} عملة لزيارتك {app}": "+{n} pièces pour votre visite de {app}", "مكافأة {n} عملة مرة واحدة": "Récompense unique : {n} pièces", "تم استلام المكافأة ✓": "Récompense reçue ✓", "الرمز غير صحيح أو سبق استعماله": "Code invalide ou déjà utilisé", "+{n} ماسة": "+{n} diamants", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "Ceci fonctionne uniquement sur le lien sécurisé (https)", "أدخل الرمز أولاً": "Saisissez d’abord le code", "{n} تلميحات · {p} ماسة": "{n} indices · {p} diamants", "تلميحات بالماس": "Indices contre diamants", "تُشترى بالماس فقط": "Achetés uniquement avec des diamants", "لا تكفي الماس لهذا الشراء": "Pas assez de diamants pour cet achat", "تم الشراء": "Acheté", "إغلاق": "Fermer", "أدخل": "Saisir"});
 Object.assign(I18N.en,{"الإشعارات": "Notifications", "لا توجد إشعارات حالياً": "No notifications right now", "نسخ": "Copy", "تم النسخ": "Copied", "ادفع عبر تطبيق بنكيلي": "Pay with the Bankily app", "اضغط على شعار بنكيلي لتفتح موقعها الرسمي. بعد أن تكمل الشحن ارجع إلى اللعبة، وستصلك مكافأة الزيارة تلقائياً.": "Tap the Bankily logo to open its official website. After you finish the top-up, come back to the game and your visit reward arrives automatically."});
 Object.assign(I18N.fr,{"الإشعارات": "Notifications", "لا توجد إشعارات حالياً": "Aucune notification pour le moment", "نسخ": "Copier", "تم النسخ": "Copié", "ادفع عبر تطبيق بنكيلي": "Payez avec l’application Bankily", "اضغط على شعار بنكيلي لتفتح موقعها الرسمي. بعد أن تكمل الشحن ارجع إلى اللعبة، وستصلك مكافأة الزيارة تلقائياً.": "Touchez le logo Bankily pour ouvrir son site officiel. Une fois la recharge faite, revenez au jeu : votre récompense de visite arrive automatiquement."});
+Object.assign(I18N.en,{"قطع الألماس": "Diamond pieces", "الهلال": "Crescent", "اللهب": "Flame", "ورقة البرسيم": "Clover", "الجوهرة": "Gem", "السداسي الذهبي": "Golden hexagon", "تحتاج {n} ماسة إضافية لشراء «{s}»": "You need {n} more diamonds to buy “{s}”", "تحتاج {n} عملة إضافية لشراء «{s}»": "You need {n} more coins to buy “{s}”"});
+Object.assign(I18N.fr,{"قطع الألماس": "Pièces en diamant", "الهلال": "Croissant", "اللهب": "Flamme", "ورقة البرسيم": "Trèfle", "الجوهرة": "Gemme", "السداسي الذهبي": "Hexagone doré", "تحتاج {n} ماسة إضافية لشراء «{s}»": "Il vous manque {n} diamants pour acheter « {s} »", "تحتاج {n} عملة إضافية لشراء «{s}»": "Il vous manque {n} pièces pour acheter « {s} »"});
 /* block the browser's own zoom and long-press menus, so the game behaves like an installed app */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach((ev) => document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
 // two or more fingers never zoom the page: the gesture is cancelled as soon as it starts
