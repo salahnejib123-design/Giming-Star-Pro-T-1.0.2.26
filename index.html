@@ -34,6 +34,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+.agbody,.agbody *,.agfit,.xocell{touch-action:manipulation}
 .brand{position:relative}
 .topupbtn,.notifround{position:absolute;inset-inline-end:4px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;padding:0;cursor:pointer;color:#fff;transition:transform .15s ease}
 .topupbtn{top:4px;border:2px solid #ffc83d;background:radial-gradient(circle at 30% 25%,#4a3800,#1d1600 70%);box-shadow:0 0 0 3px rgba(255,200,61,.18),0 10px 24px rgba(255,200,61,.35)}
@@ -1105,6 +1106,16 @@ html[data-theme=night] .splash{background-color:#04061a}
   </div>
 </div>
 
+<div class="modal" id="m-visitcode" hidden>
+  <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-vc" style="display:grid;gap:12px;text-align:center">
+    <h2 id="t-vc" style="margin:0">رمز مكافأة الزيارة</h2>
+    <p id="vcText" class="muted" style="margin:0;line-height:1.7"></p>
+    <div class="codebox" style="justify-content:center"><code id="vcCode" style="flex:0 1 auto;font-size:1.35rem"></code></div>
+    <button class="btn primary" id="vcCopy" type="button">نسخ الرمز</button>
+    <button class="btn" data-close="m-visitcode" type="button">لاحقاً</button>
+  </div>
+</div>
+
 <div class="modal" id="m-topup" hidden>
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-topup" style="display:grid;gap:12px;max-height:88dvh;overflow:auto">
     <h2 id="t-topup" style="margin:0;text-align:center">شحن اللعبة</h2>
@@ -1182,7 +1193,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-tips">
     <h2 id="t-tips">نصائح الاحتراف</h2>
     <div id="tipsBody" class="alist"></div>
-    <div class="credit"><span id="verTxt">Master Ludo · <span>الإصدار</span> <span dir="ltr">1.0.2.48</span></span><b dir="ltr">Salah.Nejb.650</b></div>
+    <div class="credit"><span id="verTxt">Master Ludo · <span>الإصدار</span> <span dir="ltr">1.0.2.49</span></span><b dir="ltr">Salah.Nejb.650</b></div>
     <button class="btn primary" data-close="m-tips">إغلاق</button>
   </div>
 </div>
@@ -1613,7 +1624,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.2.48';
+const APP_VERSION = '1.0.2.49';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -1633,6 +1644,7 @@ const saveSettings = () => store.set('gs_settings', settings);
 /* v1.9: one-tap play, no confirmation questions */
 if ((settings.ver || 0) < 3) { settings.confirm = false; settings.autoMove = true; settings.ver = 3; saveSettings(); }
 if ((settings.themeV || 0) < 4) { settings.theme = 'night'; settings.themeV = 4; saveSettings(); }   // dark is the default from 1.0.2.46
+if ((settings.musicV || 0) < 1) { settings.musicVol = Math.max(settings.musicVol || 0, 0.6); settings.musicV = 1; saveSettings(); }   // 1.0.2.49: music was too quiet
 let paused = false;
 const scaleMs = (ms) => ms * TIMESCALE * (settings.speed === 'fast' ? 0.55 : 1);
 function later(fn, ms) { setTimeout(function chk() { if (paused) { setTimeout(chk, 150); return; } fn(); }, scaleMs(ms)); }
@@ -1692,14 +1704,16 @@ function T(s, v) {
 /* static HTML: remember the Arabic original of every text node / label once, then re-apply on language change */
 const STATIC_ATTRS = ['aria-label', 'placeholder', 'title', 'alt'];
 const staticNodes = [];
+const capText = new WeakSet(), capAttr = new WeakMap();
 function i18nCapture(root) {
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   let n; while ((n = w.nextNode())) {
-    const t = n.nodeValue.trim(); if (!t || !AR_RE.test(t)) continue;
+    const t = n.nodeValue.trim(); if (!t || !AR_RE.test(t) || capText.has(n)) continue;
     const p = n.parentNode && n.parentNode.nodeName; if (p === 'SCRIPT' || p === 'STYLE') continue;
+    capText.add(n);
     staticNodes.push({ n, ar: t, lead: n.nodeValue.match(/^\s*/)[0], trail: n.nodeValue.match(/\s*$/)[0] });
   }
-  root.querySelectorAll('*').forEach((el) => STATIC_ATTRS.forEach((a) => { const v = el.getAttribute(a); if (v && AR_RE.test(v)) staticNodes.push({ el, a, ar: v }); }));
+  root.querySelectorAll('*').forEach((el) => { const done = capAttr.get(el) || new Set(); capAttr.set(el, done); STATIC_ATTRS.forEach((a) => { const v = el.getAttribute(a); if (v && AR_RE.test(v) && !done.has(a)) { done.add(a); staticNodes.push({ el, a, ar: v }); } }); });
 }
 function i18nApplyStatic() {
   staticNodes.forEach((x) => { if (x.n) x.n.nodeValue = x.lead + T(x.ar) + x.trail; else x.el.setAttribute(x.a, T(x.ar)); });
@@ -1760,7 +1774,7 @@ const Sound = {
   },
   applyVolumes() {
     if (!this.ctx) return;
-    this.mg.gain.value = settings.music ? settings.musicVol * 0.7 : 0;
+    this.mg.gain.value = settings.music ? settings.musicVol * 1.0 : 0;
     this.sg.gain.value = settings.sfx ? settings.sfxVol * 3.2 : 0;   // small sounds: about +6.5 dB louder than before
     // the soft ambient echo of the music: normal balance at the usual volume, and it comes forward (about +8..10 dB) as the music is turned down
     if (this.mrev) this.mrev.gain.value = 0.28 + (1 - Math.min(1, settings.musicVol / 0.4)) * 0.9;
@@ -3194,7 +3208,7 @@ function onShopItem(id) {
   if (w[cur] < s.price) { shopPending = null; Sound.sfx('err'); toast(cur === 'dia' ? T('تحتاج {n} ماسة إضافية لشراء «{s}»', { n: s.price - w[cur], s: T(s.name) }) : T('تحتاج {n} عملة إضافية لشراء «{s}»', { n: s.price - w[cur], s: T(s.name) })); renderShop(); return; }
   if (shopPending !== id) { shopPending = id; Sound.sfx('click'); renderShop(); return; }
   const r = buySkin(id);
-  if (r.ok) { equipSkin(shopTarget, id); Sound.sfx('home'); toast(T('اشتريت «{s}» وطبّقتها على {t}', { s: T(s.name), t: tgt })); }
+  if (r.ok) { equipSkin(shopTarget, id); Sound.sfx('home'); toast(T('اشتريت «{s}» وطبّقتها على {t}', { s: T(s.name), t: tgt })); if (r.bought) inboxAdd('تم الشراء', 'اشتريت «{s}» من المتجر', { s: s.name }); }
   shopPending = null; renderShop();
 }
 $('btnShop').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); shopTarget = 'all'; shopPending = null; renderShop(); openModal('m-shop'); });
@@ -7144,7 +7158,7 @@ document.addEventListener('pointerdown', () => { if (settings.fsAuto === true &&
 
 /* ---------- language switching (live) ---------- */
 function relang() {
-  applyLangDir(); i18nApplyStatic(); renderVer();
+  applyLangDir(); if (LANG === 'ar') i18nCapture($('app')); i18nApplyStatic(); renderVer();
   ['agBack', 'agHubBack'].forEach((i) => { $(i).textContent = LANGS[LANG].dir === 'rtl' ? '›' : '‹'; });
   document.querySelectorAll('[data-setlang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.setlang === LANG)));
   const run = (f) => { try { f(); } catch (e) { /* screen not ready */ } };
@@ -7296,24 +7310,28 @@ function setPayPending(id) { try { localStorage.setItem(PAY_KEY, JSON.stringify(
 // the player came back: a visit of two minutes or more is rewarded once per app, a short visit is not
 function checkPayReturn() {
   let q = null; try { q = JSON.parse(localStorage.getItem(PAY_KEY) || 'null'); localStorage.removeItem(PAY_KEY); } catch (e) { q = null; }
-  if (!q || !q.id || Date.now() - q.t < PAY_WAIT) return;
-  const pre = getMeta(); if ((pre.pay || {})[q.id]) return;
+  if (!q || !q.id) return;
+  if (Date.now() - q.t < PAY_WAIT) { toast(T('ابقَ في تطبيق بنكيلي دقيقتين على الأقل لتحصل على المكافأة'), 3200); return; }
+  const pre = getMeta(); if ((pre.pay || {})[q.id]) { toast(T('تم استلام مكافأة هذا التطبيق من قبل'), 2400); return; }
   const a = PAY_APPS.find((x) => x.id === q.id), name = a ? a.name : '';
   const title = 'رمز مكافأة الزيارة', text = 'شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.';
   sbRpc('get_visit_code', { p_device: devId(), p_app: q.id }).then((code) => {
     if (!code) throw new Error('no code');
     const m = getMeta(); m.pay = m.pay || {}; m.notes = m.notes || [];
     if (m.pay[q.id]) return;
+    const shown = fmtCode(code);
     m.pay[q.id] = Date.now();
-    m.notes = [{ id: 'v-' + q.id, title, text, vars: { app: name, n: DIA_CODE }, code: fmtCode(code), used: false, t: Date.now() }].concat(m.notes).slice(0, 30);
+    m.notes = [{ id: 'v-' + q.id, title, text, vars: { app: name, n: DIA_CODE }, code: shown, used: false, t: Date.now() }].concat(m.notes).slice(0, 30);
     saveMeta(m); addCoins(PAY_REWARD); renderCoins(); Sound.sfx('coin');
-    toast(T('+{n} عملة لزيارتك {app}', { n: PAY_REWARD, app: T(name) }), 2800);
     sysNotify(T(title), T(text, { app: T(name), n: DIA_CODE }), 'pay-' + q.id);
     renderPayApps(); refreshNotifBadge();
+    $('vcText').textContent = T(text, { app: T(name), n: DIA_CODE });
+    $('vcCode').textContent = shown;
+    openModal('m-visitcode');
   }).catch(() => {
-    // no connection: keep the visit and try again the next time the player comes back
+    // no connection, or the server is not ready yet: keep the visit and try again the next time the player comes back
     try { localStorage.setItem(PAY_KEY, JSON.stringify(q)); } catch (e) { /* ignore */ }
-    toast(T('تعذّر الاتصال الآن، سنحاول مرة أخرى عند عودتك للعبة'), 2600);
+    toast(T('تعذّر الاتصال الآن، سنحاول مرة أخرى عند عودتك للعبة'), 2800);
   });
 }
 function renderPayApps() {
@@ -7349,7 +7367,7 @@ async function redeemCode(raw) {
   try { n = await sbRpc('redeem_visit_code', { p_code: code, p_device: devId() }); } catch (e) { online = false; }
   if (n > 0) {
     m.notes = (m.notes || []).map((x) => (x.code && normCode(x.code) === code ? Object.assign({}, x, { used: true }) : x));
-    saveMeta(m); addDia(n); say(T('+{n} ماسة', { n }), true); Sound.sfx('coin');
+    saveMeta(m); addDia(n); inboxAdd('هدية الشحن', '+{n} ماسة', { n }); say(T('+{n} ماسة', { n }), true); Sound.sfx('coin');
     const ci = $('codeIn'); if (ci) ci.value = ''; refreshNotifBadge(); return;
   }
   if (!online) { say(T('يلزم الاتصال بالإنترنت لتفعيل الرمز'), false); Sound.sfx('err'); return; }
@@ -7357,7 +7375,7 @@ async function redeemCode(raw) {
   const hx = await sha256hex(code);
   if (CODE_HASHES.indexOf(hx) < 0 || m.codes[hx]) { say(T('الرمز غير صحيح أو سبق استعماله'), false); Sound.sfx('err'); return; }
   m.codes[hx] = Date.now(); saveMeta(m);
-  addDia(DIA_CODE); say(T('+{n} ماسة', { n: DIA_CODE }), true); Sound.sfx('coin');
+  addDia(DIA_CODE); inboxAdd('هدية الشحن', '+{n} ماسة', { n: DIA_CODE }); say(T('+{n} ماسة', { n: DIA_CODE }), true); Sound.sfx('coin');
   const ci = $('codeIn'); if (ci) ci.value = '';
 }
 function normCode(x) { return String(x || '').trim().toUpperCase().replace(/[\s-]/g, ''); }
@@ -7399,6 +7417,10 @@ async function loadNotifs() {
   try { const r = await fetch(NOTIF_URL + '?v=' + APP_VERSION, { cache: 'no-store' }); if (!r.ok) return []; const d = await r.json(); return Array.isArray(d.items) ? d.items : []; }
   catch (e) { return []; }
 }
+// in-game inbox: rewards and purchases are listed in the notifications window (no code, just news)
+function inboxAdd(title, text, vars) {
+  try { const m = getMeta(); m.notes = [{ title, text, vars: vars || {}, unread: true, at: Date.now() }].concat(m.notes || []).slice(0, 40); saveMeta(m); refreshNotifBadge(); } catch (e) { /* ignore */ }
+}
 function renderNotifs(remote) {
   const box = $('notifList'); box.innerHTML = '';
   const m = getMeta(); const local = (m.notes || []);
@@ -7423,18 +7445,29 @@ function renderNotifs(remote) {
 async function openNotif() {
   Sound.init(); Sound.sfx('click');
   const remote = await loadNotifs(); renderNotifs(remote); renderNotifPerm(); openModal('m-notif');
+  const m = getMeta(); if ((m.notes || []).some((n) => n.unread)) { m.notes = m.notes.map((n) => Object.assign({}, n, { unread: false })); saveMeta(m); }
+  refreshNotifBadge();
 }
 async function refreshNotifBadge() {
   const remote = await loadNotifs(); const b = $('notifBadge'); if (!b) return;
-  const m = getMeta(); const open = (m.notes || []).filter((n) => n.code && !n.used).length + remote.length;
+  const m = getMeta(); const open = (m.notes || []).filter((n) => (n.code && !n.used) || n.unread).length + remote.length;
   b.hidden = !open; b.textContent = String(open);
 }
 $('btnNotif').addEventListener('click', openNotif);
 $('btnNotifPerm').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); notifAsk(); });
 refreshNotifBadge();
 $('codeGo').addEventListener('click', () => { redeemCode($('codeIn').value); });
+// a complete code (12 digits) is checked as soon as it is typed or pasted
+let autoRedeeming = false;
+$('codeIn').addEventListener('input', () => {
+  if (autoRedeeming || normCode($('codeIn').value).length !== 12) return;
+  autoRedeeming = true; redeemCode($('codeIn').value).finally(() => { autoRedeeming = false; });
+});
+$('vcCopy').addEventListener('click', () => { copyText($('vcCode').textContent, () => { $('vcCopy').textContent = T('تم النسخ'); setTimeout(() => { $('vcCopy').textContent = T('نسخ الرمز'); }, 1600); }); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkPayReturn(); });
 window.addEventListener('pageshow', checkPayReturn);
+// the game may reload when the player comes back from the bank app: check the visit on every start too
+window.addEventListener('load', () => setTimeout(checkPayReturn, 700));
 
 Object.assign(I18N.en,{"شحن": "Top up", "شحن اللعبة": "Top up the game", "كل شحن يمنحك 500 ماسة تستعملها في المتجر.": "Each top-up gives you 500 diamonds to use in the shop.", "رقم الشحن": "Top-up number", "نسخ الرقم": "Copy number", "تم نسخ الرقم": "Number copied", "ادفع عبر أحد التطبيقات": "Pay with one of the apps", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Tap an app: if it is installed it opens directly, otherwise it takes you to its page to download it. After you finish the top-up, come back to the game.", "أدخل رمز الشحن": "Enter your top-up code", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "After your top-up you receive a code from the game team. Enter it here to get the diamonds.", "تفعيل": "Activate", "رصيدك من الماس:": "Your diamonds:", "ماسة": "diamonds", "طريقة الشحن": "How to top up", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Top up via the Bankily app to the number", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "After your top-up you receive a code from the game team. Enter it in the “Top up the game” window to get 500 diamonds.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiting a top-up app earns 1000 coins once per app, when you return after at least two minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Diamonds come only from top-ups, never from coins or visits.", "+{n} عملة لزيارتك {app}": "+{n} coins for visiting {app}", "مكافأة {n} عملة مرة واحدة": "One-time reward: {n} coins", "تم استلام المكافأة ✓": "Reward received ✓", "الرمز غير صحيح أو سبق استعماله": "Invalid code or already used", "+{n} ماسة": "+{n} diamonds", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "This works only on the secure (https) link", "أدخل الرمز أولاً": "Enter the code first", "{n} تلميحات · {p} ماسة": "{n} hints · {p} diamonds", "تلميحات بالماس": "Hints for diamonds", "تُشترى بالماس فقط": "Bought with diamonds only", "لا تكفي الماس لهذا الشراء": "Not enough diamonds for this purchase", "تم الشراء": "Purchased", "إغلاق": "Close", "أدخل": "Enter"});
 Object.assign(I18N.fr,{"شحن": "Recharger", "شحن اللعبة": "Recharger le jeu", "كل شحن يمنحك 500 ماسة تستعملها في المتجر.": "Chaque recharge vous donne 500 diamants à utiliser dans la boutique.", "رقم الشحن": "Numéro de recharge", "نسخ الرقم": "Copier le numéro", "تم نسخ الرقم": "Numéro copié", "ادفع عبر أحد التطبيقات": "Payez avec l’une des applications", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Touchez une application : si elle est installée elle s’ouvre directement, sinon elle vous mène à sa page de téléchargement. Une fois la recharge faite, revenez au jeu.", "أدخل رمز الشحن": "Saisissez votre code de recharge", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "Après la recharge, vous recevez un code de l’équipe du jeu. Saisissez-le ici pour obtenir les diamants.", "تفعيل": "Activer", "رصيدك من الماس:": "Vos diamants :", "ماسة": "diamants", "طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Rechargez via l’application Bankily au numéro", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "Après la recharge, vous recevez un code de l’équipe. Saisissez-le dans la fenêtre « Recharger le jeu » pour obtenir 500 diamants.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiter une application de recharge rapporte 1000 pièces une seule fois par application, si vous revenez après au moins deux minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Les diamants viennent uniquement des recharges, jamais des pièces ou des visites.", "+{n} عملة لزيارتك {app}": "+{n} pièces pour votre visite de {app}", "مكافأة {n} عملة مرة واحدة": "Récompense unique : {n} pièces", "تم استلام المكافأة ✓": "Récompense reçue ✓", "الرمز غير صحيح أو سبق استعماله": "Code invalide ou déjà utilisé", "+{n} ماسة": "+{n} diamants", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "Ceci fonctionne uniquement sur le lien sécurisé (https)", "أدخل الرمز أولاً": "Saisissez d’abord le code", "{n} تلميحات · {p} ماسة": "{n} indices · {p} diamants", "تلميحات بالماس": "Indices contre diamants", "تُشترى بالماس فقط": "Achetés uniquement avec des diamants", "لا تكفي الماس لهذا الشراء": "Pas assez de diamants pour cet achat", "تم الشراء": "Acheté", "إغلاق": "Fermer", "أدخل": "Saisir"});
@@ -7450,6 +7483,8 @@ Object.assign(I18N.en,{"الإصدار": "Version", "كل شحن يمنحك": "E
 Object.assign(I18N.fr,{"الإصدار": "Version", "كل شحن يمنحك": "Chaque recharge vous donne", "تستعملها في المتجر.": "à utiliser dans la boutique.", "500 ماسة": "500 diamants", "ترقية إلى قطعة جديدة، أو إحياء قطعة من قطعك المأكولة": "Promouvoir vers une nouvelle pièce, ou ressusciter une de vos pièces capturées", "معلومات المطور والفريق": "Infos du développeur et de l’équipe", "المطور": "Développeur", "صنع اللعبة من الفكرة إلى التنفيذ، وأضاف إليها ميزات كثيرة: قواعد النرد والشطرنج كاملة، وصالة ألعاب بعدة ألعاب مصغّرة، ونظام إنجازات ومهام يومية، وسجلاً للمباريات، ومظهراً زجاجياً داكناً، وتثبيتاً على الهاتف ولعباً بدون إنترنت. ويواصل تطويرها باستمرار لتبقى تجربة ممتعة لكل اللاعبين.": "Créé de l’idée à la réalisation, avec de nombreuses fonctions : règles complètes du jeu de dés et des échecs, une salle d’arcade avec plusieurs mini-jeux, succès et tâches quotidiennes, historique des parties, un look verre sombre, installation sur téléphone et jeu hors ligne. Le développement se poursuit pour que le jeu reste agréable à tous les joueurs.", "فريق التحديثات": "Équipe des mises à jour", "يتولى نشر الإصدارات الجديدة وتجهيزها للاعبين، ومتابعة الأخطاء وتصحيحها، وضمان وصول كل تحديث في وقته وبسلاسة، حتى يبقى التطبيق دائماً بأحدث نسخة.": "Publie et prépare les nouvelles versions pour les joueurs, suit et corrige les bogues, et veille à ce que chaque mise à jour arrive à temps et sans accroc, pour que l’application reste toujours à jour.", "شكراً لكل من يلعب ويشارك اللعبة.": "Merci à tous ceux qui jouent et partagent le jeu."});
 Object.assign(I18N.en,{"يلزم الاتصال بالإنترنت لتفعيل الرمز": "An internet connection is needed to activate the code", "تعذّر الاتصال الآن، سنحاول مرة أخرى عند عودتك للعبة": "No connection right now. We will try again when you come back to the game"});
 Object.assign(I18N.fr,{"يلزم الاتصال بالإنترنت لتفعيل الرمز": "Une connexion internet est nécessaire pour activer le code", "تعذّر الاتصال الآن، سنحاول مرة أخرى عند عودتك للعبة": "Connexion impossible pour le moment. Nous réessaierons à votre retour dans le jeu"});
+Object.assign(I18N.en,{"ابقَ في تطبيق بنكيلي دقيقتين على الأقل لتحصل على المكافأة": "Stay in the Bankily app for at least two minutes to get the reward", "تم استلام مكافأة هذا التطبيق من قبل": "This app's reward was already received", "نسخ الرمز": "Copy code"});
+Object.assign(I18N.fr,{"ابقَ في تطبيق بنكيلي دقيقتين على الأقل لتحصل على المكافأة": "Restez au moins deux minutes dans l’application Bankily pour obtenir la récompense", "تم استلام مكافأة هذا التطبيق من قبل": "La récompense de cette application a déjà été reçue", "نسخ الرمز": "Copier le code"});
 /* block the browser's own zoom and long-press menus, so the game behaves like an installed app */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach((ev) => document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
 // two or more fingers never zoom the page: the gesture is cancelled as soon as it starts
