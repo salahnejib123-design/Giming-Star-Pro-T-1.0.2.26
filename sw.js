@@ -1,5 +1,7 @@
 /* Master Ludo - service worker: offline-first app shell */
-const CACHE = 'master-ludo-1.0.2.46';
+// OneSignal (phone notifications). If the file cannot load, the game keeps working.
+try { importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js'); } catch (e) { /* offline or blocked */ }
+const CACHE = 'master-ludo-1.0.2.47';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './favicon-48.png', './offline.html'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {
@@ -27,9 +29,4 @@ self.addEventListener('notificationclick', (e) => {
     for (const c of list) { if ('focus' in c) return c.focus(); }
     return self.clients.openWindow('./');
   }));
-});
-// a message pushed from a server (when one is connected) shows as a phone notification
-self.addEventListener('push', (e) => {
-  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (err) { d = { title: 'Master Ludo', body: e.data ? e.data.text() : '' }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'Master Ludo', { body: d.body || '', icon: 'icon-192.png', badge: 'icon-192.png', tag: d.tag || 'ml' }));
 });
