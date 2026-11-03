@@ -1100,6 +1100,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-notif" style="display:grid;gap:12px;max-height:88dvh;overflow:auto">
     <h2 id="t-notif" style="margin:0;text-align:center">الإشعارات</h2>
     <div id="notifList" style="display:grid;gap:10px"></div>
+    <button class="btn primary" id="btnNotifPerm" type="button" style="width:100%">تفعيل إشعارات الهاتف</button>
     <button class="btn" type="button" data-close="m-notif" style="width:100%">إغلاق</button>
   </div>
 </div>
@@ -1181,7 +1182,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-tips">
     <h2 id="t-tips">نصائح الاحتراف</h2>
     <div id="tipsBody" class="alist"></div>
-    <div class="credit"><span id="verTxt">Master Ludo · الإصدار 1.0.2.44</span><b dir="ltr">Salah.Nejb.650</b></div>
+    <div class="credit"><span id="verTxt">Master Ludo · <span>الإصدار</span> <span dir="ltr">1.0.2.45</span></span><b dir="ltr">Salah.Nejb.650</b></div>
     <button class="btn primary" data-close="m-tips">إغلاق</button>
   </div>
 </div>
@@ -1611,7 +1612,7 @@ function checkInvariants(G) {
 if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newGame, nextActive, occ, canLand, legalMoves, bonusOptions, applyMove, swapTargets, applySwap, hasWon, progressPct, homeCount, engineRoll, engineEnd, botPick, botBonus, botSwap, danger, riskOf, evalPos, cloneG, AIW, checkInvariants };
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
-const APP_VERSION = '1.0.2.44';
+const APP_VERSION = '1.0.2.45';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -6679,6 +6680,7 @@ const displayName = () => { const s = session(); return s ? (s.guest ? T('ضيف
 function show(id) {
   ['s-login', 's-menu', 's-game', 's-chess', 's-arcade', 's-play'].forEach((s) => { $(s).hidden = s !== id; });
   window.scrollTo(0, 0);
+  if (id === 's-menu') setTimeout(ensureUpdate, 500);
 }
 function openModal(id) { $(id).hidden = false; }
 function closeModal(id) {
@@ -7123,10 +7125,11 @@ $('btnFsBack').addEventListener('click', () => {
 });
 function enterApp() {
   if (FS.entered) return;
-  Sound.init(); Sound.sfx('click');
+  Sound.init(); Sound.sfx('click'); notifAsk();
   if (settings.fsAuto === true) enterFS();       // must start inside the user gesture
   FS.entered = true; $('splash').hidden = true; updateGate();
   setTimeout(ensureUpdate, 450); setTimeout(tryFollowGrant, 700);
+  setTimeout(() => { try { if (getWallet().lastDaily !== dayStr(new Date())) sysNotify(T('المكافأة اليومية'), T('خذ مكافأتك اليوم'), 'daily'); } catch (e) { /* ignore */ } }, 2500);
   if (session()) afterLogin(); else show('s-login');
 }
 $('splash').addEventListener('click', enterApp);   // any tap on the entry screen enters + goes full screen
@@ -7139,7 +7142,7 @@ document.addEventListener('pointerdown', () => { if (settings.fsAuto === true &&
 
 /* ---------- language switching (live) ---------- */
 function relang() {
-  applyLangDir(); i18nApplyStatic();
+  applyLangDir(); i18nApplyStatic(); renderVer();
   ['agBack', 'agHubBack'].forEach((i) => { $(i).textContent = LANGS[LANG].dir === 'rtl' ? '›' : '‹'; });
   document.querySelectorAll('[data-setlang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.setlang === LANG)));
   const run = (f) => { try { f(); } catch (e) { /* screen not ready */ } };
@@ -7172,12 +7175,14 @@ const UPD = { key: 'gs_seen_version', pending: null };
 function updSeen() { try { return localStorage.getItem(UPD.key); } catch (e) { return null; } }
 function updMark(v) { try { localStorage.setItem(UPD.key, v); } catch (e) { /* private mode: ignore */ } }
 function hasOldData() { try { for (let i = 0; i < localStorage.length; i++) { const k = String(localStorage.key(i)); if (k.indexOf('gs_') === 0 && k !== 'gs_settings' && k !== UPD.key) return true; } } catch (e) { /* ignore */ } return false; }   // a player with saved coins, scores or matches
+var SEEN_VER = null;
+function renderVer() { const vt = $('verTxt'); if (vt) vt.textContent = 'Master Ludo · ' + T('الإصدار') + ' ' + (SEEN_VER || APP_VERSION); }
 function checkUpdate() {
   if (!/^https?:$/.test(location.protocol)) return;
   fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
     if (!d || !d.version) return;
     const notes = Array.isArray(d.notes) ? d.notes : [];
-    const vt = $('verTxt'); if (vt) vt.textContent = 'Master Ludo · ' + T('الإصدار') + ' ' + d.version;
+    SEEN_VER = d.version; renderVer();
     if (d.version !== APP_VERSION) UPD.pending = { v: d.version, notes, from: APP_VERSION };   // the server has a newer build than this copy
     else {
       const seen = updSeen();
@@ -7226,6 +7231,22 @@ checkUpdate();
 /* ---------- top-up: the payment apps, the reward for visiting them, and diamond codes ---------- */
 const PAY_NUMBER = '+22236797904';
 const PAY_KEY = 'gs_pay_pending', PAY_WAIT = 120000, PAY_REWARD = 1000, DIA_CODE = 500;
+// the device id is random and saved once; the code is the same on every visit to the same app, so one visit gives one code
+function devId() {
+  try { let d = localStorage.getItem('gs_dev'); if (!d) { d = Array.from({ length: 4 }, () => Math.floor(Math.random() * 4294967296).toString(36)).join(''); localStorage.setItem('gs_dev', d); } return d; } catch (e) { return 'nodev'; }
+}
+function hash32(str, seed) { let h = seed >>> 0; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+const CODE_ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function visitCode(appId) {
+  const src = 'MasterLudo|' + devId() + '|' + appId;
+  let a = hash32(src, 2166136261), b = hash32(src, 0x9e3779b9), out = '';
+  for (let i = 0; i < 12; i++) {
+    const v = i < 6 ? a : b;
+    out += CODE_ALPHA[(v >>> ((i % 6) * 5)) % 32];
+    if (i === 5) { a = hash32(src + 'a', a); b = hash32(src + 'b', b); }
+  }
+  return out.slice(0, 4) + '-' + out.slice(4, 8) + '-' + out.slice(8);
+}
 const PAY_APPS = [
   { id: 'bankily', name: 'Bankily', letter: 'B', c: '#2f7bff', pkg: 'mr.bpm.digitalbanking.consumer', url: 'https://www.bankily.mr/ar/bankily-ar/' }
 ];
@@ -7264,12 +7285,16 @@ function setPayPending(id) { try { localStorage.setItem(PAY_KEY, JSON.stringify(
 function checkPayReturn() {
   let q = null; try { q = JSON.parse(localStorage.getItem(PAY_KEY) || 'null'); localStorage.removeItem(PAY_KEY); } catch (e) { q = null; }
   if (!q || !q.id || Date.now() - q.t < PAY_WAIT) return;
-  const m = getMeta(); m.pay = m.pay || {};
+  const m = getMeta(); m.pay = m.pay || {}; m.notes = m.notes || [];
   if (m.pay[q.id]) return;
-  m.pay[q.id] = Date.now(); saveMeta(m); addCoins(PAY_REWARD); renderCoins(); Sound.sfx('coin');
-  const a = PAY_APPS.find((x) => x.id === q.id);
-  toast(T('+{n} عملة لزيارتك {app}', { n: PAY_REWARD, app: T(a ? a.name : '') }), 2800);
-  renderPayApps();
+  m.pay[q.id] = Date.now();
+  const a = PAY_APPS.find((x) => x.id === q.id), name = a ? a.name : '';
+  const title = 'رمز مكافأة الزيارة', text = 'شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.';
+  m.notes = [{ id: 'v-' + q.id, title, text, vars: { app: name, n: DIA_CODE }, code: visitCode(q.id), used: false, t: Date.now() }].concat(m.notes).slice(0, 30);
+  saveMeta(m); addCoins(PAY_REWARD); renderCoins(); Sound.sfx('coin');
+  toast(T('+{n} عملة لزيارتك {app}', { n: PAY_REWARD, app: T(name) }), 2800);
+  sysNotify(T(title), T(text, { app: T(name), n: DIA_CODE }), 'pay-' + q.id);
+  renderPayApps(); refreshNotifBadge();
 }
 function renderPayApps() {
   const box = $('payApps'); if (!box) return;
@@ -7297,22 +7322,43 @@ async function sha256hex(text) {
 }
 async function redeemCode(raw) {
   const msg = $('codeMsg'); const say = (t, ok) => { if (msg) { msg.textContent = t; msg.style.color = ok ? '#9be564' : ''; } };
-  const code = String(raw || '').trim().toUpperCase().replace(/[\s-]/g, '');
+  const code = normCode(raw);
   if (!code) { say(T('أدخل الرمز أولاً'), false); return; }
+  const m = getMeta(); m.notes = m.notes || []; m.codes = m.codes || {};
+  const note = m.notes.find((n) => n.code && !n.used && normCode(n.code) === code);
+  if (note) { note.used = true; saveMeta(m); addDia(DIA_CODE); say(T('+{n} ماسة', { n: DIA_CODE }), true); Sound.sfx('coin'); const ci = $('codeIn'); if (ci) ci.value = ''; refreshNotifBadge(); return; }
   if (!window.crypto || !crypto.subtle) { say(T('هذه الخانة تعمل عبر الرابط المحمي (https) فقط'), false); return; }
   const hx = await sha256hex(code);
-  const m = getMeta(); m.codes = m.codes || {};
   if (CODE_HASHES.indexOf(hx) < 0 || m.codes[hx]) { say(T('الرمز غير صحيح أو سبق استعماله'), false); Sound.sfx('err'); return; }
   m.codes[hx] = Date.now(); saveMeta(m);
-  const w = getWallet(); w.dia = (w.dia || 0) + DIA_CODE; saveWallet(w);
-  say(T('+{n} ماسة', { n: DIA_CODE }), true); Sound.sfx('coin'); renderDia();
+  addDia(DIA_CODE); say(T('+{n} ماسة', { n: DIA_CODE }), true); Sound.sfx('coin');
   const ci = $('codeIn'); if (ci) ci.value = '';
 }
+function normCode(x) { return String(x || '').trim().toUpperCase().replace(/[\s-]/g, ''); }
+function addDia(n) { const w = getWallet(); w.dia = (w.dia || 0) + n; saveWallet(w); renderDia(); }
 function buyHintsDia(n, price) {
   const w = getWallet(); if ((w.dia || 0) < price) return false;
   w.dia -= price; w.hints += n; saveWallet(w); return true;
 }
 $('btnTopup').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); openTopup(); });
+// the phone's own notifications: asked for once, shown through the service worker
+function notifAsk() {
+  try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission().then(() => renderNotifPerm()).catch(() => {}); } catch (e) { /* not supported */ }
+}
+function renderNotifPerm() {
+  const b = $('btnNotifPerm'); if (!b) return;
+  const p = ('Notification' in window) ? Notification.permission : 'unsupported';
+  b.textContent = p === 'granted' ? T('إشعارات الهاتف مفعّلة ✓') : p === 'denied' ? T('الإشعارات مرفوضة من إعدادات الهاتف') : p === 'unsupported' ? T('هذا المتصفح لا يدعم إشعارات الهاتف') : T('تفعيل إشعارات الهاتف');
+  b.disabled = p !== 'default';
+}
+function sysNotify(title, body, tag) {
+  try {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    const opts = { body, tag: tag || 'ml', icon: 'icon-192.png', badge: 'icon-192.png', lang: LANG, dir: LANGS[LANG].dir };
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then((reg) => reg.showNotification(title, opts)).catch(() => { try { new Notification(title, opts); } catch (e) { /* ignore */ } });
+    else new Notification(title, opts);
+  } catch (e) { /* not supported */ }
+}
 function copyText(t, done) {
   const fb = () => {
     const ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -7325,28 +7371,38 @@ async function loadNotifs() {
   try { const r = await fetch(NOTIF_URL + '?v=' + APP_VERSION, { cache: 'no-store' }); if (!r.ok) return []; const d = await r.json(); return Array.isArray(d.items) ? d.items : []; }
   catch (e) { return []; }
 }
-function renderNotifs(items) {
+function renderNotifs(remote) {
   const box = $('notifList'); box.innerHTML = '';
+  const m = getMeta(); const local = (m.notes || []);
+  const items = local.map((n) => Object.assign({ local: true }, n)).concat(remote);
   if (!items.length) { box.appendChild(h('p', 'muted', T('لا توجد إشعارات حالياً'))); return; }
   items.forEach((it) => {
     const card = h('div', 'notifitem');
-    card.appendChild(h('b', null, String(it.title || '')));
-    if (it.text) card.appendChild(h('p', null, String(it.text)));
+    card.appendChild(h('b', null, T(String(it.title || ''))));
+    if (it.text) card.appendChild(h('p', null, T(String(it.text), it.vars || {})));
     if (it.code) {
-      const bx = h('div', 'codebox'); const code = h('code', null, String(it.code)); const btn = h('button', 'btn small', T('نسخ'));
-      btn.type = 'button';
-      btn.addEventListener('click', () => { copyText(String(it.code), () => { btn.textContent = T('تم النسخ'); Sound.sfx('click'); setTimeout(() => { btn.textContent = T('نسخ'); }, 1600); }); });
-      bx.append(code, btn); card.appendChild(bx);
+      if (it.used) { card.appendChild(h('small', 'muted', T('تم استعمال هذا الرمز'))); }
+      else {
+        const bx = h('div', 'codebox'); const code = h('code', null, String(it.code)); const btn = h('button', 'btn small', T('نسخ'));
+        btn.type = 'button';
+        btn.addEventListener('click', () => { copyText(String(it.code), () => { btn.textContent = T('تم النسخ'); Sound.sfx('click'); setTimeout(() => { btn.textContent = T('نسخ'); }, 1600); }); });
+        bx.append(code, btn); card.appendChild(bx);
+      }
     }
     box.appendChild(card);
   });
 }
-async function openNotif() { Sound.init(); Sound.sfx('click'); const items = await loadNotifs(); renderNotifs(items); openModal('m-notif'); }
+async function openNotif() {
+  Sound.init(); Sound.sfx('click');
+  const remote = await loadNotifs(); renderNotifs(remote); renderNotifPerm(); openModal('m-notif');
+}
 async function refreshNotifBadge() {
-  const items = await loadNotifs(); const b = $('notifBadge'); if (!b) return;
-  b.hidden = !items.length; b.textContent = String(items.length);
+  const remote = await loadNotifs(); const b = $('notifBadge'); if (!b) return;
+  const m = getMeta(); const open = (m.notes || []).filter((n) => n.code && !n.used).length + remote.length;
+  b.hidden = !open; b.textContent = String(open);
 }
 $('btnNotif').addEventListener('click', openNotif);
+$('btnNotifPerm').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); notifAsk(); });
 refreshNotifBadge();
 $('codeGo').addEventListener('click', () => { redeemCode($('codeIn').value); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkPayReturn(); });
@@ -7360,6 +7416,10 @@ Object.assign(I18N.en,{"قطع الألماس": "Diamond pieces", "الهلال"
 Object.assign(I18N.fr,{"قطع الألماس": "Pièces en diamant", "الهلال": "Croissant", "اللهب": "Flamme", "ورقة البرسيم": "Trèfle", "الجوهرة": "Gemme", "السداسي الذهبي": "Hexagone doré", "تحتاج {n} ماسة إضافية لشراء «{s}»": "Il vous manque {n} diamants pour acheter « {s} »", "تحتاج {n} عملة إضافية لشراء «{s}»": "Il vous manque {n} pièces pour acheter « {s} »"});
 Object.assign(I18N.en,{"طريقة الشحن": "How to top up", "اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم أدخل الرمز الذي يصلك في نافذة الشحن لتحصل على 500 ماسة.": "Top up via the Bankily app to +222 36 79 79 04, then enter the code you receive in the top-up window to get 500 diamonds.", "مكافأة زيارة التطبيق": "Visit reward", "زيارة تطبيق بنكيلي لمدة دقيقتين ثم العودة إلى اللعبة تعطيك 1000 عملة، مرة واحدة فقط.": "Visiting the Bankily app for two minutes and then returning to the game gives you 1000 coins, once only.", "الماس": "Diamonds", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات، ويُصرف في المتجر على قطع خاصة.": "Diamonds come only from top-ups, never from coins or visits, and are spent in the shop on special pieces."});
 Object.assign(I18N.fr,{"طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم أدخل الرمز الذي يصلك في نافذة الشحن لتحصل على 500 ماسة.": "Rechargez via l’application Bankily au +222 36 79 79 04, puis saisissez le code reçu dans la fenêtre de recharge pour obtenir 500 diamants.", "مكافأة زيارة التطبيق": "Récompense de visite", "زيارة تطبيق بنكيلي لمدة دقيقتين ثم العودة إلى اللعبة تعطيك 1000 عملة، مرة واحدة فقط.": "Visiter l’application Bankily pendant deux minutes puis revenir au jeu vous donne 1000 pièces, une seule fois.", "الماس": "Diamants", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات، ويُصرف في المتجر على قطع خاصة.": "Les diamants viennent uniquement des recharges, jamais des pièces ou des visites, et se dépensent dans la boutique sur des pièces spéciales."});
+Object.assign(I18N.en,{"رمز مكافأة الزيارة": "Visit reward code", "شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.": "Thank you for visiting {app}. Enter the code in the top-up window to get {n} diamonds.", "تم استعمال هذا الرمز": "This code has been used", "تفعيل إشعارات الهاتف": "Turn on phone notifications", "إشعارات الهاتف مفعّلة ✓": "Phone notifications on ✓", "الإشعارات مرفوضة من إعدادات الهاتف": "Notifications are blocked in phone settings", "هذا المتصفح لا يدعم إشعارات الهاتف": "This browser does not support phone notifications", "المكافأة اليومية": "Daily reward", "خذ مكافأتك اليوم": "Claim your reward today"});
+Object.assign(I18N.fr,{"رمز مكافأة الزيارة": "Code de récompense de visite", "شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.": "Merci d’avoir visité {app}. Saisissez le code dans la fenêtre de recharge pour obtenir {n} diamants.", "تم استعمال هذا الرمز": "Ce code a déjà été utilisé", "تفعيل إشعارات الهاتف": "Activer les notifications du téléphone", "إشعارات الهاتف مفعّلة ✓": "Notifications du téléphone activées ✓", "الإشعارات مرفوضة من إعدادات الهاتف": "Notifications refusées dans les réglages du téléphone", "هذا المتصفح لا يدعم إشعارات الهاتف": "Ce navigateur ne prend pas en charge les notifications du téléphone", "المكافأة اليومية": "Récompense quotidienne", "خذ مكافأتك اليوم": "Récupérez votre récompense aujourd’hui"});
+Object.assign(I18N.en,{"الإصدار": "Version", "كل شحن يمنحك": "Each top-up gives you", "تستعملها في المتجر.": "to use in the shop.", "500 ماسة": "500 diamonds", "ترقية إلى قطعة جديدة، أو إحياء قطعة من قطعك المأكولة": "Promote to a new piece, or revive one of your captured pieces", "معلومات المطور والفريق": "Developer and team info", "المطور": "Developer", "صنع اللعبة من الفكرة إلى التنفيذ، وأضاف إليها ميزات كثيرة: قواعد النرد والشطرنج كاملة، وصالة ألعاب بعدة ألعاب مصغّرة، ونظام إنجازات ومهام يومية، وسجلاً للمباريات، ومظهراً زجاجياً داكناً، وتثبيتاً على الهاتف ولعباً بدون إنترنت. ويواصل تطويرها باستمرار لتبقى تجربة ممتعة لكل اللاعبين.": "Built from idea to release, with many features: full Ludo and chess rules, an arcade with several mini games, achievements and daily tasks, a match history, a dark glass look, phone install and offline play. Development continues so the game stays fun for every player.", "فريق التحديثات": "Update team", "يتولى نشر الإصدارات الجديدة وتجهيزها للاعبين، ومتابعة الأخطاء وتصحيحها، وضمان وصول كل تحديث في وقته وبسلاسة، حتى يبقى التطبيق دائماً بأحدث نسخة.": "Publishes and prepares new versions for players, tracks and fixes bugs, and makes sure every update arrives on time and smoothly, so the app is always on the latest version.", "شكراً لكل من يلعب ويشارك اللعبة.": "Thank you to everyone who plays and shares the game."});
+Object.assign(I18N.fr,{"الإصدار": "Version", "كل شحن يمنحك": "Chaque recharge vous donne", "تستعملها في المتجر.": "à utiliser dans la boutique.", "500 ماسة": "500 diamants", "ترقية إلى قطعة جديدة، أو إحياء قطعة من قطعك المأكولة": "Promouvoir vers une nouvelle pièce, ou ressusciter une de vos pièces capturées", "معلومات المطور والفريق": "Infos du développeur et de l’équipe", "المطور": "Développeur", "صنع اللعبة من الفكرة إلى التنفيذ، وأضاف إليها ميزات كثيرة: قواعد النرد والشطرنج كاملة، وصالة ألعاب بعدة ألعاب مصغّرة، ونظام إنجازات ومهام يومية، وسجلاً للمباريات، ومظهراً زجاجياً داكناً، وتثبيتاً على الهاتف ولعباً بدون إنترنت. ويواصل تطويرها باستمرار لتبقى تجربة ممتعة لكل اللاعبين.": "Créé de l’idée à la réalisation, avec de nombreuses fonctions : règles complètes du jeu de dés et des échecs, une salle d’arcade avec plusieurs mini-jeux, succès et tâches quotidiennes, historique des parties, un look verre sombre, installation sur téléphone et jeu hors ligne. Le développement se poursuit pour que le jeu reste agréable à tous les joueurs.", "فريق التحديثات": "Équipe des mises à jour", "يتولى نشر الإصدارات الجديدة وتجهيزها للاعبين، ومتابعة الأخطاء وتصحيحها، وضمان وصول كل تحديث في وقته وبسلاسة، حتى يبقى التطبيق دائماً بأحدث نسخة.": "Publie et prépare les nouvelles versions pour les joueurs, suit et corrige les bogues, et veille à ce que chaque mise à jour arrive à temps et sans accroc, pour que l’application reste toujours à jour.", "شكراً لكل من يلعب ويشارك اللعبة.": "Merci à tous ceux qui jouent et partagent le jeu."});
 /* block the browser's own zoom and long-press menus, so the game behaves like an installed app */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach((ev) => document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
 // two or more fingers never zoom the page: the gesture is cancelled as soon as it starts

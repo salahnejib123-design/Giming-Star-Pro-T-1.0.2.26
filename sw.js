@@ -1,5 +1,5 @@
 /* Master Ludo - service worker: offline-first app shell */
-const CACHE = 'master-ludo-1.0.2.44';
+const CACHE = 'master-ludo-1.0.2.45';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './favicon-48.png', './offline.html'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {
@@ -9,7 +9,7 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.pathname.endsWith('version.json')) return;   // always ask the network for the version
+  if (url.pathname.endsWith('version.json') || url.pathname.endsWith('notifications.json')) return;   // always ask the network for these two
   const sameOrigin = url.origin === location.origin;
   const fonts = /(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if (!sameOrigin && !fonts) return;
@@ -18,4 +18,18 @@ self.addEventListener('fetch', (e) => {
     return;
   }
   e.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((r) => { if (r.ok) { const cp = r.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); } return r; }).catch(() => hit)));
+});
+
+// phone notifications: tapping one opens the game
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    for (const c of list) { if ('focus' in c) return c.focus(); }
+    return self.clients.openWindow('./');
+  }));
+});
+// a message pushed from a server (when one is connected) shows as a phone notification
+self.addEventListener('push', (e) => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (err) { d = { title: 'Master Ludo', body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'Master Ludo', { body: d.body || '', icon: 'icon-192.png', badge: 'icon-192.png', tag: d.tag || 'ml' }));
 });
