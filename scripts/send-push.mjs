@@ -13,7 +13,7 @@ const m = msgs[Math.floor(Date.now() / 600000) % msgs.length];
 const res = await fetch("https://onesignal.com/api/v1/notifications", {
   method: "POST",
   headers: { "Content-Type": "application/json", Authorization: "Key " + KEY },
-  body: JSON.stringify({ app_id: APP, included_segments: ["Subscribed Users"], headings: { ar: m.t, en: m.t }, contents: { ar: m.b, en: m.b }, url: "https://master-ludo-beta.netlify.app/" }),
+  body: JSON.stringify({ app_id: APP, included_segments: ["Subscribed Users"], headings: { ar: m.t, en: m.t }, contents: { ar: m.b, en: m.b }, url: "https://master-ludo-beta.netlify.app/", chrome_web_icon: "https://master-ludo-beta.netlify.app/icon-512.png", chrome_web_badge: "https://master-ludo-beta.netlify.app/icon-192.png", chrome_web_image: "https://master-ludo-beta.netlify.app/icon-512.png" }),
 });
 console.log("OneSignal status", res.status, await res.text());
 if (!res.ok) process.exit(1);

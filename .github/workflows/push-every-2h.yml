@@ -1,7 +1,7 @@
-name: Push every 10 minutes
+name: Push twice a day
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "0 9,20 * * *"
   workflow_dispatch:
 permissions:
   contents: write
