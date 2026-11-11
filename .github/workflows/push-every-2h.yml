@@ -1,0 +1,26 @@
+name: Push every 2 hours
+on:
+  schedule:
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Send notice
+        env:
+          ONESIGNAL_REST_KEY: ${{ secrets.ONESIGNAL_REST_KEY }}
+          ONESIGNAL_APP_ID: a65eeca1-05fa-40ae-a172-ddbd75fc14f0
+        run: node scripts/send-push.mjs
+      - name: Save notice list
+        run: |
+          git config user.name "master-ludo-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add notifications.json
+          git diff --cached --quiet || (git commit -m "Update notice list" && git push)

@@ -5,8 +5,23 @@
 <meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Master Ludo</title>
-<meta name="description" content="لعبة Master Ludo: لعبة استراتيجية بقواعد ليدو ستار">
-<meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Master Ludo: لعبة ليدو ستار الاستراتيجية مع صالة ألعاب مصغّرة وشطرنج. العب الآن مجاناً.">
+<link rel="canonical" href="https://master-ludo-beta.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Master Ludo">
+<meta property="og:title" content="Master Ludo: لعبة ليدو ستار">
+<meta property="og:description" content="Master Ludo: لعبة ليدو ستار الاستراتيجية مع صالة ألعاب مصغّرة وشطرنج. العب الآن مجاناً.">
+<meta property="og:url" content="https://master-ludo-beta.netlify.app/">
+<meta property="og:image" content="https://master-ludo-beta.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Master Ludo: لعبة ليدو ستار">
+<meta name="twitter:description" content="Master Ludo: لعبة ليدو ستار الاستراتيجية مع صالة ألعاب مصغّرة وشطرنج. العب الآن مجاناً.">
+<meta name="twitter:image" content="https://master-ludo-beta.netlify.app/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Master Ludo","description":"Master Ludo: لعبة ليدو ستار الاستراتيجية مع صالة ألعاب مصغّرة وشطرنج. العب الآن مجاناً.","url":"https://master-ludo-beta.netlify.app/","inLanguage":"ar","genre":["Board game","Strategy"],"gamePlatform":"Web browser","applicationCategory":"Game","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Salah.Nejb.650"}}</script>
 <meta name="theme-color" content="#0b1240">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,7 +33,8 @@
 <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Readex+Pro:wght@300;400;600;700&display=swap">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<style>#verFloat{position:fixed;left:6px;bottom:4px;z-index:9999;font:600 10px/1 system-ui,sans-serif;color:#fff;opacity:.55;pointer-events:none;text-shadow:0 1px 2px #000}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
 <style>
 /* Layout: bright blue stage with slow sunburst rays, glossy candy buttons, deep-blue panels.
    Game screen is a fixed full-viewport layer: board (with player cards + dice outside the board) + side panel. */
@@ -1106,29 +1122,16 @@ html[data-theme=night] .splash{background-color:#04061a}
   </div>
 </div>
 
-<div class="modal" id="m-visitcode" hidden>
-  <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-vc" style="display:grid;gap:12px;text-align:center">
-    <h2 id="t-vc" style="margin:0">رمز مكافأة الزيارة</h2>
-    <p id="vcText" class="muted" style="margin:0;line-height:1.7"></p>
-    <div class="codebox" style="justify-content:center"><code id="vcCode" style="flex:0 1 auto;font-size:1.35rem"></code></div>
-    <button class="btn primary" id="vcCopy" type="button">نسخ الرمز</button>
-    <button class="btn" data-close="m-visitcode" type="button">لاحقاً</button>
-  </div>
-</div>
 
 <div class="modal" id="m-topup" hidden>
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-topup" style="display:grid;gap:12px;max-height:88dvh;overflow:auto">
     <h2 id="t-topup" style="margin:0;text-align:center">شحن اللعبة</h2>
-    <p class="muted" style="margin:0;text-align:center;line-height:1.7">كل شحن يمنحك <b>500 ماسة</b> تستعملها في المتجر.</p>
+    <p class="muted" style="margin:0;text-align:center;line-height:1.7">زيارة تطبيق بنكيلي لمدة خمس دقائق تمنحك <b>500 ماسة</b> تستعملها في المتجر.</p>
     <div class="credit" style="width:100%"><span>رقم الشحن</span><b dir="ltr" id="payNum">+222 36 79 79 04</b></div>
     <button class="btn" id="payCopy" type="button" style="width:100%">نسخ الرقم</button>
     <h3 style="margin:4px 0 0">ادفع عبر تطبيق بنكيلي</h3>
     <p class="muted" style="margin:0;font-size:.85rem;line-height:1.7">اضغط على شعار بنكيلي لتفتح موقعها الرسمي. بعد أن تكمل الشحن ارجع إلى اللعبة، وستصلك مكافأة الزيارة تلقائياً.</p>
     <div id="payApps" class="payapps"></div>
-    <h3 style="margin:4px 0 0">أدخل رمز الشحن</h3>
-    <p class="muted" style="margin:0;font-size:.85rem;line-height:1.7">بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.</p>
-    <div style="display:flex;gap:8px"><input id="codeIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX" style="flex:1;min-width:0"><button class="btn primary" id="codeGo" type="button">تفعيل</button></div>
-    <p id="codeMsg" class="muted" style="margin:0;min-height:1.2em;font-size:.85rem"></p>
     <p class="muted" style="margin:0;font-size:.9rem">رصيدك من الماس: <b class="diaval">0</b> ماسة</p>
     <button class="btn" type="button" data-close="m-topup" style="width:100%">إغلاق</button>
   </div>
@@ -1193,7 +1196,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-tips">
     <h2 id="t-tips">نصائح الاحتراف</h2>
     <div id="tipsBody" class="alist"></div>
-    <div class="credit"><span id="verTxt">Master Ludo · <span>الإصدار</span> <span dir="ltr">1.0.2.50</span></span><b dir="ltr">Salah.Nejb.650</b></div>
+    <div class="credit"><span id="verTxt">Master Ludo · <span>الإصدار</span> <span dir="ltr">1.0.2.51</span></span><b dir="ltr">Salah.Nejb.650</b></div>
     <button class="btn primary" data-close="m-tips">إغلاق</button>
   </div>
 </div>
@@ -1624,7 +1627,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.2.50';
+const APP_VERSION = '1.0.2.51';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -3491,9 +3494,9 @@ $('tLead').addEventListener('click', () => { Sound.sfx('click'); renderLead(); o
 
 /* ---------- pro tips ---------- */
 const TIPS = [
-  ['gem', 'طريقة الشحن', 'اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم أدخل الرمز الذي يصلك في نافذة الشحن لتحصل على 500 ماسة.'],
-  ['shop', 'مكافأة زيارة التطبيق', 'زيارة تطبيق بنكيلي لمدة دقيقتين ثم العودة إلى اللعبة تعطيك 1000 عملة، مرة واحدة فقط.'],
-  ['gem', 'الماس', 'الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات، ويُصرف في المتجر على قطع خاصة.'],
+  ['gem', 'طريقة الشحن', 'اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم ابقَ في التطبيق خمس دقائق بالضبط وارجع إلى اللعبة، فتصلك 500 ماسة تلقائياً.'],
+  ['shop', 'مكافأة زيارة التطبيق', 'زيارة تطبيق بنكيلي لمدة دقيقتين تعطيك 1000 عملة، ولمدة خمس دقائق تعطيك 500 ماسة، مرة واحدة لكل منهما.'],
+  ['gem', 'الماس', 'الماس يأتي من زيارة بنكيلي لخمس دقائق فقط، ولا يُكتسب من العملات، ويُصرف في المتجر على قطع خاصة.'],
   ['eye', 'استقر على العين عند الخطر', 'قطعتك على مربع العين لا يمكن أكلها، فاجعلها محطة آمنة وأنت قريب من قطع الخصم.'],
   ['house', 'الحصار يحميك ويسدّ الطريق', 'وقوفك على المنزل يمنع الخصوم من الاستقرار عليه ويحميك من الأكل. استخدمه أمام قطعهم المتقدمة.'],
   ['target', 'التهديف لتبديل المراكز', 'بدّل مكانك مع قطعة خصم متقدمة غير محمية لتقفز للأمام وتؤخّره.'],
@@ -6701,6 +6704,7 @@ function show(id) {
 function openModal(id) { $(id).hidden = false; }
 function closeModal(id) {
   $(id).hidden = true;
+  if (id === 'm-notif') { try { const m = getMeta(); if ((m.notes || []).length) { m.notes = []; saveMeta(m); } refreshNotifBadge(); } catch (e) { /* ignore */ } }
   if (id === 'm-pause' && !modalReturn) paused = false;
   if (modalReturn && id !== modalReturn) { const r = modalReturn; modalReturn = null; openModal(r); }
 }
@@ -7200,7 +7204,7 @@ function updSeen() { try { return localStorage.getItem(UPD.key); } catch (e) { r
 function updMark(v) { try { localStorage.setItem(UPD.key, v); } catch (e) { /* private mode: ignore */ } }
 function hasOldData() { try { for (let i = 0; i < localStorage.length; i++) { const k = String(localStorage.key(i)); if (k.indexOf('gs_') === 0 && k !== 'gs_settings' && k !== UPD.key) return true; } } catch (e) { /* ignore */ } return false; }   // a player with saved coins, scores or matches
 var SEEN_VER = null;
-function renderVer() { const vt = $('verTxt'); if (vt) vt.textContent = 'Master Ludo · ' + T('الإصدار') + ' ' + (SEEN_VER || APP_VERSION); }
+function renderVer() { const vt = $('verTxt'); if (vt) vt.textContent = 'Master Ludo · ' + T('الإصدار') + ' ' + (SEEN_VER || APP_VERSION); const vf = $('verFloat'); if (vf) vf.textContent = 'v' + APP_VERSION; }
 function checkUpdate() {
   if (!/^https?:$/.test(location.protocol)) return;
   fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
@@ -7254,7 +7258,7 @@ checkUpdate();
 
 /* ---------- top-up: the payment apps, the reward for visiting them, and diamond codes ---------- */
 const PAY_NUMBER = '+22236797904';
-const PAY_KEY = 'gs_pay_pending', PAY_WAIT = 120000, PAY_REWARD = 1000, DIA_CODE = 500;
+const PAY_KEY = 'gs_pay_pending', PAY_WAIT = 120000, DIA_WAIT = 300000, PAY_REWARD = 1000, DIA_CODE = 500;
 // the device id is random and saved once; the server gives one code per device and app
 function devId() {
   try { let d = localStorage.getItem('gs_dev'); if (!d) { d = Array.from({ length: 4 }, () => Math.floor(Math.random() * 4294967296).toString(36)).join(''); localStorage.setItem('gs_dev', d); } return d; } catch (e) { return 'nodev'; }
@@ -7307,32 +7311,26 @@ function payLink(a) {
 }
 const NOTIF_URL = 'notifications.json';
 function setPayPending(id) { try { localStorage.setItem(PAY_KEY, JSON.stringify({ id, t: Date.now() })); } catch (e) { /* ignore */ } }
-// the player came back: a visit of two minutes or more is rewarded once per app, a short visit is not
+// the player came back: 2 minutes gives coins, 5 minutes gives diamonds; each once per app
 function checkPayReturn() {
   let q = null; try { q = JSON.parse(localStorage.getItem(PAY_KEY) || 'null'); localStorage.removeItem(PAY_KEY); } catch (e) { q = null; }
   if (!q || !q.id) return;
-  if (Date.now() - q.t < PAY_WAIT) { toast(T('ابقَ في تطبيق بنكيلي دقيقتين على الأقل لتحصل على المكافأة'), 3200); return; }
-  const pre = getMeta(); if ((pre.pay || {})[q.id]) { toast(T('تم استلام مكافأة هذا التطبيق من قبل'), 2400); return; }
+  const el = Date.now() - q.t;
+  if (el < PAY_WAIT) { toast(T('ابقَ في تطبيق بنكيلي دقيقتين على الأقل لتحصل على المكافأة'), 3200); return; }
+  const m = getMeta(); m.pay = m.pay || {}; m.dpay = m.dpay || {};
   const a = PAY_APPS.find((x) => x.id === q.id), name = a ? a.name : '';
-  const title = 'رمز مكافأة الزيارة', text = 'شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.';
-  sbRpc('get_visit_code', { p_device: devId(), p_app: q.id }).then((code) => {
-    if (!code) throw new Error('no code');
-    const m = getMeta(); m.pay = m.pay || {}; m.notes = m.notes || [];
-    if (m.pay[q.id]) return;
-    const shown = fmtCode(code);
-    m.pay[q.id] = Date.now();
-    m.notes = [{ id: 'v-' + q.id, title, text, vars: { app: name, n: DIA_CODE }, code: shown, used: false, t: Date.now() }].concat(m.notes).slice(0, 30);
-    saveMeta(m); addCoins(PAY_REWARD); renderCoins(); Sound.sfx('coin');
-    sysNotify(T(title), T(text, { app: T(name), n: DIA_CODE }), 'pay-' + q.id);
-    renderPayApps(); refreshNotifBadge();
-    $('vcText').textContent = T(text, { app: T(name), n: DIA_CODE });
-    $('vcCode').textContent = shown;
-    openModal('m-visitcode');
-  }).catch(() => {
-    // no connection, or the server is not ready yet: keep the visit and try again the next time the player comes back
-    try { localStorage.setItem(PAY_KEY, JSON.stringify(q)); } catch (e) { /* ignore */ }
-    toast(T('تعذّر الاتصال الآن، سنحاول مرة أخرى عند عودتك للعبة'), 2800);
-  });
+  let gotAny = false;
+  const giveCoins = !m.pay[q.id], giveDia = el >= DIA_WAIT && !m.dpay[q.id];
+  if (giveCoins) m.pay[q.id] = Date.now();
+  if (giveDia) m.dpay[q.id] = Date.now();
+  saveMeta(m);
+  if (giveCoins) { addCoins(PAY_REWARD); gotAny = true; inboxAdd('مكافأة الزيارة', '+{n} عملة لزيارتك {app}', { n: PAY_REWARD, app: name }); }
+  if (giveDia) { addDia(DIA_CODE); gotAny = true; inboxAdd('مكافأة الشحن', '+{n} ماسة لزيارتك {app}', { n: DIA_CODE, app: name }); }
+  renderCoins(); renderDia(); renderPayApps();
+  if (gotAny) Sound.sfx('coin');
+  else if (el < DIA_WAIT) toast(T('ابقَ خمس دقائق بالضبط في بنكيلي لتحصل على الماس'), 3200);
+  else toast(T('تم استلام مكافأة هذا التطبيق من قبل'), 2400);
+  if (el < DIA_WAIT && m.pay[q.id] && !m.dpay[q.id]) { try { localStorage.setItem(PAY_KEY, JSON.stringify(q)); } catch (e) { /* ignore */ } }
 }
 function renderPayApps() {
   const box = $('payApps'); if (!box) return;
@@ -7357,26 +7355,6 @@ function openTopup() { renderPayApps(); renderDia(); const cm = $('codeMsg'); if
 async function sha256hex(text) {
   const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
   return Array.from(new Uint8Array(d)).map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-async function redeemCode(raw) {
-  const msg = $('codeMsg'); const say = (t, ok) => { if (msg) { msg.textContent = t; msg.style.color = ok ? '#9be564' : ''; } };
-  const code = normCode(raw);
-  if (!code) { say(T('أدخل الرمز أولاً'), false); return; }
-  const m = getMeta(); m.codes = m.codes || {};
-  let n = 0, online = true;
-  try { n = await sbRpc('redeem_visit_code', { p_code: code, p_device: devId() }); } catch (e) { online = false; }
-  if (n > 0) {
-    m.notes = (m.notes || []).map((x) => (x.code && normCode(x.code) === code ? Object.assign({}, x, { used: true }) : x));
-    saveMeta(m); addDia(n); inboxAdd('هدية الشحن', '+{n} ماسة', { n }); say(T('+{n} ماسة', { n }), true); Sound.sfx('coin');
-    const ci = $('codeIn'); if (ci) ci.value = ''; refreshNotifBadge(); return;
-  }
-  if (!online) { say(T('يلزم الاتصال بالإنترنت لتفعيل الرمز'), false); Sound.sfx('err'); return; }
-  if (!window.crypto || !crypto.subtle) { say(T('هذه الخانة تعمل عبر الرابط المحمي (https) فقط'), false); return; }
-  const hx = await sha256hex(code);
-  if (CODE_HASHES.indexOf(hx) < 0 || m.codes[hx]) { say(T('الرمز غير صحيح أو سبق استعماله'), false); Sound.sfx('err'); return; }
-  m.codes[hx] = Date.now(); saveMeta(m);
-  addDia(DIA_CODE); inboxAdd('هدية الشحن', '+{n} ماسة', { n: DIA_CODE }); say(T('+{n} ماسة', { n: DIA_CODE }), true); Sound.sfx('coin');
-  const ci = $('codeIn'); if (ci) ci.value = '';
 }
 function normCode(x) { return String(x || '').trim().toUpperCase().replace(/[\s-]/g, ''); }
 function addDia(n) { const w = getWallet(); w.dia = (w.dia || 0) + n; saveWallet(w); renderDia(); }
@@ -7419,7 +7397,7 @@ async function loadNotifs() {
 }
 // in-game inbox: rewards and purchases are listed in the notifications window (no code, just news)
 function inboxAdd(title, text, vars) {
-  try { const m = getMeta(); m.notes = [{ title, text, vars: vars || {}, unread: true, at: Date.now() }].concat(m.notes || []).slice(0, 40); saveMeta(m); refreshNotifBadge(); } catch (e) { /* ignore */ }
+  try { const m = getMeta(); m.notes = [{ title, text, vars: vars || {}, unread: true, at: Date.now() }].concat(m.notes || []).slice(0, 40); saveMeta(m); refreshNotifBadge(); sysNotify(T(title), T(text, vars || {}), 'inbox-' + Date.now()); } catch (e) { /* ignore */ }
 }
 function renderNotifs(remote) {
   const box = $('notifList'); box.innerHTML = '';
@@ -7456,27 +7434,21 @@ async function refreshNotifBadge() {
 $('btnNotif').addEventListener('click', openNotif);
 $('btnNotifPerm').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); notifAsk(); });
 refreshNotifBadge();
-$('codeGo').addEventListener('click', () => { redeemCode($('codeIn').value); });
-// a complete code (12 digits) is checked as soon as it is typed or pasted
-let autoRedeeming = false;
-$('codeIn').addEventListener('input', () => {
-  if (autoRedeeming || normCode($('codeIn').value).length !== 12) return;
-  autoRedeeming = true; redeemCode($('codeIn').value).finally(() => { autoRedeeming = false; });
-});
-$('vcCopy').addEventListener('click', () => { copyText($('vcCode').textContent, () => { $('vcCopy').textContent = T('تم النسخ'); setTimeout(() => { $('vcCopy').textContent = T('نسخ الرمز'); }, 1600); }); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkPayReturn(); });
 window.addEventListener('pageshow', checkPayReturn);
 // the game may reload when the player comes back from the bank app: check the visit on every start too
 window.addEventListener('load', () => setTimeout(checkPayReturn, 700));
 
-Object.assign(I18N.en,{"شحن": "Top up", "شحن اللعبة": "Top up the game", "كل شحن يمنحك 500 ماسة تستعملها في المتجر.": "Each top-up gives you 500 diamonds to use in the shop.", "رقم الشحن": "Top-up number", "نسخ الرقم": "Copy number", "تم نسخ الرقم": "Number copied", "ادفع عبر أحد التطبيقات": "Pay with one of the apps", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Tap an app: if it is installed it opens directly, otherwise it takes you to its page to download it. After you finish the top-up, come back to the game.", "أدخل رمز الشحن": "Enter your top-up code", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "After your top-up you receive a code from the game team. Enter it here to get the diamonds.", "تفعيل": "Activate", "رصيدك من الماس:": "Your diamonds:", "ماسة": "diamonds", "طريقة الشحن": "How to top up", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Top up via the Bankily app to the number", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "After your top-up you receive a code from the game team. Enter it in the “Top up the game” window to get 500 diamonds.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiting a top-up app earns 1000 coins once per app, when you return after at least two minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Diamonds come only from top-ups, never from coins or visits.", "+{n} عملة لزيارتك {app}": "+{n} coins for visiting {app}", "مكافأة {n} عملة مرة واحدة": "One-time reward: {n} coins", "تم استلام المكافأة ✓": "Reward received ✓", "الرمز غير صحيح أو سبق استعماله": "Invalid code or already used", "+{n} ماسة": "+{n} diamonds", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "This works only on the secure (https) link", "أدخل الرمز أولاً": "Enter the code first", "{n} تلميحات · {p} ماسة": "{n} hints · {p} diamonds", "تلميحات بالماس": "Hints for diamonds", "تُشترى بالماس فقط": "Bought with diamonds only", "لا تكفي الماس لهذا الشراء": "Not enough diamonds for this purchase", "تم الشراء": "Purchased", "إغلاق": "Close", "أدخل": "Enter"});
-Object.assign(I18N.fr,{"شحن": "Recharger", "شحن اللعبة": "Recharger le jeu", "كل شحن يمنحك 500 ماسة تستعملها في المتجر.": "Chaque recharge vous donne 500 diamants à utiliser dans la boutique.", "رقم الشحن": "Numéro de recharge", "نسخ الرقم": "Copier le numéro", "تم نسخ الرقم": "Numéro copié", "ادفع عبر أحد التطبيقات": "Payez avec l’une des applications", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Touchez une application : si elle est installée elle s’ouvre directement, sinon elle vous mène à sa page de téléchargement. Une fois la recharge faite, revenez au jeu.", "أدخل رمز الشحن": "Saisissez votre code de recharge", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "Après la recharge, vous recevez un code de l’équipe du jeu. Saisissez-le ici pour obtenir les diamants.", "تفعيل": "Activer", "رصيدك من الماس:": "Vos diamants :", "ماسة": "diamants", "طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Rechargez via l’application Bankily au numéro", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "Après la recharge, vous recevez un code de l’équipe. Saisissez-le dans la fenêtre « Recharger le jeu » pour obtenir 500 diamants.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiter une application de recharge rapporte 1000 pièces une seule fois par application, si vous revenez après au moins deux minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Les diamants viennent uniquement des recharges, jamais des pièces ou des visites.", "+{n} عملة لزيارتك {app}": "+{n} pièces pour votre visite de {app}", "مكافأة {n} عملة مرة واحدة": "Récompense unique : {n} pièces", "تم استلام المكافأة ✓": "Récompense reçue ✓", "الرمز غير صحيح أو سبق استعماله": "Code invalide ou déjà utilisé", "+{n} ماسة": "+{n} diamants", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "Ceci fonctionne uniquement sur le lien sécurisé (https)", "أدخل الرمز أولاً": "Saisissez d’abord le code", "{n} تلميحات · {p} ماسة": "{n} indices · {p} diamants", "تلميحات بالماس": "Indices contre diamants", "تُشترى بالماس فقط": "Achetés uniquement avec des diamants", "لا تكفي الماس لهذا الشراء": "Pas assez de diamants pour cet achat", "تم الشراء": "Acheté", "إغلاق": "Fermer", "أدخل": "Saisir"});
+Object.assign(I18N.en,{"زيارة تطبيق بنكيلي لمدة خمس دقائق تمنحك": "A five-minute visit to Bankily gives you"});
+Object.assign(I18N.fr,{"زيارة تطبيق بنكيلي لمدة خمس دقائق تمنحك": "Une visite de cinq minutes sur Bankily vous donne"});
+Object.assign(I18N.en,{"شحن": "Top up", "شحن اللعبة": "Top up the game", "زيارة تطبيق بنكيلي لمدة خمس دقائق تمنحك 500 ماسة تستعملها في المتجر.": "A five-minute visit to Bankily gives you 500 diamonds to use in the shop.", "رقم الشحن": "Top-up number", "نسخ الرقم": "Copy number", "تم نسخ الرقم": "Number copied", "ادفع عبر أحد التطبيقات": "Pay with one of the apps", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Tap an app: if it is installed it opens directly, otherwise it takes you to its page to download it. After you finish the top-up, come back to the game.", "أدخل رمز الشحن": "Enter your top-up code", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "After your top-up you receive a code from the game team. Enter it here to get the diamonds.", "تفعيل": "Activate", "رصيدك من الماس:": "Your diamonds:", "ماسة": "diamonds", "طريقة الشحن": "How to top up", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Top up via the Bankily app to the number", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "After your top-up you receive a code from the game team. Enter it in the “Top up the game” window to get 500 diamonds.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiting a top-up app earns 1000 coins once per app, when you return after at least two minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Diamonds come only from top-ups, never from coins or visits.", "+{n} عملة لزيارتك {app}": "+{n} coins for visiting {app}", "مكافأة {n} عملة مرة واحدة": "One-time reward: {n} coins", "تم استلام المكافأة ✓": "Reward received ✓", "الرمز غير صحيح أو سبق استعماله": "Invalid code or already used", "+{n} ماسة": "+{n} diamonds", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "This works only on the secure (https) link", "أدخل الرمز أولاً": "Enter the code first", "{n} تلميحات · {p} ماسة": "{n} hints · {p} diamonds", "تلميحات بالماس": "Hints for diamonds", "تُشترى بالماس فقط": "Bought with diamonds only", "لا تكفي الماس لهذا الشراء": "Not enough diamonds for this purchase", "تم الشراء": "Purchased", "إغلاق": "Close", "أدخل": "Enter"});
+Object.assign(I18N.fr,{"شحن": "Recharger", "شحن اللعبة": "Recharger le jeu", "زيارة تطبيق بنكيلي لمدة خمس دقائق تمنحك 500 ماسة تستعملها في المتجر.": "Une visite de cinq minutes sur Bankily vous donne 500 diamants à utiliser dans la boutique.", "رقم الشحن": "Numéro de recharge", "نسخ الرقم": "Copier le numéro", "تم نسخ الرقم": "Numéro copié", "ادفع عبر أحد التطبيقات": "Payez avec l’une des applications", "اضغط على التطبيق: إن كان مثبّتاً ينفتح مباشرة، وإلا ينقلك إلى صفحته لتحميله. بعد أن تكمل الشحن ارجع إلى اللعبة.": "Touchez une application : si elle est installée elle s’ouvre directement, sinon elle vous mène à sa page de téléchargement. Une fois la recharge faite, revenez au jeu.", "أدخل رمز الشحن": "Saisissez votre code de recharge", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله هنا لتحصل على الماس.": "Après la recharge, vous recevez un code de l’équipe du jeu. Saisissez-le ici pour obtenir les diamants.", "تفعيل": "Activer", "رصيدك من الماس:": "Vos diamants :", "ماسة": "diamants", "طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم": "Rechargez via l’application Bankily au numéro", "بعد الشحن يصلك رمز من فريق اللعبة، أدخله في نافذة «شحن اللعبة» لتحصل على 500 ماسة.": "Après la recharge, vous recevez un code de l’équipe. Saisissez-le dans la fenêtre « Recharger le jeu » pour obtenir 500 diamants.", "زيارة أي تطبيق للشحن تكافأ بـ 1000 عملة مرة واحدة لكل تطبيق، عند الرجوع بعد دقيقتين على الأقل.": "Visiter une application de recharge rapporte 1000 pièces une seule fois par application, si vous revenez après au moins deux minutes.", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات.": "Les diamants viennent uniquement des recharges, jamais des pièces ou des visites.", "+{n} عملة لزيارتك {app}": "+{n} pièces pour votre visite de {app}", "مكافأة {n} عملة مرة واحدة": "Récompense unique : {n} pièces", "تم استلام المكافأة ✓": "Récompense reçue ✓", "الرمز غير صحيح أو سبق استعماله": "Code invalide ou déjà utilisé", "+{n} ماسة": "+{n} diamants", "هذه الخانة تعمل عبر الرابط المحمي (https) فقط": "Ceci fonctionne uniquement sur le lien sécurisé (https)", "أدخل الرمز أولاً": "Saisissez d’abord le code", "{n} تلميحات · {p} ماسة": "{n} indices · {p} diamants", "تلميحات بالماس": "Indices contre diamants", "تُشترى بالماس فقط": "Achetés uniquement avec des diamants", "لا تكفي الماس لهذا الشراء": "Pas assez de diamants pour cet achat", "تم الشراء": "Acheté", "إغلاق": "Fermer", "أدخل": "Saisir"});
 Object.assign(I18N.en,{"الإشعارات": "Notifications", "لا توجد إشعارات حالياً": "No notifications right now", "نسخ": "Copy", "تم النسخ": "Copied", "ادفع عبر تطبيق بنكيلي": "Pay with the Bankily app", "اضغط على شعار بنكيلي لتفتح موقعها الرسمي. بعد أن تكمل الشحن ارجع إلى اللعبة، وستصلك مكافأة الزيارة تلقائياً.": "Tap the Bankily logo to open its official website. After you finish the top-up, come back to the game and your visit reward arrives automatically."});
 Object.assign(I18N.fr,{"الإشعارات": "Notifications", "لا توجد إشعارات حالياً": "Aucune notification pour le moment", "نسخ": "Copier", "تم النسخ": "Copié", "ادفع عبر تطبيق بنكيلي": "Payez avec l’application Bankily", "اضغط على شعار بنكيلي لتفتح موقعها الرسمي. بعد أن تكمل الشحن ارجع إلى اللعبة، وستصلك مكافأة الزيارة تلقائياً.": "Touchez le logo Bankily pour ouvrir son site officiel. Une fois la recharge faite, revenez au jeu : votre récompense de visite arrive automatiquement."});
 Object.assign(I18N.en,{"قطع الألماس": "Diamond pieces", "الهلال": "Crescent", "اللهب": "Flame", "ورقة البرسيم": "Clover", "الجوهرة": "Gem", "السداسي الذهبي": "Golden hexagon", "تحتاج {n} ماسة إضافية لشراء «{s}»": "You need {n} more diamonds to buy “{s}”", "تحتاج {n} عملة إضافية لشراء «{s}»": "You need {n} more coins to buy “{s}”"});
 Object.assign(I18N.fr,{"قطع الألماس": "Pièces en diamant", "الهلال": "Croissant", "اللهب": "Flamme", "ورقة البرسيم": "Trèfle", "الجوهرة": "Gemme", "السداسي الذهبي": "Hexagone doré", "تحتاج {n} ماسة إضافية لشراء «{s}»": "Il vous manque {n} diamants pour acheter « {s} »", "تحتاج {n} عملة إضافية لشراء «{s}»": "Il vous manque {n} pièces pour acheter « {s} »"});
-Object.assign(I18N.en,{"طريقة الشحن": "How to top up", "اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم أدخل الرمز الذي يصلك في نافذة الشحن لتحصل على 500 ماسة.": "Top up via the Bankily app to +222 36 79 79 04, then enter the code you receive in the top-up window to get 500 diamonds.", "مكافأة زيارة التطبيق": "Visit reward", "زيارة تطبيق بنكيلي لمدة دقيقتين ثم العودة إلى اللعبة تعطيك 1000 عملة، مرة واحدة فقط.": "Visiting the Bankily app for two minutes and then returning to the game gives you 1000 coins, once only.", "الماس": "Diamonds", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات، ويُصرف في المتجر على قطع خاصة.": "Diamonds come only from top-ups, never from coins or visits, and are spent in the shop on special pieces."});
-Object.assign(I18N.fr,{"طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم أدخل الرمز الذي يصلك في نافذة الشحن لتحصل على 500 ماسة.": "Rechargez via l’application Bankily au +222 36 79 79 04, puis saisissez le code reçu dans la fenêtre de recharge pour obtenir 500 diamants.", "مكافأة زيارة التطبيق": "Récompense de visite", "زيارة تطبيق بنكيلي لمدة دقيقتين ثم العودة إلى اللعبة تعطيك 1000 عملة، مرة واحدة فقط.": "Visiter l’application Bankily pendant deux minutes puis revenir au jeu vous donne 1000 pièces, une seule fois.", "الماس": "Diamants", "الماس يأتي من الشحن فقط، ولا يُكتسب من العملات أو الزيارات، ويُصرف في المتجر على قطع خاصة.": "Les diamants viennent uniquement des recharges, jamais des pièces ou des visites, et se dépensent dans la boutique sur des pièces spéciales."});
+Object.assign(I18N.en,{"طريقة الشحن": "How to top up", "اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم ابقَ في التطبيق خمس دقائق بالضبط وارجع إلى اللعبة، فتصلك 500 ماسة تلقائياً.": "Top up via the Bankily app to +222 36 79 79 04, then stay in the app for exactly five minutes and return to the game. 500 diamonds arrive automatically.", "مكافأة زيارة التطبيق": "Visit reward", "زيارة تطبيق بنكيلي لمدة دقيقتين تعطيك 1000 عملة، ولمدة خمس دقائق تعطيك 500 ماسة، مرة واحدة لكل منهما.": "Visiting the Bankily app for two minutes gives you 1000 coins, and for five minutes 500 diamonds, once for each.", "الماس": "Diamonds", "الماس يأتي من زيارة بنكيلي لخمس دقائق فقط، ولا يُكتسب من العملات، ويُصرف في المتجر على قطع خاصة.": "Diamonds come only from a five-minute Bankily visit, never from coins, and are spent in the shop on special pieces."});
+Object.assign(I18N.fr,{"طريقة الشحن": "Comment recharger", "اشحن عبر تطبيق بنكيلي إلى الرقم +222 36 79 79 04، ثم ابقَ في التطبيق خمس دقائق بالضبط وارجع إلى اللعبة، فتصلك 500 ماسة تلقائياً.": "Rechargez via l’application Bankily au +222 36 79 79 04, restez exactement cinq minutes dans l’application, puis revenez au jeu. Les 500 diamants arrivent automatiquement.", "مكافأة زيارة التطبيق": "Récompense de visite", "زيارة تطبيق بنكيلي لمدة دقيقتين تعطيك 1000 عملة، ولمدة خمس دقائق تعطيك 500 ماسة، مرة واحدة لكل منهما.": "Visiter l’application Bankily pendant deux minutes rapporte 1000 pièces, et cinq minutes 500 diamants, une seule fois pour chacun.", "الماس": "Diamants", "الماس يأتي من زيارة بنكيلي لخمس دقائق فقط، ولا يُكتسب من العملات، ويُصرف في المتجر على قطع خاصة.": "Les diamants viennent uniquement d’une visite de cinq minutes sur Bankily, jamais des pièces, et se dépensent dans la boutique sur des pièces spéciales."});
 Object.assign(I18N.en,{"رمز مكافأة الزيارة": "Visit reward code", "شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.": "Thank you for visiting {app}. Enter the code in the top-up window to get {n} diamonds.", "تم استعمال هذا الرمز": "This code has been used", "تفعيل إشعارات الهاتف": "Turn on phone notifications", "إشعارات الهاتف مفعّلة ✓": "Phone notifications on ✓", "الإشعارات مرفوضة من إعدادات الهاتف": "Notifications are blocked in phone settings", "هذا المتصفح لا يدعم إشعارات الهاتف": "This browser does not support phone notifications", "المكافأة اليومية": "Daily reward", "خذ مكافأتك اليوم": "Claim your reward today"});
 Object.assign(I18N.fr,{"رمز مكافأة الزيارة": "Code de récompense de visite", "شكراً لزيارتك {app}. أدخل الرمز في نافذة الشحن لتحصل على {n} ماسة.": "Merci d’avoir visité {app}. Saisissez le code dans la fenêtre de recharge pour obtenir {n} diamants.", "تم استعمال هذا الرمز": "Ce code a déjà été utilisé", "تفعيل إشعارات الهاتف": "Activer les notifications du téléphone", "إشعارات الهاتف مفعّلة ✓": "Notifications du téléphone activées ✓", "الإشعارات مرفوضة من إعدادات الهاتف": "Notifications refusées dans les réglages du téléphone", "هذا المتصفح لا يدعم إشعارات الهاتف": "Ce navigateur ne prend pas en charge les notifications du téléphone", "المكافأة اليومية": "Récompense quotidienne", "خذ مكافأتك اليوم": "Récupérez votre récompense aujourd’hui"});
 Object.assign(I18N.en,{"الإصدار": "Version", "كل شحن يمنحك": "Each top-up gives you", "تستعملها في المتجر.": "to use in the shop.", "500 ماسة": "500 diamonds", "ترقية إلى قطعة جديدة، أو إحياء قطعة من قطعك المأكولة": "Promote to a new piece, or revive one of your captured pieces", "معلومات المطور والفريق": "Developer and team info", "المطور": "Developer", "صنع اللعبة من الفكرة إلى التنفيذ، وأضاف إليها ميزات كثيرة: قواعد النرد والشطرنج كاملة، وصالة ألعاب بعدة ألعاب مصغّرة، ونظام إنجازات ومهام يومية، وسجلاً للمباريات، ومظهراً زجاجياً داكناً، وتثبيتاً على الهاتف ولعباً بدون إنترنت. ويواصل تطويرها باستمرار لتبقى تجربة ممتعة لكل اللاعبين.": "Built from idea to release, with many features: full Ludo and chess rules, an arcade with several mini games, achievements and daily tasks, a match history, a dark glass look, phone install and offline play. Development continues so the game stays fun for every player.", "فريق التحديثات": "Update team", "يتولى نشر الإصدارات الجديدة وتجهيزها للاعبين، ومتابعة الأخطاء وتصحيحها، وضمان وصول كل تحديث في وقته وبسلاسة، حتى يبقى التطبيق دائماً بأحدث نسخة.": "Publishes and prepares new versions for players, tracks and fixes bugs, and makes sure every update arrives on time and smoothly, so the app is always on the latest version.", "شكراً لكل من يلعب ويشارك اللعبة.": "Thank you to everyone who plays and shares the game."});
@@ -7496,5 +7468,6 @@ document.addEventListener('contextmenu', (e) => { if (!e.target.closest || !e.ta
 document.addEventListener('dragstart', (e) => e.preventDefault());
 
 </script>
+<div id="verFloat" dir="ltr">v1.0.2.51</div>
 </body>
 </html>
