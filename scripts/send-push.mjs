@@ -9,7 +9,7 @@ const msgs = [
   { t: "تحدٍّ جديد", b: "حاول كسر رقمك القياسي في إحدى ألعاب صالة الألعاب." },
   { t: "متجر الماس", b: "تفقّد قطع المتجر قبل أن تنفد." },
 ];
-const m = msgs[Math.floor(Date.now() / 7200000) % msgs.length];
+const m = msgs[Math.floor(Date.now() / 600000) % msgs.length];
 const res = await fetch("https://onesignal.com/api/v1/notifications", {
   method: "POST",
   headers: { "Content-Type": "application/json", Authorization: "Key " + KEY },
