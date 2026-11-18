@@ -108,6 +108,7 @@ const RPC = {
   list_my_challenges: [],
   get_match: ["p_match_id"],
   resign_match: ["p_match_id"],
+  set_my_email: ["p_email"],
 };
 
 async function callRpc(client, name, body) {
