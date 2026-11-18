@@ -64,6 +64,8 @@ const KNOWN_ERRORS = {
   cannot_add_self: 400,
   cannot_challenge_self: 400,
   invalid_game_type: 400,
+  invalid_state: 400,
+  invalid_result: 400,
 };
 
 function errorResponse(e) {
@@ -166,6 +168,21 @@ async function handleTimeout(uid, body) {
   });
 }
 
+// Online Ludo: the browser computes the move with the Ludo engine and sends the
+// whole state. The database checks only participation, the turn owner (or an
+// expired 20-second turn) and the version; it does not validate Ludo rules.
+async function handleLudoSave(uid, body) {
+  const { match_id, expected_version, state, result } = body;
+  if (!state || typeof state !== "object" || Array.isArray(state)) throw new Error("invalid_state");
+  return asPlayer(uid, async (client) => {
+    const { rows: out } = await client.query(
+      "SELECT * FROM save_ludo_state($1, $2, $3::jsonb, $4)",
+      [match_id, expected_version, JSON.stringify(state), result ?? null],
+    );
+    return out[0];
+  });
+}
+
 // Chess move validation on the server. The client sends only the move;
 // the server replays it with chess.js and computes the new state.
 async function handleMove(uid, body) {
@@ -240,6 +257,10 @@ export default async (req) => {
 
     if (path === "timeout" && req.method === "POST") {
       return json(200, await handleTimeout(uid, await req.json()));
+    }
+
+    if (path === "ludo-save" && req.method === "POST") {
+      return json(200, await handleLudoSave(uid, await req.json()));
     }
 
     if (path.startsWith("rpc/") && req.method === "POST") {

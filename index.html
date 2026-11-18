@@ -939,6 +939,7 @@ html[data-theme=night] .splash{background-color:#04061a}
     <div class="side">
       <div class="glass hud">
         <div id="msg" aria-live="polite">—</div>
+        <div class="ol-line" id="ldOpp" hidden><span class="ol-dots" id="ldOppDots"></span><b id="ldOppName"></b></div>
       </div>
     </div>
   </div>
@@ -2770,8 +2771,8 @@ function layout() {
     });
   }
 }
-const isBot = (c) => !!(G && G.seats[c] && G.seats[c].type === 'bot');
-const isHuman = (c) => !!(G && G.seats[c] && G.seats[c].type === 'human');
+const isBot = (c) => !!(G && G.seats[c] && (G.seats[c].type === 'bot' || ldRobotTurn(c)));
+const isHuman = (c) => !!(G && G.seats[c] && G.seats[c].type === 'human' && !ldRobotTurn(c));
 function buildTurnStars() {
   const box = $('turnStars'); if (!box || box.dataset.built) return;
   box.dataset.built = '1';
@@ -2929,7 +2930,7 @@ function updateHUD() {
   }
   $('msg').textContent = msg;
   if (G.phase !== 'move') hintArmed = false;
-  const hb = $('btnHint'), showH = G.phase === 'move' && human && !ui.swap && ui.legal.length > 1;
+  const hb = $('btnHint'), showH = G.phase === 'move' && human && !ui.swap && ui.legal.length > 1 && !G.online;
   hb.hidden = !showH; hb.classList.toggle('arm', hintArmed);
   if (showH) { $('hintN').textContent = String(getWallet().hints); hb.setAttribute('aria-label', hintLabel()); }
 }
@@ -2957,7 +2958,7 @@ function hintLabel() {
   return w.hints > 0 ? T('💡 تلميح ({n})', { n: w.hints }) : T('💡 شراء تلميح ({n} عملات)', { n: HINT_PRICE });
 }
 function showHint() {
-  if (!G || G.phase !== 'move' || !isHuman(G.turn) || ui.legal.length < 2) return;
+  if (!G || G.online || G.phase !== 'move' || !isHuman(G.turn) || ui.legal.length < 2) return;
   const w = getWallet();
   if (w.hints < 1) {
     if (w.coins < HINT_PRICE) { Sound.sfx('err'); toast(T('لا تملك تلميحات ولا عملات كافية. اربح عملات بأكل قطع الخصم والفوز.'), 3000); return; }
@@ -2975,6 +2976,7 @@ function bringFront(c, i) { gTok.appendChild(TOK[c][i]); }
 /* ---------- save / restore ---------- */
 function save() {
   if (!G || !['roll', 'move', 'bonus'].includes(G.phase)) return;
+  if (G.online) { ldPush(); return; }
   store.set('gs_save', { G, user: currentUser() });
 }
 
@@ -2982,6 +2984,7 @@ function save() {
 function startTurn() {
   if (!G) return;
   ui.flash = ''; ui.swap = null; ui.legal = []; clearSel(); G.phase = 'roll';
+  if (G.online) G.turnNo = (G.turnNo || 0) + 1;
   save(); refresh(); kick();
   if (isHuman(G.turn) && G.mode === 'bot') Sound.sfx('turn');
 }
@@ -3052,7 +3055,7 @@ function finishMove() {
   const ex = G.extra, was = G.turn, before = (G.ranks || []).length;
   engineEnd(G, ex);
   if ((G.ranks || []).length > before) logEv('{n} وصل إلى المنزل وحصل على المركز {r}', was, { n: () => pname(was), r: G.ranks.length });
-  if (G.phase === 'over') { gameOver(); return; }
+  if (G.phase === 'over') { if (G.online) { ldPush(); ldOver(); } else gameOver(); return; }
   if (ex) logEv('{n} يلعب مرة أخرى', was, { n: () => pname(was) });
   startTurn();
 }
@@ -3647,6 +3650,7 @@ function timerSeat() {
   return (G.phase === 'roll' || G.phase === 'move' || G.phase === 'bonus') && isHuman(c) ? c : -1;
 }
 function timerTick() {
+  if (G && G.online) return;
   const el = $('turnTimer'), secs = settings.turnTimer === 'off' ? 0 : parseInt(settings.turnTimer, 10) || 0, c = timerSeat(), now = Date.now();
   if (!secs || c < 0 || $('s-game').hidden) { TT.key = ''; el.hidden = true; return; }
   if (paused) { TT.deadline += 250; }
@@ -6898,6 +6902,7 @@ function afterLogin() {
 }
 function renderMenuTexts() { $('whoami').textContent = T('مرحباً {n}', { n: displayName() }); renderLevel(); renderCoins(); updateBadges(); }
 function goMenu() {
+  ldStop();
   Sound.duck = 1; Sound.applyVolumes();
   runId++; kickId++; G = null; paused = false; keepAwake(false);
   show('s-menu');
@@ -6917,6 +6922,7 @@ $('btnLogout').addEventListener('click', () => { store.del('gs_session'); Sound.
 /* ---------- online: accounts, friends and challenges (needs internet) ---------- */
 const OL_BASE = '/api/';
 const OL_TURN_SECONDS = 20;   // per-turn timer for online matches; a timeout is played by the robot
+let OL_SKEW = 0;             // server clock minus this device's clock (from the HTTP Date header)
 const OL_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const AV_PERSON = '<svg viewBox="-1 -1 2 2" aria-hidden="true"><circle r=".92" fill="#7fbcff" stroke="#fff" stroke-width=".1"/><circle cy="-.22" r=".3" fill="#fff"/><path d="M-.55 .62 Q-.55 .12 0 .12 Q.55 .12 .55 .62 Z" fill="#fff"/></svg>';
 const AV_ROBOT = '<svg viewBox="-1 -1 2 2" aria-hidden="true"><circle r=".92" fill="#58e592" stroke="#fff" stroke-width=".1"/><rect x="-.42" y="-.36" width=".84" height=".62" rx=".16" fill="#fff"/><circle cx="-.18" cy="-.08" r=".09" fill="#1b2f7a"/><circle cx=".18" cy="-.08" r=".09" fill="#1b2f7a"/><rect x="-.2" y=".2" width=".4" height=".08" rx=".04" fill="#1b2f7a"/><rect x="-.03" y="-.56" width=".06" height=".16" fill="#fff"/></svg>';
@@ -6943,6 +6949,8 @@ async function olCall(path, body, method) {
       body: body ? JSON.stringify(body) : undefined
     });
   } catch (e) { throw new Error('offline'); }
+  const sd = Date.parse(res.headers.get('date') || '');
+  if (!isNaN(sd)) OL_SKEW = sd - Date.now();
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error((data && data.error) || ('http_' + res.status));
   return data;
@@ -7252,12 +7260,169 @@ async function olCheckMatches() {
     if (!olMe) olMe = (await olCall('rpc/get_my_profile', {}))[0];
     if (!OL_FRIENDS.length) OL_FRIENDS = await olCall('rpc/list_friends', {}).then((f) => { f.forEach((x) => { OL_NAMES[x.user_id] = x.username; }); return f; }).catch(() => []);
     const rows = await olCall('rpc/list_my_matches', {});
-    if (rows[0] && rows[0].id !== MT.dismissed) mtOpen(rows[0]);
+    const chess = rows.find((r) => r.game_type === 'chess');
+    const ludo = rows.find((r) => r.game_type === 'friends');
+    if (chess && chess.id !== MT.dismissed) mtOpen(chess);
+    if (ludo) ldAutoOpen(ludo);
   } catch (e) { /* offline: try again on the next refresh */ }
 }
 document.querySelectorAll('[data-close="m-match"]').forEach((b) => b.addEventListener('click', () => {
   MT.dismissed = MT.id; clearInterval(MT.poll); clearInterval(MT.tick);
 }));
+
+/* ---------- online Ludo match: the normal Ludo board; this browser plays each move with the Ludo engine,
+   the server stores the state and checks only the turn owner (or an expired turn) and the version ---------- */
+const LD = { id: null, version: 0, updated: null, active: false, color: 0, oppColor: 2, oppId: null, oppName: '', seats: null,
+  busy: false, dirty: false, needInit: false, endShown: false, kickedVer: null, nextKickAt: 0, expShown: -1, dismissed: null,
+  poll: null, tick: null, presence: null };
+// seconds left in the current turn, from the server's updated_at (the seat that owns the turn has 20 seconds)
+function ldRemain() {
+  const u = LD.updated ? Date.parse(LD.updated) : NaN;
+  if (isNaN(u)) return OL_TURN_SECONDS;
+  return Math.min(OL_TURN_SECONDS, Math.max(0, OL_TURN_SECONDS - ((Date.now() + OL_SKEW) - u) / 1000));
+}
+// the turn seat's time is up: the robot plays that seat on this device (any participant's browser may do it)
+function ldRobotTurn(c) { return !!(G && G.online && LD.active && c === G.turn && G.phase !== 'over' && ldRemain() <= 0); }
+// the part of G that goes to the server (stable phases only; nothing that belongs to this device)
+function ldSerialize() {
+  return { v: 1, turn: G.turn, turnNo: G.turnNo || 0, phase: G.phase, dice: G.dice, sixes: G.sixes, extra: G.extra,
+    bonus: G.bonus, winner: G.winner, ranks: G.ranks || [], caps: G.caps, sixCount: G.sixCount, moves: G.moves,
+    faces: G.faces, pos: G.pos, aim: G.aim };
+}
+function ldFromState(L) {
+  return { v: 1, seats: LD.seats, mode: 'online', diff: 'normal', online: true,
+    pos: L.pos, aim: L.aim, turn: L.turn, turnNo: L.turnNo || 0, phase: L.phase, dice: L.dice, sixes: L.sixes,
+    extra: L.extra, bonus: L.bonus, winner: L.winner, ranks: L.ranks || [], caps: L.caps, sixCount: L.sixCount,
+    moves: L.moves, faces: L.faces };
+}
+function ldPush() { if (!G || !G.online || !LD.id) return; LD.dirty = true; ldFlush(); }
+// one save at a time: a newer state replaces the queued one, and the version comes from the last accepted save
+async function ldFlush() {
+  if (LD.busy || !LD.dirty || !LD.id || !G || !G.online) return;
+  if (!['roll', 'move', 'bonus', 'over'].includes(G.phase)) return;   // transient phases are not stored
+  LD.dirty = false; LD.busy = true;
+  const body = { match_id: LD.id, expected_version: LD.version, state: ldSerialize(),
+    result: G.phase === 'over' ? (G.winner === 0 ? 'white' : 'black') : null };
+  let next = 'ok';
+  try {
+    const row = await olCall('ludo-save', body);
+    LD.version = row.version; LD.updated = row.updated_at; LD.needInit = false; LD.kickedVer = null;
+  } catch (e) {
+    const code = String((e && e.message) || e);
+    next = (code === 'offline' || code === 'server_error' || /^http_/.test(code)) ? 'retry' : 'sync';
+    if (code === 'not_your_turn') LD.nextKickAt = Date.now() + 2000;   // a robot save sent a moment early: wait a little
+  }
+  LD.busy = false;
+  if (next === 'retry') { LD.dirty = true; setTimeout(() => ldFlush(), 2000); return; }
+  if (next === 'sync') { LD.dirty = false; await ldSync(true); return; }
+  if (LD.dirty && LD.id) ldFlush();
+}
+async function ldSync(force) {
+  if (!LD.id) return;
+  try {
+    const rows = await olCall('rpc/get_match', { p_match_id: LD.id });
+    if (rows[0]) ldApply(rows[0], force);
+  } catch (e) { /* offline: keep the board, the next poll tries again */ }
+}
+// show the server's state: the engine restarts from it, animations of the old state are dropped
+function ldApply(row, force) {
+  if (!row || row.id !== LD.id || !row.state || !row.state.ludo) return;
+  if (LD.busy && !force) return;                              // our own save is in flight: the next poll brings the result
+  if (force ? row.version < LD.version : row.version <= LD.version) return;
+  LD.version = row.version; LD.updated = row.updated_at; LD.kickedVer = null; LD.nextKickAt = 0; LD.dirty = false; LD.needInit = false;
+  runId++; kickId++;
+  ui.swap = null; ui.sel = null; ui.bonusSel = null; ui.hint = null; ui.flash = '';
+  G = ldFromState(row.state.ludo);
+  ui.legal = G.phase === 'move' ? legalMoves(G, G.turn, G.dice) : [];
+  if (row.status !== 'active' && G.phase !== 'over') {        // ended on the server (resigned)
+    G.phase = 'over'; G.winner = row.winner === olMe.id ? LD.color : LD.oppColor;
+  }
+  if (G.phase === 'over') { ldOver(); return; }
+  refresh(); kick();
+}
+function ldOpen(row) {
+  if (!olMe) return;
+  const white = row.player_white === olMe.id;
+  LD.id = row.id; LD.version = row.version; LD.updated = row.updated_at; LD.active = row.status === 'active';
+  LD.color = white ? 0 : 2; LD.oppColor = white ? 2 : 0;       // the challenger (white) is seat 0, the other player seat 2
+  LD.oppId = white ? row.player_black : row.player_white;
+  LD.oppName = OL_NAMES[LD.oppId] || T('الخصم');
+  LD.busy = false; LD.dirty = false; LD.kickedVer = null; LD.nextKickAt = 0; LD.endShown = false; LD.expShown = -1;
+  LD.seats = [];
+  LD.seats[LD.color] = { name: olMe.username, type: 'human', owner: true };
+  LD.seats[LD.oppColor] = { name: LD.oppName, type: 'remote', owner: false };
+  LD.needInit = !(row.state && row.state.ludo);
+  if (LD.needInit) { G = newGame({ seats: LD.seats, first: 0, mode: 'online' }); G.online = true; G.turnNo = 0; }
+  else G = ldFromState(row.state.ludo);
+  runId++; kickId++; paused = false; ui.sel = null; ui.bonusSel = null; ui.swap = null; ui.flash = ''; ui.log = [];
+  ui.legal = G.phase === 'move' ? legalMoves(G, G.turn, G.dice) : [];
+  enterGame();
+  logEv('مباراة أونلاين ضد {n}', null, { n: LD.oppName });
+  $('ldOpp').hidden = false; ldDots();
+  clearInterval(LD.poll); clearInterval(LD.tick); clearInterval(LD.presence);
+  LD.poll = setInterval(() => ldSync(false), 2000);
+  LD.tick = setInterval(ldTickFn, 250);
+  LD.presence = setInterval(ldPresence, 5000);
+  refresh(); kick();
+}
+// every 250 ms: the timer chip, the first save of a new match, and the robot when a turn expires
+function ldTickFn() {
+  if (!G || !G.online || !LD.id || !LD.active) return;
+  const r = ldRemain(), el = $('turnTimer');
+  el.hidden = false; el.textContent = '⏱ ' + Math.ceil(r); el.classList.toggle('low', r <= 5);
+  if (LD.needInit && !LD.busy && (LD.color === 0 || r <= 0)) { LD.dirty = true; ldFlush(); }
+  if (r <= 0 && LD.kickedVer !== LD.version && Date.now() >= LD.nextKickAt && G.phase !== 'over') {
+    LD.kickedVer = LD.version;
+    if (LD.expShown !== LD.version) { LD.expShown = LD.version; toast(T('انتهى وقت الدور، يلعب الروبوت عنه')); }
+    kick();
+  }
+}
+async function ldPresence() {
+  if (!LD.id) return;
+  try {
+    const f = await olCall('rpc/list_friends', {});
+    f.forEach((x) => { OL_NAMES[x.user_id] = x.username; });
+    OL_FRIENDS = f; ldDots();
+  } catch (e) { /* keep the last status */ }
+}
+function ldDots() {
+  const fr = OL_FRIENDS.find((x) => x.user_id === LD.oppId);
+  const st = fr ? olState(fr) : 'gray';
+  const box = $('ldOppDots'); box.replaceChildren();
+  ['gray', 'red', 'green'].forEach((k) => box.append(h('i', k + (k === st ? ' on' : ''))));
+  $('ldOppName').textContent = LD.oppName;
+}
+function ldOver() {
+  if (LD.endShown || !G) return;
+  LD.endShown = true; LD.active = false;
+  clearInterval(LD.poll); clearInterval(LD.tick); clearInterval(LD.presence);
+  LD.poll = LD.tick = LD.presence = null;
+  $('turnTimer').hidden = true;
+  const won = G.winner === LD.color;
+  runId++; kickId++; ui.swap = null; ui.legal = []; clearSel(); refresh();
+  $('t-win').textContent = G.winner == null ? T('انتهت المباراة') : won ? T('🏆 مبروك! فزت') : T('فاز {n}', { n: LD.oppName });
+  $('winSub').textContent = won ? T('أوصلت قطعك الأربع إلى المركز أولاً.') : T('حاول مرة أخرى، المباراة القادمة لك.');
+  $('winCoins').hidden = true; $('winRank').replaceChildren(); $('wAgain').hidden = true;
+  Sound.sfx(won ? 'win' : 'err');
+  if (won) confetti();
+  openModal('m-win');
+}
+// leaving an unfinished match hides it until the opponent moves again (the menu would otherwise reopen it at once)
+function ldStop() {
+  clearInterval(LD.poll); clearInterval(LD.tick); clearInterval(LD.presence);
+  LD.poll = LD.tick = LD.presence = null;
+  if (LD.id && LD.active) LD.dismissed = { id: LD.id, version: LD.version };
+  LD.id = null; LD.active = false;
+  $('turnTimer').hidden = true; $('ldOpp').hidden = true;
+}
+function ldAutoOpen(row) {
+  if (LD.id === row.id || !$('m-match').hidden) return;      // already on screen, or a chess match is open
+  if ($('splash') && !$('splash').hidden) return;             // the entry screen is still up: the menu comes first
+  if (G && !G.online) return;                                  // an offline game is on screen: never replace it
+  if (LD.dismissed && LD.dismissed.id === row.id && LD.dismissed.version === row.version) return;
+  ldStop();
+  ldOpen(row);
+}
 
 /* ---------- stats ---------- */
 const statsKey = () => 'gs_stats_' + currentUser();
@@ -7474,7 +7639,7 @@ function resumeSaved() {
 
 /* ---------- game over ---------- */
 function gameOver() {
-  runId++; clearSel(); ui.swap = null; refresh(); store.del('gs_save');
+  runId++; clearSel(); ui.swap = null; refresh(); store.del('gs_save'); $('wAgain').hidden = false;
   const owner = G.seats.findIndex((s) => s && s.owner);
   const st = getStats(), lvBefore = levelInfo(st).level;
   st.games++; if (G.winner === owner) st.wins++; st.caps += G.caps[owner] || 0; st.sixes += (G.sixCount && G.sixCount[owner]) || 0; store.set(statsKey(), st);
@@ -7511,7 +7676,7 @@ $('wMenu').addEventListener('click', () => { Sound.sfx('click'); closeModal('m-w
 /* ---------- pause menu ---------- */
 let restartArmed = false;
 function resetRestart() { restartArmed = false; $('pRestart').textContent = T('إعادة المباراة من البداية'); }
-$('btnPause').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); paused = true; resetRestart(); openModal('m-pause'); });
+$('btnPause').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); paused = true; resetRestart(); $('pRestart').hidden = !!(G && G.online); openModal('m-pause'); });
 $('pScore').addEventListener('click', () => { modalReturn = 'm-pause'; $('m-pause').hidden = true; updateHarvest(); openModal('m-score'); });
 $('pRules').addEventListener('click', () => { modalReturn = 'm-pause'; $('m-pause').hidden = true; openModal('m-rules'); });
 $('pSettings').addEventListener('click', () => { modalReturn = 'm-pause'; $('m-pause').hidden = true; syncSettingsUI(); openModal('m-settings'); });
@@ -7519,7 +7684,7 @@ $('pRestart').addEventListener('click', () => {
   if (!restartArmed) { restartArmed = true; $('pRestart').textContent = T('اضغط مرة أخرى لتأكيد الإعادة'); return; }
   closeModal('m-pause'); startGame(G.cfg);
 });
-$('pQuit').addEventListener('click', () => { save(); closeModal('m-pause'); goMenu(); });
+$('pQuit').addEventListener('click', () => { if (!(G && G.online)) save(); closeModal('m-pause'); goMenu(); });
 
 /* ---------- menu buttons & init ---------- */
 $('btnBot').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); openSetup('bot'); });
