@@ -806,6 +806,18 @@ html[data-theme=night] .splash{background-color:#04061a}
 .upd-fill{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#7a5cff,#ff5ecb,#ffe27a);box-shadow:0 0 14px rgba(255,94,203,.6)}
 .upd-h{margin:0;width:100%;text-align:start;font-weight:800;color:#ffe27a;font-size:.95rem}
 .upd-priv{margin:2px 0 0;font-size:.8rem;color:#9aa6d6;line-height:1.5}
+.ol-list{display:flex;flex-direction:column;gap:8px}
+.ol-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:rgba(255,255,255,.08);flex-wrap:wrap}
+.ol-row .av,.ol-me .av{width:44px;height:44px;flex:0 0 44px;display:block}
+.ol-row .av svg,.ol-me .av svg{width:100%;height:100%;display:block}
+.ol-dot{width:10px;height:10px;border-radius:50%;background:#7a7f99;flex:0 0 10px}
+.ol-dot.on{background:#38d07a}
+.ol-grow{flex:1;min-width:0;display:flex;flex-direction:column}
+.ol-msg{font-size:.9rem;min-height:1.2em}
+.ol-err{color:#ff8a95}
+.ol-cd{font-variant-numeric:tabular-nums;color:var(--gold)}
+#m-online .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#m-online input{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -866,6 +878,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="menu-list">
     <button class="btn big blue" id="btnResume" hidden><span class="ic" data-ic="play"></span><span><b>استئناف المباراة</b><small>Resume saved match</small></span></button>
     <button class="btn big primary" id="btnBot"><span class="ic" data-ic="bot"></span><span><b>لعب مع روبوت ذكي</b><small>AI Bot Mode</small></span></button>
+    <button class="btn big blue" id="btnOnline"><span class="ic" data-ic="group"></span><span><b>أونلاين</b><small>Online · أصدقاء وتحديات (يحتاج إنترنت)</small></span></button>
     <button class="btn big orange" id="btnMulti"><span class="ic" data-ic="group"></span><span><b>أصدقاء وروبوتات</b><small>Multiplayer · 2–4 · صديق أو روبوت لكل مقعد</small></span></button>
   </div>
   <button class="btn big slate" id="btnChess"><span class="ic" data-ic="chess"></span><span><b>الشطرنج</b><small>Chess · أصدقاء أو روبوت</small></span></button>
@@ -1041,6 +1054,36 @@ html[data-theme=night] .splash{background-color:#04061a}
   </div>
 </div>
 
+<div class="modal" id="m-online" hidden>
+  <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-online">
+    <h2 id="t-online">أونلاين</h2>
+    <div id="olAuth" hidden>
+      <form id="olForm" style="display:flex;flex-direction:column;gap:12px" novalidate>
+        <label class="f" for="olUser">اسم المستخدم<input id="olUser" type="text" maxlength="20" autocomplete="username" placeholder="من 3 إلى 20 حرفًا"></label>
+        <label class="f" for="olPass">كلمة المرور<input id="olPass" type="password" maxlength="60" autocomplete="current-password" placeholder="6 أحرف على الأقل"></label>
+        <div class="row"><button class="btn primary grow" type="submit" id="olLogin">دخول</button><button class="btn grow" type="button" id="olSignup">إنشاء حساب</button></div>
+        <label class="f" for="olEmail">البريد الإلكتروني (اختياري، عند إنشاء الحساب)<input id="olEmail" type="email" maxlength="120" autocomplete="email"></label>
+      </form>
+    </div>
+    <div id="olHome" hidden>
+      <div class="row sb ol-me">
+        <span id="olAv" class="av"></span>
+        <div class="ol-grow"><b id="olName"></b><small id="olCode" class="muted"></small></div>
+        <button class="btn small" id="olLogout">خروج</button>
+      </div>
+      <div class="row">
+        <button class="btn small" data-av="person">صورة شخص</button>
+        <button class="btn small" data-av="robot">صورة روبوت</button>
+      </div>
+      <div class="row"><input id="olFind" type="text" maxlength="20" placeholder="اسم المستخدم أو رمز الصديق XXXX-XXXX"><button class="btn primary" id="olAdd">إضافة صديق</button></div>
+      <div class="ol-msg" id="olMsg" role="status"></div>
+      <h3>طلبات الصداقة</h3><div id="olPending" class="ol-list"></div>
+      <h3>التحديات</h3><div id="olChallenges" class="ol-list"></div>
+      <h3>الأصدقاء</h3><div id="olFriends" class="ol-list"></div>
+    </div>
+    <button class="btn primary" data-close="m-online">إغلاق</button>
+  </div>
+</div>
 <div class="modal" id="m-rules" hidden>
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-rules">
     <h2 id="t-rules">دليل القواعد والرموز</h2>
@@ -6831,6 +6874,196 @@ $('loginForm').addEventListener('submit', doLogin);
 $('btnGuest').addEventListener('click', () => { Sound.init(); store.set('gs_session', { name: 'ضيف', guest: true }); afterLogin(); });
 $('btnAccept').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); store.set('gs_terms', true); closeModal('m-terms'); goMenu(); });
 $('btnLogout').addEventListener('click', () => { store.del('gs_session'); Sound.sfx('click'); show('s-login'); });
+
+/* ---------- online: accounts, friends and challenges (needs internet) ---------- */
+const OL_BASE = '/api/';
+const OL_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const AV_PERSON = '<svg viewBox="-1 -1 2 2" aria-hidden="true"><circle r=".92" fill="#7fbcff" stroke="#fff" stroke-width=".1"/><circle cy="-.22" r=".3" fill="#fff"/><path d="M-.55 .62 Q-.55 .12 0 .12 Q.55 .12 .55 .62 Z" fill="#fff"/></svg>';
+const AV_ROBOT = '<svg viewBox="-1 -1 2 2" aria-hidden="true"><circle r=".92" fill="#58e592" stroke="#fff" stroke-width=".1"/><rect x="-.42" y="-.36" width=".84" height=".62" rx=".16" fill="#fff"/><circle cx="-.18" cy="-.08" r=".09" fill="#1b2f7a"/><circle cx=".18" cy="-.08" r=".09" fill="#1b2f7a"/><rect x="-.2" y=".2" width=".4" height=".08" rx=".04" fill="#1b2f7a"/><rect x="-.03" y="-.56" width=".06" height=".16" fill="#fff"/></svg>';
+const OL_OFFLINE = 'لا يوجد اتصال بالإنترنت. أعد المحاولة عند الاتصال بالإنترنت.';
+const OL_MSG = {
+  username_taken: 'اسم المستخدم مستخدم، جرّب اسمًا آخر', invalid_credentials: 'الاسم أو كلمة المرور غير صحيحة',
+  weak_password: 'كلمة المرور قصيرة (6 أحرف على الأقل)', invalid_username: 'اسم المستخدم: من 3 إلى 20 حرفًا إنجليزيًا أو أرقامًا أو _',
+  invalid_email: 'البريد الإلكتروني غير صحيح', friend_code_not_found: 'لم يُعثر على هذا الرمز أو الاسم',
+  already_friends: 'أنتما صديقان بالفعل', request_already_sent: 'طلب الصداقة مُرسل بالفعل', cannot_add_self: 'لا يمكنك إضافة نفسك',
+  not_friends: 'يجب أن تكونا صديقين لبدء تحدٍّ', target_offline: 'هذا الصديق غير متصل الآن',
+  rate_limited: 'وصلت إلى الحد: 10 تحديات في الساعة', challenge_already_pending: 'لديك تحدٍّ معلّق لهذا الصديق',
+  challenge_expired: 'انتهت مهلة التحدي (30 ثانية)', challenge_not_pending_or_not_yours: 'هذا التحدي لم يعد متاحًا',
+  not_authenticated: 'انتهت الجلسة، سجّل الدخول من جديد', server_error: 'حدث خطأ في الخادم، حاول لاحقًا'
+};
+const olTok = () => store.get('gs_online_token', '');
+let olMe = null, olTimer = null, olHb = null;
+async function olCall(path, body, method) {
+  if (!navigator.onLine) throw new Error('offline');
+  let res;
+  try {
+    res = await fetch(OL_BASE + path, {
+      method: method || 'POST', cache: 'no-store',
+      headers: Object.assign({ 'content-type': 'application/json' }, olTok() ? { authorization: 'Bearer ' + olTok() } : {}),
+      body: body ? JSON.stringify(body) : undefined
+    });
+  } catch (e) { throw new Error('offline'); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data && data.error) || ('http_' + res.status));
+  return data;
+}
+function olErrText(e) {
+  const c = String((e && e.message) || e);
+  if (c === 'offline') return OL_OFFLINE;
+  return OL_MSG[c] ? T(OL_MSG[c]) : T('تعذّر تنفيذ الطلب');
+}
+function olMsg(text, bad) { const m = $('olMsg'); m.textContent = text || ''; m.className = 'ol-msg' + (bad ? ' ol-err' : ''); }
+function olShowAuth(on) { $('olAuth').hidden = !on; $('olHome').hidden = on; }
+function olMakeCode() {
+  const part = () => Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => OL_CHARS[b % OL_CHARS.length]).join('');
+  return part() + '-' + part();
+}
+function olRow(name, online, avHtml) {
+  const row = h('div', 'ol-row');
+  const av = h('span', 'av'); av.innerHTML = avHtml || AV_PERSON; row.append(av);
+  row.append(h('span', 'ol-dot' + (online ? ' on' : '')));
+  const g = h('div', 'ol-grow'); g.append(h('b', null, name)); row.append(g);
+  return row;
+}
+function olBtn(label, cls, fn) { const b = h('button', cls || 'btn small', label); b.type = 'button'; b.addEventListener('click', fn); return b; }
+async function olAct(path, body, okText) {
+  try {
+    await olCall(path, body);
+    olMsg(okText || '', false);
+    olRefresh();
+  } catch (e) { olMsg(olErrText(e), true); }
+}
+function olDraw(friends, chal) {
+  const names = {};
+  friends.forEach((f) => { names[f.user_id] = f.username; });
+  const nm = (id) => names[id] || T('لاعب');
+  const now = Date.now();
+
+  const pend = $('olPending'); pend.replaceChildren();
+  friends.filter((f) => f.status === 'pending').forEach((f) => {
+    const row = olRow(f.username, f.is_online, AV_PERSON);
+    if (f.direction === 'incoming') {
+      row.append(olBtn(T('قبول'), 'btn small primary', () => olAct('rpc/respond_friend_request', { p_requester: f.user_id, p_accept: true }, T('تمت إضافته صديقًا'))));
+      row.append(olBtn(T('رفض'), 'btn small', () => olAct('rpc/respond_friend_request', { p_requester: f.user_id, p_accept: false })));
+    } else row.append(h('small', 'muted', T('بانتظار الرد')));
+    pend.append(row);
+  });
+  if (!pend.children.length) pend.append(h('small', 'muted', T('لا توجد طلبات')));
+
+  const box = $('olChallenges'); box.replaceChildren();
+  chal.filter((c) => c.status === 'pending' && Date.parse(c.expires_at) > now).forEach((c) => {
+    const incoming = c.to_user === olMe.id;
+    const row = olRow(incoming ? nm(c.from_user) : nm(c.to_user), true, AV_PERSON);
+    const cd = h('small', 'ol-cd'); cd.dataset.exp = c.expires_at; row.append(cd);
+    row.append(h('small', 'muted', (c.game_type === 'chess' ? T('شطرنج') : T('لودو'))));
+    if (incoming) {
+      row.append(olBtn(T('قبول'), 'btn small primary', () => olAct('rpc/accept_challenge', { p_challenge_id: c.id }, T('تم قبول التحدي'))));
+      row.append(olBtn(T('رفض'), 'btn small', () => olAct('rpc/decline_challenge', { p_challenge_id: c.id })));
+    } else {
+      row.append(olBtn(T('إلغاء'), 'btn small', () => olAct('rpc/cancel_challenge', { p_challenge_id: c.id })));
+    }
+    box.append(row);
+  });
+  if (!box.children.length) box.append(h('small', 'muted', T('لا توجد تحديات الآن')));
+
+  const fl = $('olFriends'); fl.replaceChildren();
+  friends.filter((f) => f.status === 'accepted').forEach((f) => {
+    const row = olRow(f.username, f.is_online, AV_PERSON);
+    const sel = h('select'); sel.className = 'btn small';
+    [['friends', T('لودو')], ['chess', T('شطرنج')]].forEach(([v, t]) => { const o = h('option', null, t); o.value = v; sel.append(o); });
+    row.append(sel);
+    row.append(olBtn(T('تحدٍّ'), 'btn small primary', () => {
+      olAct('rpc/create_challenge', { p_to_user: f.user_id, p_game_type: sel.value }, T('أُرسل التحدي، لديك 30 ثانية'));
+    }));
+    row.append(olBtn(T('حذف'), 'btn small', () => olAct('rpc/remove_friend', { p_friend: f.user_id }, T('أُزيل الصديق'))));
+    fl.append(row);
+  });
+  if (!fl.children.length) fl.append(h('small', 'muted', T('لا يوجد أصدقاء بعد')));
+}
+async function olRefresh() {
+  if ($('m-online').hidden) { clearInterval(olTimer); clearInterval(olHb); return; }
+  try {
+    const [prof, friends, chal] = await Promise.all([
+      olCall('rpc/get_my_profile', {}), olCall('rpc/list_friends', {}), olCall('rpc/list_my_challenges', {})
+    ]);
+    olMe = prof[0];
+    $('olName').textContent = olMe.username;
+    $('olCode').textContent = T('رمز الصديق: ') + olMe.friend_code;
+    $('olAv').innerHTML = store.get('gs_avatar', 'person') === 'robot' ? AV_ROBOT : AV_PERSON;
+    olDraw(friends, chal);
+  } catch (e) {
+    if (String(e.message) === 'not_authenticated') { store.del('gs_online_token'); olShowAuth(true); }
+    olMsg(olErrText(e), true);
+  }
+}
+async function olOpen() {
+  openModal('m-online');
+  olMsg('');
+  if (!olTok()) { olShowAuth(true); return; }
+  olShowAuth(false);
+  olRefresh();
+  clearInterval(olTimer); olTimer = setInterval(olRefresh, 5000);
+  clearInterval(olHb); olHb = setInterval(() => olCall('rpc/heartbeat', {}).catch(() => {}), 30000);
+  olCall('rpc/heartbeat', {}).catch(() => {});
+}
+async function olAuthSubmit(ev, signup) {
+  if (ev && ev.preventDefault) ev.preventDefault();
+  const u = $('olUser').value.trim(), p = $('olPass').value, em = $('olEmail').value.trim();
+  if (!/^[A-Za-z0-9_]{3,20}$/.test(u)) { olMsg(olErrText({ message: 'invalid_username' }), true); return; }
+  if (p.length < 6) { olMsg(olErrText({ message: 'weak_password' }), true); return; }
+  try {
+    if (signup) {
+      let done = false;
+      for (let i = 0; i < 3 && !done; i++) {
+        try { await olCall('signup', { username: u, password: p, friend_code: olMakeCode() }); done = true; }
+        catch (e) { if (String(e.message) !== 'friend_code_taken') throw e; }
+      }
+    }
+    const r = await olCall('login', { username: u, password: p });
+    store.set('gs_online_token', r.token);
+    if (signup && em) {
+      try { await olCall('rpc/set_my_email', { p_email: em }); }
+      catch (e) { olMsg(olErrText(e), true); }
+    }
+    $('olPass').value = ''; $('olEmail').value = '';
+    Sound.init(); Sound.sfx('click');
+    olOpen();
+  } catch (e) { olMsg(olErrText(e), true); }
+}
+async function olAddFriend() {
+  const v = $('olFind').value.trim();
+  if (!v) return;
+  try {
+    let code = v.toUpperCase();
+    if (!/^[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(code)) {
+      const rows = await olCall('rpc/find_user_by_username', { p_username: v });
+      if (!rows[0]) throw new Error('friend_code_not_found');
+      code = rows[0].friend_code;
+    }
+    const r = await olCall('rpc/send_friend_request', { p_friend_code: code });
+    $('olFind').value = '';
+    const st = Array.isArray(r) && r[0] ? Object.values(r[0])[0] : r;
+    olMsg(st === 'accepted' ? T('أصبحتما صديقين') : T('أُرسل طلب الصداقة'));
+    olRefresh();
+  } catch (e) { olMsg(olErrText(e), true); }
+}
+$('btnOnline').addEventListener('click', () => { Sound.sfx('click'); olOpen(); });
+$('olForm').addEventListener('submit', (e) => olAuthSubmit(e, false));
+$('olSignup').addEventListener('click', (e) => olAuthSubmit(e, true));
+$('olAdd').addEventListener('click', olAddFriend);
+$('olLogout').addEventListener('click', async () => {
+  try { await olCall('logout', {}); } catch (e) { /* offline: local logout still works */ }
+  store.del('gs_online_token'); olShowAuth(true); olMsg('');
+});
+document.querySelectorAll('#m-online [data-av]').forEach((b) => b.addEventListener('click', () => {
+  const kind = b.dataset.av; store.set('gs_avatar', kind);
+  $('olAv').innerHTML = kind === 'robot' ? AV_ROBOT : AV_PERSON;
+}));
+setInterval(() => {
+  document.querySelectorAll('#m-online .ol-cd').forEach((el) => {
+    el.textContent = Math.max(0, Math.ceil((Date.parse(el.dataset.exp) - Date.now()) / 1000)) + 's';
+  });
+}, 1000);
 
 /* ---------- stats ---------- */
 const statsKey = () => 'gs_stats_' + currentUser();
