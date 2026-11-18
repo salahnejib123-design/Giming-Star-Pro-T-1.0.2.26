@@ -109,6 +109,7 @@ const RPC = {
   get_match: ["p_match_id"],
   resign_match: ["p_match_id"],
   set_my_email: ["p_email"],
+  list_my_matches: [],
 };
 
 async function callRpc(client, name, body) {
@@ -125,6 +126,44 @@ async function authUser(req) {
   if (!token) return null;
   const { rows } = await pool.query("SELECT resolve_session($1) AS uid", [sha256(token)]);
   return rows[0]?.uid ?? null;
+}
+
+// Robot move when a player's 20-second turn has run out. The database checks
+// that the time really passed; the server picks a legal move with chess.js.
+function robotPick(moves) {
+  const checks = moves.filter((m) => m.san && m.san.includes("#"));
+  if (checks.length) return checks[0];
+  const captures = moves.filter((m) => m.captured);
+  const pool = captures.length && Math.random() < 0.7 ? captures : moves;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+async function handleTimeout(uid, body) {
+  const { match_id } = body;
+  return asPlayer(uid, async (client) => {
+    const { rows } = await client.query("SELECT * FROM get_match($1)", [match_id]);
+    const m = rows[0];
+    if (!m) throw new Error("match_not_found");
+    if (m.game_type !== "chess") throw new Error("invalid_game_type");
+    if (m.status !== "active") throw new Error("match_finished");
+
+    const chess = new Chess(m.state.fen);
+    const moves = chess.moves({ verbose: true });
+    if (!moves.length) throw new Error("no_moves");
+    const mover = chess.turn();
+    const pick = robotPick(moves);
+    const applied = chess.move({ from: pick.from, to: pick.to, promotion: pick.promotion });
+    let result = null;
+    if (chess.isCheckmate()) result = mover === "w" ? "white" : "black";
+    else if (chess.isDraw() || chess.isStalemate()) result = "draw";
+
+    const newState = { fen: chess.fen(), turn: chess.turn() };
+    const { rows: out } = await client.query(
+      "SELECT * FROM apply_robot_move($1, $2, $3::jsonb, $4::jsonb, $5)",
+      [match_id, m.version, JSON.stringify(applied), JSON.stringify(newState), result],
+    );
+    return out[0];
+  });
 }
 
 // Chess move validation on the server. The client sends only the move;
@@ -197,6 +236,10 @@ export default async (req) => {
 
     if (path === "move" && req.method === "POST") {
       return json(200, await handleMove(uid, await req.json()));
+    }
+
+    if (path === "timeout" && req.method === "POST") {
+      return json(200, await handleTimeout(uid, await req.json()));
     }
 
     if (path.startsWith("rpc/") && req.method === "POST") {
