@@ -2,9 +2,9 @@
   "name": "master-ludo",
   "private": true,
   "type": "module",
-  "description": "Master Ludo: static game on Netlify with a Netlify Function API",
+  "description": "Master Ludo: static game on Netlify with a Netlify Function API backed by Supabase Postgres",
   "dependencies": {
-    "@netlify/database": "^1.0.0",
+    "pg": "^8.13.1",
     "chess.js": "^1.0.0"
   }
 }

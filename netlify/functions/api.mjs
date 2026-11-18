@@ -4,11 +4,16 @@
 // the RPC functions in the migration decide what each player may do.
 // UNTESTED: written without a live database; verify before merging.
 
-import { getDatabase } from "@netlify/database";
+import pg from "pg";
 import { Chess } from "chess.js";
 import crypto from "node:crypto";
 
-const db = getDatabase();
+// Supabase Postgres. DATABASE_URL is set in Netlify environment variables (never in code).
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: /supabase\.(co|com)/.test(process.env.DATABASE_URL ?? "") ? { rejectUnauthorized: false } : false,   // Supabase needs SSL
+  max: 5,
+});
 
 const json = (status, body) =>
   new Response(JSON.stringify(body), {
@@ -71,7 +76,7 @@ function errorResponse(e) {
 
 // Run fn(client) as the given player inside one transaction.
 async function asPlayer(uid, fn) {
-  const client = await db.pool.connect();
+  const client = await pool.connect();
   try {
     await client.query("BEGIN");
     await client.query("SET LOCAL ROLE ludo_app");
@@ -117,7 +122,7 @@ async function authUser(req) {
   const auth = req.headers.get("authorization") ?? "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
   if (!token) return null;
-  const { rows } = await db.sql`SELECT resolve_session(${sha256(token)}) AS uid`;
+  const { rows } = await pool.query("SELECT resolve_session($1) AS uid", [sha256(token)]);
   return rows[0]?.uid ?? null;
 }
 
@@ -161,27 +166,27 @@ export default async (req) => {
       if (typeof password !== "string" || password.length < 6) {
         return json(400, { error: "weak_password" });
       }
-      const { rows } = await db.sql`
-        SELECT sign_up(${username}, ${friend_code}, ${hashPassword(password)}) AS id`;
+      const { rows } = await pool.query("SELECT sign_up($1, $2, $3) AS id",
+        [username, friend_code, hashPassword(password)]);
       return json(201, { user_id: rows[0].id });
     }
 
     if (path === "login" && req.method === "POST") {
       const { username, password } = await req.json();
-      const { rows } = await db.sql`SELECT * FROM get_login(${String(username ?? "")})`;
+      const { rows } = await pool.query("SELECT * FROM get_login($1)", [String(username ?? "")]);
       const row = rows[0];
       // Same response whether the user is missing or the password is wrong.
       const ok = row && typeof password === "string" && verifyPassword(password, row.password_hash);
       if (!ok) return json(401, { error: "invalid_credentials" });
       const token = crypto.randomBytes(32).toString("base64url");
-      await db.sql`SELECT create_session(${row.user_id}, ${sha256(token)})`;
+      await pool.query("SELECT create_session($1, $2)", [row.user_id, sha256(token)]);
       return json(200, { token });
     }
 
     if (path === "logout" && req.method === "POST") {
       const auth = req.headers.get("authorization") ?? "";
       const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-      if (token) await db.sql`SELECT delete_session(${sha256(token)})`;
+      if (token) await pool.query("SELECT delete_session($1)", [sha256(token)]);
       return json(200, { ok: true });
     }
 
