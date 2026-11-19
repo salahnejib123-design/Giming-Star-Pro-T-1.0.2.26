@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://master-ludo-v.netlify.app/sitemap.xml
+Sitemap: https://master-ludo-v.netlify.app/sitemap2.xml
