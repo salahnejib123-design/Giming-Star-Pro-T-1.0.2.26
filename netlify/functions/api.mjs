@@ -183,6 +183,21 @@ async function handleLudoSave(uid, body) {
   });
 }
 
+// Online chess (fast approach, like Ludo): the browser computes each move with the chess engine
+// and sends the whole state. The database checks participation, the turn owner (or an expired
+// 20-second turn) and the version; the chess rules are not validated here.
+async function handleChessSave(uid, body) {
+  const { match_id, expected_version, state, result } = body;
+  if (!state || typeof state !== "object" || Array.isArray(state)) throw new Error("invalid_state");
+  return asPlayer(uid, async (client) => {
+    const { rows: out } = await client.query(
+      "SELECT * FROM save_chess_state($1, $2, $3::jsonb, $4)",
+      [match_id, expected_version, JSON.stringify(state), result ?? null],
+    );
+    return out[0];
+  });
+}
+
 // Chess move validation on the server. The client sends only the move;
 // the server replays it with chess.js and computes the new state.
 async function handleMove(uid, body) {
@@ -257,6 +272,10 @@ export default async (req) => {
 
     if (path === "timeout" && req.method === "POST") {
       return json(200, await handleTimeout(uid, await req.json()));
+    }
+
+    if (path === "chess-save" && req.method === "POST") {
+      return json(200, await handleChessSave(uid, await req.json()));
     }
 
     if (path === "ludo-save" && req.method === "POST") {
