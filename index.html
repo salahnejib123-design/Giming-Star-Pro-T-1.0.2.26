@@ -7193,6 +7193,7 @@ async function olOpen() {
   if (!olTok()) { olShowAuth(true); olSetMode(OL_MODE); return; }
   olShowAuth(false); olPaintGame(); olPaintAv();
   olRefresh();
+  olCheckMatches();                                  // the ongoing matches and invitations are read when the panel opens
   clearInterval(olTimer); olTimer = setInterval(olRefresh, 5000);
   clearInterval(olHb); olHb = setInterval(() => olCall('rpc/heartbeat', {}).catch(() => {}), 30000);
   olCall('rpc/heartbeat', {}).catch(() => {});
@@ -7218,7 +7219,10 @@ async function olAuthSubmit(ev, signup) {
     }
     $('olPass').value = ''; $('olEmail').value = '';
     Sound.init(); Sound.sfx('click');
+    CO.dismissed = null; LD.dismissed = null;          // a fresh sign-in: the matches in progress come back at once
+    olMe = null;
     olOpen();
+    olCheckMatches();
   } catch (e) { olMsg(olErrText(e), true); }
 }
 let OL_MODE = 'login', olSearchT = null;
@@ -7578,8 +7582,9 @@ async function olCheckMatches() {
     const ludo = OL_ACTIVE.find((r) => r.game_type === 'friends');
     const splashUp = $('splash') && !$('splash').hidden;
     const dismissed = CO.dismissed && chess && CO.dismissed.id === chess.id && CO.dismissed.version === chess.version;
-    if (chess && !CG && !LD.id && !splashUp && !dismissed) coOpen(chess);
-    if (ludo) ldAutoOpen(ludo);
+    if (chess && !CG && !LD.id && !splashUp && !dismissed) { coOpen(chess); closeModal('m-online'); }
+    if (ludo) { const before = LD.id; ldAutoOpen(ludo); if (LD.id && LD.id !== before) closeModal('m-online'); }
+    olRenderActive();
   } catch (e) { /* offline: try again on the next check */ }
 }
 
