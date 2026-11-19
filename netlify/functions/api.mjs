@@ -99,6 +99,8 @@ const RPC = {
   heartbeat: [],
   get_my_profile: [],
   find_user_by_username: ["p_username"],
+  search_users: ["p_query"],
+  add_friend_by_id: ["p_user"],
   send_friend_request: ["p_friend_code"],
   respond_friend_request: ["p_requester", "p_accept"],
   remove_friend: ["p_friend"],
