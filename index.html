@@ -867,9 +867,6 @@ html[data-theme=night] .splash{background-color:#04061a}
 .ol-row .btn.small{min-height:36px;padding:6px 12px}
 .ol-row select{display:none}
 .ol-msg{text-align:center}
-.olResume{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;border:2px solid var(--gold)}
-.olResume[hidden]{display:none!important}
-.olResumeTxt{flex:1;min-width:0;font-weight:700;line-height:1.4;overflow-wrap:anywhere}
 /* ---- in-app invitations: a challenge, a friend request or the answer to one ---- */
 #m-invite{z-index:90}
 .inv-card{width:min(380px,calc(100vw - 32px));display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:24px 20px}
@@ -901,6 +898,14 @@ html[data-theme=night] .splash{background-color:#04061a}
 .mt-piece{width:86%;height:86%;transition:transform .25s ease;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
 .mt-sq:hover .mt-piece{transform:translateY(-2px)}
 </style>
+<style>
+.olPlayCard{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:14px;border-radius:18px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(127,188,255,.2),rgba(255,194,26,.16));color:inherit;font:inherit;cursor:pointer}
+.olPlayCard .olPlayIc{flex:0 0 44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--gold);color:#222}
+.olPlayCard .olPlayIc svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.olPlayCard b{display:block;font-size:1rem}
+.olPlayCard small{display:block;color:var(--muted);margin-top:2px}
+#loginSearch{margin-top:14px}
+</style>
 </head>
 <body>
 <svg id="gdefs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
@@ -930,7 +935,6 @@ html[data-theme=night] .splash{background-color:#04061a}
     <h1 class="title name-en">Master Ludo</h1>
     <small dir="ltr">Ludo · Chess · Arcade</small>
   </div>
-  <div class="olResume glass" hidden><span class="olResumeTxt"></span><button class="btn primary small" type="button" data-resume>ادخل المباراة</button></div>
   <form id="loginForm" class="glass pad" autocomplete="off" style="display:flex;flex-direction:column;gap:14px" novalidate>
     <label class="f" for="inUser">اسم المستخدم<input id="inUser" type="text" maxlength="16" autocomplete="username" placeholder="مثال: نجم_الليل"></label>
     <label class="f" for="inPass">كلمة المرور<input id="inPass" type="password" maxlength="40" autocomplete="current-password" placeholder="4 أحرف على الأقل"></label>
@@ -939,11 +943,14 @@ html[data-theme=night] .splash{background-color:#04061a}
     <button class="btn" type="button" id="btnGuest">الدخول كضيف (Guest Mode)</button>
     <p class="muted" style="font-size:.78rem;text-align:center">الحساب المحلي محفوظ على جهازك فقط. الحساب الأونلاين يُحفظ على خادم قاعدة البيانات، ويحتوي على اسم المستخدم وكلمة مرور مشفّرة وبريد إلكتروني اختياري.</p>
   </form>
+  <div id="loginSearch" class="glass pad" style="display:flex;flex-direction:column;gap:10px">
+    <label class="f" for="loginFind">ابحث عن لاعب مسجل<input id="loginFind" type="search" maxlength="40" autocomplete="off" placeholder="اكتب اسم صديقك المسجل لتجده هنا"></label>
+    <div id="loginResults" class="ol-list"></div>
+  </div>
 </section>
 
 <!-- ===== Main menu ===== -->
 <section id="s-menu" class="screen" hidden>
-  <div class="olResume glass" hidden><span class="olResumeTxt"></span><button class="btn primary small" type="button" data-resume>ادخل المباراة</button></div>
   <div class="profile glass">
     <div class="pav" aria-hidden="true"><svg viewBox="-1 -1 2 2"><circle r=".92" fill="#ffc21a" stroke="#fff" stroke-width=".12"/><circle cx="0" cy="-.2" r=".3" fill="#fff"/><path d="M-.52 .6 Q-.52 .15 0 .15 Q.52 .15 .52 .6Z" fill="#fff"/></svg></div>
     <div class="pinfo">
@@ -1200,10 +1207,6 @@ html[data-theme=night] .splash{background-color:#04061a}
       <section class="ol-section">
         <h3><span class="ic" data-ic="swords"></span>التحديات<em class="ol-count" id="olChalN"></em></h3>
         <div id="olChallenges" class="ol-list"></div>
-      </section>
-      <section class="ol-section">
-        <h3><span class="ic" data-ic="swords"></span>مبارياتك الجارية</h3>
-        <div id="olActive" class="ol-list"></div>
       </section>
       <section class="ol-section">
         <h3><span class="ic" data-ic="group"></span>أصدقاؤك<em class="ol-count" id="olFriN"></em></h3>
@@ -1835,7 +1838,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.2.76';
+const APP_VERSION = '1.0.2.77';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -7168,7 +7171,6 @@ function olDraw(friends, chal) {
   $('olPendN').textContent = friends.filter((f) => f.status === 'pending' && f.direction === 'incoming').length || '';
   $('olChalN').textContent = chal.filter((c) => c.status === 'pending' && c.to_user === olMe.id).length || '';
   $('olFriN').textContent = friends.filter((f) => f.status === 'accepted').length || '';
-  olRenderActive();
 }
 async function olRefresh() {
   if ($('m-online').hidden) { clearInterval(olTimer); clearInterval(olHb); return; }
@@ -7283,6 +7285,44 @@ async function olSearch(q) {
     });
   } catch (e) { olMsg(olErrText(e), true); }
 }
+function olPlayCard() {
+  const b = h('button', 'olPlayCard'); b.type = 'button';
+  const ic = h('span', 'olPlayIc'); ic.innerHTML = icoSvg('swords');
+  const tx = h('span'); tx.append(h('b', '', T('لعب أونلاين')), h('small', '', T('العب مع أصدقائك عبر الإنترنت')));
+  b.append(ic, tx);
+  b.addEventListener('click', () => { Sound.sfx('click'); closeModal('m-setup'); olOpen(); });
+  return b;
+}
+// the sign-in screen: type a registered name and it appears (signed-in players search the directory)
+let LF_T = null;
+function lfNow(v) {
+  clearTimeout(LF_T);
+  const q = v.trim(), box = $('loginResults');
+  box.replaceChildren();
+  if (q.length < 2) return;
+  LF_T = setTimeout(() => lfSearch(q), 300);
+}
+async function lfSearch(q) {
+  const box = $('loginResults');
+  box.replaceChildren();
+  if (!olTok()) {
+    box.append(h('small', 'muted', T('سجّل الدخول أونلاين لتبحث عن الأصدقاء المسجلين.')));
+    box.append(olBtn(T('تسجيل الدخول أونلاين'), 'btn small primary', () => { Sound.sfx('click'); olOpen(); }));
+    return;
+  }
+  try {
+    const rows = await olCall('rpc/search_users', { p_query: q });
+    if ($('loginFind').value.trim() !== q) return;
+    box.replaceChildren();
+    if (!rows.length) { box.append(h('small', 'muted', T('لا يوجد لاعب بهذا الاسم'))); return; }
+    rows.forEach((u) => {
+      const row = olRow(u.username, u.is_online ? 'green' : 'gray', AV_PERSON);
+      row.append(h('small', 'muted', u.relation === 'friend' ? T('صديق') : u.relation === 'sent' ? T('بانتظار الرد') : T('ليس صديقًا بعد')));
+      box.append(row);
+    });
+  } catch (e) { box.replaceChildren(h('small', 'err', olErrText(e))); }
+}
+$('loginFind').addEventListener('input', (e) => lfNow(e.target.value));
 $('btnOnline').addEventListener('click', () => { Sound.sfx('click'); olOpen(); });
 $('olForm').addEventListener('submit', (e) => olAuthSubmit(e, OL_MODE === 'signup'));
 $('olModeLogin').addEventListener('click', () => olSetMode('login'));
@@ -7536,30 +7576,6 @@ function olNotify(chal, friends) {
     }
   });
 }
-// the matches still being played: the player can enter them again any time
-function olRenderActive() {
-  const box = $('olActive'); if (!box) return;
-  box.replaceChildren();
-  if (!OL_ACTIVE.length) { box.append(h('small', 'muted', T('لا توجد مباراة جارية'))); return; }
-  OL_ACTIVE.forEach((m) => {
-    const oppId = m.player_white === olMe.id ? m.player_black : m.player_white;
-    const fr = OL_FRIENDS.find((x) => x.user_id === oppId);
-    const row = olRow(olNm(oppId) + ' · ' + olGameName(m.game_type), fr ? olState(fr) : 'gray', AV_PERSON);
-    row.append(olBtn(T('ادخل المباراة'), 'btn small primary', () => olEnterMatch(m)));
-    box.append(row);
-  });
-}
-// the match in progress, shown on the login and main screens: one tap to enter it
-function olRenderResume() {
-  const m = OL_ACTIVE[0];
-  document.querySelectorAll('.olResume').forEach((box) => {
-    box.hidden = !m;
-    if (!m) return;
-    const oppId = m.player_white === olMe.id ? m.player_black : m.player_white;
-    box.querySelector('.olResumeTxt').textContent = T('لديك مباراة جارية مع {n} ({g})', { n: olNm(oppId), g: olGameName(m.game_type) });
-  });
-}
-document.querySelectorAll('[data-resume]').forEach((b) => b.addEventListener('click', () => { if (OL_ACTIVE[0]) olEnterMatch(OL_ACTIVE[0]); }));
 function olEnterMatch(m) {
   closeModal('m-online');
   if ((CG && CG.online && CO.id === m.id) || LD.id === m.id) return;   // already on screen
@@ -7577,14 +7593,12 @@ async function olCheckMatches() {
     const [rows, chal] = await Promise.all([olCall('rpc/list_my_matches', {}), olCall('rpc/list_my_challenges', {})]);
     OL_ACTIVE = rows.filter((r) => r.status === 'active');
     olNotify(chal, friends);
-    olRenderResume();
     const chess = OL_ACTIVE.find((r) => r.game_type === 'chess');
     const ludo = OL_ACTIVE.find((r) => r.game_type === 'friends');
     const splashUp = $('splash') && !$('splash').hidden;
     const dismissed = CO.dismissed && chess && CO.dismissed.id === chess.id && CO.dismissed.version === chess.version;
     if (chess && !CG && !LD.id && !splashUp && !dismissed) { coOpen(chess); closeModal('m-online'); }
     if (ludo) { const before = LD.id; ldAutoOpen(ludo); if (LD.id && LD.id !== before) closeModal('m-online'); }
-    olRenderActive();
   } catch (e) { /* offline: try again on the next check */ }
 }
 
@@ -7863,6 +7877,7 @@ function renderSetup() {
     $('btnStart').textContent = setup.step === 1 ? T('التالي ←') : T('ابدأ اللعب');
     if (setup.step === 1) {
       $('t-setup').textContent = T('اللاعبون والألوان');
+      body.appendChild(olPlayCard());
       const cw = document.createElement('div'); cw.className = 'f'; cw.style.cssText = 'display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:.9rem';
       cw.innerHTML = '<span>' + T('اختر ألوان اللاعبين على الطاولة (من 2 إلى 4). كل لون يمثّل لاعباً.') + '</span>';
       const sw = document.createElement('div'); sw.className = 'colpick';
@@ -8173,6 +8188,20 @@ Object.assign(I18N.en,{"{n} رفض المباراة. انتهى كل شيء.": "
 Object.assign(I18N.fr,{"{n} رفض المباراة. انتهى كل شيء.": "{n} a refusé la partie. Tout est annulé.", "{n} قبل المباراة. ستدخلان إلى اللعب الآن.": "{n} a accepté la partie. Vous entrez tous les deux en jeu maintenant.", "{n} يدعوك لمباراة {g}": "{n} vous défie à une partie de {g}", "{n} يريد إضافتك صديقًا.": "{n} souhaite vous ajouter comme ami.", "ادخل المباراة": "Rejoindre la partie", "المباراة مرفوضة": "Partie refusée", "انتهت مهلة التحدي": "Le défi a expiré", "تحدٍّ جديد": "Nouveau défi", "تم قبول المباراة": "Partie acceptée", "حسنًا": "OK", "طلب صداقة": "Demande d'amitié", "لا توجد مباراة جارية": "Aucune partie en cours", "مبارياتك الجارية": "Vos parties en cours"});
 Object.assign(I18N.en,{"لديك مباراة جارية مع {n} ({g})": "You have a match in progress with {n} ({g})"});
 Object.assign(I18N.fr,{"لديك مباراة جارية مع {n} ({g})": "Vous avez une partie en cours avec {n} ({g})"});
+Object.assign(I18N.en,{"لعب أونلاين": "Play online"});
+Object.assign(I18N.fr,{"لعب أونلاين": "Jouer en ligne"});
+Object.assign(I18N.en,{"العب مع أصدقائك عبر الإنترنت": "Play with your friends online"});
+Object.assign(I18N.fr,{"العب مع أصدقائك عبر الإنترنت": "Jouez avec vos amis en ligne"});
+Object.assign(I18N.en,{"ابحث عن لاعب مسجل": "Find a registered player"});
+Object.assign(I18N.fr,{"ابحث عن لاعب مسجل": "Trouver un joueur inscrit"});
+Object.assign(I18N.en,{"اكتب اسم صديقك المسجل لتجده هنا": "Type your friend's registered name to find them here"});
+Object.assign(I18N.fr,{"اكتب اسم صديقك المسجل لتجده هنا": "Tapez le nom inscrit de votre ami pour le trouver ici"});
+Object.assign(I18N.en,{"سجّل الدخول أونلاين لتبحث عن الأصدقاء المسجلين.": "Sign in online to search for registered friends."});
+Object.assign(I18N.fr,{"سجّل الدخول أونلاين لتبحث عن الأصدقاء المسجلين.": "Connectez-vous en ligne pour chercher vos amis inscrits."});
+Object.assign(I18N.en,{"تسجيل الدخول أونلاين": "Sign in online"});
+Object.assign(I18N.fr,{"تسجيل الدخول أونلاين": "Se connecter en ligne"});
+Object.assign(I18N.en,{"ليس صديقًا بعد": "Not a friend yet"});
+Object.assign(I18N.fr,{"ليس صديقًا بعد": "Pas encore ami"});
 init();
 
 /* ---------- update notice: a new version must be installed by pressing the update button; it keeps coming back until then ---------- */
