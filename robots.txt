@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://master-ludo-w.netlify.app/sitemap.xml
-Sitemap: https://master-ludo-w.netlify.app/sitemap2.xml
+Sitemap: https://master-ludo-w.vercel.app/sitemap.xml
+Sitemap: https://master-ludo-w.vercel.app/sitemap2.xml
