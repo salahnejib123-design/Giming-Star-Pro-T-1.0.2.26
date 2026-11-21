@@ -905,6 +905,10 @@ html[data-theme=night] .splash{background-color:#04061a}
 .olPlayCard b{display:block;font-size:1rem}
 .olPlayCard small{display:block;color:var(--muted);margin-top:2px}
 #loginSearch{margin-top:14px}
+.olcols{display:flex;gap:14px;justify-content:center;margin-top:10px}
+.olcols button{appearance:none;width:46px;height:46px;border-radius:50%;border:3px solid rgba(255,255,255,.4);background:var(--c);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.olcols button[aria-pressed=true]{border-color:#fff;transform:translateY(-2px);box-shadow:0 0 0 3px var(--c),0 6px 14px rgba(0,0,0,.4)}
+#olColor{display:grid;gap:4px;text-align:center}
 .ol-profile{flex-wrap:wrap}
 .ol-profile .ol-grow{flex:1 1 130px;gap:2px}
 .ol-profile #olLogout{margin-inline-start:auto;flex:0 0 auto}
@@ -1169,24 +1173,13 @@ html[data-theme=night] .splash{background-color:#04061a}
         <p>أنشئ حسابك أو سجّل دخولك لتلعب أونلاين.</p>
         <button class="btn primary ol-submit" type="button" id="olStart">إنشاء حساب لاعب</button>
       </div>
-      <div id="olFormBox" hidden>
-      <div class="seg" role="group" aria-label="طريقة الدخول">
-        <button type="button" id="olModeLogin" aria-pressed="true">دخول</button>
-        <button type="button" id="olModeSignup" aria-pressed="false">حساب جديد</button>
-      </div>
-      <form id="olForm" class="ol-form" novalidate>
-        <label class="f">اسم المستخدم
-          <span class="inp"><span class="ic" data-ic="user"></span><input id="olUser" type="text" maxlength="20" autocomplete="username" placeholder="من 3 إلى 20 حرفًا"></span>
+      <div id="olWait" class="ol-intro" hidden>
+        <span class="ol-lock"><span class="ic" data-ic="user"></span></span>
+        <p id="olWaitTxt"></p>
+        <label class="f" id="olActWrap" for="olActPass" hidden>كلمة مرور حسابك
+          <span class="inp"><span class="ic" data-ic="lock"></span><input id="olActPass" type="password" autocomplete="current-password" maxlength="64"></span>
         </label>
-        <label class="f">كلمة المرور
-          <span class="inp"><span class="ic" data-ic="lock"></span><input id="olPass" type="password" maxlength="60" autocomplete="current-password" placeholder="6 أحرف على الأقل"><button type="button" class="eye" id="olEye" aria-label="إظهار كلمة المرور"><span class="ic" data-ic="eye"></span></button></span>
-        </label>
-        <label class="f" id="olEmailWrap" hidden>البريد الإلكتروني (اختياري)
-          <span class="inp"><span class="ic" data-ic="globe"></span><input id="olEmail" type="email" maxlength="120" autocomplete="email" placeholder="name@example.com"></span>
-        </label>
-        <p class="ol-hint" id="olHint"></p>
-        <button class="btn primary ol-submit" type="submit" id="olLogin">دخول</button>
-      </form>
+        <button class="btn primary ol-submit" type="button" id="olRetry" hidden>إعادة المحاولة</button>
       </div>
     </div>
 
@@ -1208,6 +1201,10 @@ html[data-theme=night] .splash{background-color:#04061a}
           <button type="button" data-game="chess" aria-pressed="false"><span class="ic" data-ic="chess"></span>شطرنج</button>
         </div>
         <small class="muted">التحديات والمباراة تكون من النوع المختار</small>
+        <div id="olColor" hidden>
+          <small class="muted">لونك في لودو (يظهر على شاشتك)</small>
+          <div class="olcols" id="olCols"></div>
+        </div>
       </section>
 
       <section class="ol-section">
@@ -1856,11 +1853,12 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.2.85';
+const APP_VERSION = '1.0.2.86';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
 const CNAME = ['الأحمر', 'الأخضر', 'الأصفر', 'الأزرق'];
+const PCOL_BASE = PCOL.slice(), CNAME_BASE = CNAME.slice();
 const $ = (id) => document.getElementById(id);
 const mem = {};
 const store = {
@@ -2695,6 +2693,7 @@ const DIRS = [[-1, 0], [0, -1], [1, 0], [0, 1]];
 const SYMCOL = { eye: '#0a9fbd', arrow: '#ef7d00', aim: '#d6208a', house: '#8a5a2b' };
 const PDARK = ['#8c0f20', '#0b6a2f', '#a06b00', '#123f8c'];
 const PLIGHT = ['#ff7a89', '#58e592', '#ffe27a', '#7fbcff'];
+const PDARK_BASE = PDARK.slice(), PLIGHT_BASE = PLIGHT.slice();
 const INK = '#26306a';
 const VIEWS = {
   portrait: { vb: [-0.5, -0.5, 16, 20.8], ox: 0, oy: 2.4 },     // cards above and below the board
@@ -7045,16 +7044,52 @@ document.addEventListener('fullscreenchange', () => { if (document.fullscreenEle
 lockPortrait();
 
 /* ---------- auth ---------- */
-// the normal local account also becomes the online account (same name and password)
+// the normal game account is also the online account: the same name (online names allow letters, digits and _ only)
+// and a secret derived from the name and password, so any password length works and no second sign-in ever appears
+async function olSecret(name, pass) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('masterludo:' + name.toLowerCase() + ':' + pass));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+}
+function olBaseName(name, secret) {
+  const n = name.normalize('NFKD').replace(/[^A-Za-z0-9_]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 20);
+  return (n.length >= 3 && /[A-Za-z0-9]/.test(n)) ? n : 'player_' + secret.slice(0, 4);   // e.g. an Arabic name
+}
 async function olSyncLocal(name, pass) {
-  store.del('gs_online_token');
-  if (!/^[A-Za-z0-9_]{3,20}$/.test(name) || pass.length < 6) return;   // online rules
-  try { const r = await olCall('login', { username: name, password: pass }); store.set('gs_online_token', r.token); return; } catch (e) { /* not registered online yet */ }
+  store.del('gs_online_token'); store.del('gs_online_cred');
+  if (!(window.crypto && crypto.subtle)) return false;
+  const key = name.toLowerCase(), map = store.get('gs_online_names', {});
   try {
-    await olCall('signup', { username: name, password: pass, friend_code: olMakeCode() });
-    const r = await olCall('login', { username: name, password: pass });
-    store.set('gs_online_token', r.token);
-  } catch (e) { /* the online sign-in form stays available */ }
+    const secret = await olSecret(name, pass), base = olBaseName(name, secret);
+    const tries = [secret].concat(pass.length >= 6 ? [pass] : []);          // accounts made before this update used the plain password
+    const cands = [map[key] || base].concat([0, 3, 6].map((i) => base.slice(0, 16) + '_' + secret.slice(i, i + 3)));
+    for (const uname of cands) {
+      for (const pw of tries) {
+        try { const r = await olCall('login', { username: uname, password: pw }); return olSaved(key, uname, pw, r.token, map); } catch (e) { if (String(e.message) === 'offline') return false; }
+      }
+      try { await olCall('signup', { username: uname, password: secret, friend_code: olMakeCode() }); }
+      catch (e) { if (String(e.message) === 'offline') return false; continue; }           // the name is taken by another player: next name
+      try { const r = await olCall('login', { username: uname, password: secret }); return olSaved(key, uname, secret, r.token, map); } catch (e) { return false; }
+    }
+  } catch (e) { /* the online part stays closed until the next try */ }
+  return false;
+}
+function olSaved(key, uname, pw, token, map) {
+  store.set('gs_online_token', token); store.set('gs_online_cred', { for: key, u: uname, p: pw });
+  map[key] = uname; store.set('gs_online_names', map); olMe = null; olStartBackground();
+  return true;
+}
+// a registered player without an online session (expired, or signed in before this update): the saved secret signs in again
+let OL_ENSURING = false;
+async function olEnsure() {
+  if (olTok()) return { ok: true };
+  const s = session(); if (!s || s.guest) return { ok: false };
+  const c = store.get('gs_online_cred', null);
+  if (!c || c.for !== s.name.toLowerCase()) return { ok: false, need: true };
+  if (OL_ENSURING) return { ok: false, err: 'busy' };
+  OL_ENSURING = true;
+  try { const r = await olCall('login', { username: c.u, password: c.p }); store.set('gs_online_token', r.token); olStartBackground(); return { ok: true }; }
+  catch (e) { return { ok: false, err: String((e && e.message) || e) }; }
+  finally { OL_ENSURING = false; }
 }
 async function doLogin(e) {
   e.preventDefault(); Sound.init();
@@ -7074,7 +7109,7 @@ async function doLogin(e) {
     toast(T('تم إنشاء حسابك الجديد'));
   }
   $('inPass').value = '';
-  if (session() && !session().guest) await olSyncLocal(session().name, pass);
+  if (session() && !session().guest) await Promise.race([olSyncLocal(session().name, pass), new Promise((r) => setTimeout(r, 7000))]);
   afterLogin();
 }
 function afterLogin() {
@@ -7098,11 +7133,11 @@ function goMenu() {
 $('loginForm').addEventListener('submit', doLogin);
 $('btnGuest').addEventListener('click', () => { Sound.init(); store.set('gs_session', { name: 'ضيف', guest: true }); afterLogin(); });
 $('btnAccept').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); store.set('gs_terms', true); closeModal('m-terms'); goMenu(); });
-$('btnLogout').addEventListener('click', () => { store.del('gs_session'); store.del('gs_online_token'); Sound.sfx('click'); show('s-login'); });
+$('btnLogout').addEventListener('click', () => { store.del('gs_session'); store.del('gs_online_token'); store.del('gs_online_cred'); Sound.sfx('click'); show('s-login'); });
 
 /* ---------- online: accounts, friends and challenges (needs internet) ---------- */
 const OL_BASE = '/api/';
-const OL_TURN_SECONDS = 20;   // per-turn timer for online matches; a timeout is played by the robot
+const OL_TURN_SECONDS = 20;   // per-turn timer for online matches; when it runs out the turn passes to the other player
 let OL_SKEW = 0;             // server clock minus this device's clock (from the HTTP Date header)
 const OL_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const AV_PERSON = '<svg viewBox="-1 -1 2 2" aria-hidden="true"><circle r=".92" fill="#7fbcff" stroke="#fff" stroke-width=".1"/><circle cy="-.22" r=".3" fill="#fff"/><path d="M-.55 .62 Q-.55 .12 0 .12 Q.55 .12 .55 .62 Z" fill="#fff"/></svg>';
@@ -7144,7 +7179,21 @@ function olErrText(e) {
 function olMsg(text, bad) { const m = $('olMsg'); m.textContent = text || ''; m.className = 'ol-msg' + (bad ? ' ol-err' : ''); }
 function olShowAuth(on) { $('olAuth').hidden = !on; $('olHome').hidden = on; }
 // a guest sees only the single button; a signed-in player sees the normal online sign-in form
-function olIntroPaint(guest) { $('olIntro').hidden = !guest; $('olFormBox').hidden = guest; }
+function olIntroPaint(guest) { $('olIntro').hidden = !guest; $('olWait').hidden = true; }   // there is no sign-in form here: a guest gets one card, a player goes online by itself
+let OL_WAIT = 'connecting';
+function olWaitPaint(kind, text) {
+  OL_WAIT = kind; $('olIntro').hidden = true; $('olWait').hidden = false;
+  $('olWaitTxt').textContent = text; $('olActWrap').hidden = kind !== 'activate';
+  $('olRetry').hidden = kind === 'connecting'; $('olRetry').textContent = kind === 'activate' ? T('تفعيل الأونلاين') : T('إعادة المحاولة');
+}
+async function olActivate() {
+  const s = session(), pass = $('olActPass').value, u = (store.get('gs_users', {}))[s.name.toLowerCase()];
+  if (!u || (await hashPass(pass, u.s)) !== u.h) { olMsg(T('كلمة المرور غير صحيحة.'), true); return; }
+  olMsg(''); olWaitPaint('connecting', T('جارٍ تسجيل دخولك أونلاين...'));
+  const ok = await olSyncLocal(s.name, pass); $('olActPass').value = '';
+  if (ok) olOpen(); else olWaitPaint('retry', OL_OFFLINE);
+}
+$('olRetry').addEventListener('click', () => { Sound.sfx('click'); if (OL_WAIT === 'activate') olActivate(); else olOpen(); });
 // the guest leaves guest mode and lands on the normal sign-in screen, as on a first visit
 $('olStart').addEventListener('click', () => { Sound.sfx('click'); store.del('gs_session'); closeModal('m-online'); show('s-login'); });
 function olMakeCode() {
@@ -7234,6 +7283,7 @@ function olDraw(friends, chal) {
   const onlineN = accepted.filter((f) => olState(f) === 'green').length;
   $('olFriN').textContent = accepted.length ? onlineN + '/' + accepted.length : '';
 }
+let OL_REAUTH = 0;
 async function olRefresh() {
   if ($('m-online').hidden) { clearInterval(olTimer); clearInterval(olHb); return; }
   try {
@@ -7247,19 +7297,24 @@ async function olRefresh() {
     olDraw(friends, chal);
     olCheckMatches();
   } catch (e) {
-    if (String(e.message) === 'not_authenticated') { store.del('gs_online_token'); olShowAuth(true); }
+    if (String(e.message) === 'not_authenticated') {                                  // expired session: sign in again quietly
+      store.del('gs_online_token');
+      if (Date.now() - OL_REAUTH > 15000) { OL_REAUTH = Date.now(); olOpen(); return; }
+    }
     olMsg(olErrText(e), true);
   }
 }
 async function olOpen() {
   openModal('m-online');
   olMsg('');
-  if (!olTok()) {
-    const pn = store.get('gs_nick_pending', '');
-    if (pn && $('olUser') && !$('olUser').value) $('olUser').value = pn;
-    const guest = !!(session() && session().guest);
-    olIntroPaint(guest); olShowAuth(true); olSetMode(OL_MODE); return;
+  if (session() && session().guest) { olIntroPaint(true); olShowAuth(true); return; }   // a guest sees one card and one button
+  if (!olTok()) {                                                                      // a registered player goes online by itself
+    olShowAuth(true); olWaitPaint('connecting', T('جارٍ تسجيل دخولك أونلاين...'));
+    const r = await olEnsure();
+    if ($('m-online').hidden) return;
+    if (!r.ok) { olWaitPaint(r.need ? 'activate' : 'retry', r.need ? T('لتفعيل الأونلاين أدخل كلمة مرور حسابك مرة واحدة.') : olErrText({ message: r.err || 'offline' })); return; }
   }
+  $('olWait').hidden = true;
   olShowAuth(false); olPaintGame(); olPaintAv();
   olRefresh();
   olCheckMatches();                                  // the ongoing matches and invitations are read when the panel opens
@@ -7267,47 +7322,23 @@ async function olOpen() {
   clearInterval(olHb); olHb = setInterval(() => olCall('rpc/heartbeat', {}).catch(() => {}), 30000);
   olCall('rpc/heartbeat', {}).catch(() => {});
 }
-async function olAuthSubmit(ev, signup) {
-  if (ev && ev.preventDefault) ev.preventDefault();
-  const u = $('olUser').value.trim(), p = $('olPass').value, em = $('olEmail').value.trim();
-  if (!/^[A-Za-z0-9_]{3,20}$/.test(u)) { olMsg(olErrText({ message: 'invalid_username' }), true); return; }
-  if (p.length < 6) { olMsg(olErrText({ message: 'weak_password' }), true); return; }
-  try {
-    if (signup) {
-      let done = false;
-      for (let i = 0; i < 3 && !done; i++) {
-        try { await olCall('signup', { username: u, password: p, friend_code: olMakeCode() }); done = true; }
-        catch (e) { if (String(e.message) !== 'friend_code_taken') throw e; }
-      }
-    }
-    const r = await olCall('login', { username: u, password: p });
-    store.set('gs_online_token', r.token);
-    if (signup && em) {
-      try { await olCall('rpc/set_my_email', { p_email: em }); }
-      catch (e) { olMsg(olErrText(e), true); }
-    }
-    $('olPass').value = ''; $('olEmail').value = '';
-    Sound.init(); Sound.sfx('click');
-    CO.dismissed = null; LD.dismissed = null;          // a fresh sign-in: the matches in progress come back at once
-    olMe = null;
-    olOpen();
-    olCheckMatches();
-  } catch (e) { olMsg(olErrText(e), true); }
-}
-let OL_MODE = 'login', olSearchT = null;
-function olSetMode(m) {
-  OL_MODE = m;
-  $('olModeLogin').setAttribute('aria-pressed', String(m === 'login'));
-  $('olModeSignup').setAttribute('aria-pressed', String(m === 'signup'));
-  $('olEmailWrap').hidden = m !== 'signup';
-  $('olLogin').textContent = m === 'signup' ? T('إنشاء الحساب') : T('دخول');
-  $('olHint').textContent = m === 'signup' ? T('اسم المستخدم من 3 إلى 20 حرفًا إنجليزيًا أو أرقامًا، وكلمة المرور 6 أحرف على الأقل') : '';
-  olMsg('');
-}
+let olSearchT = null;
 function olGame() { return store.get('gs_online_game', 'friends') === 'chess' ? 'chess' : 'friends'; }
 function olPaintGame() {
   const g = olGame();
   document.querySelectorAll('#olGame [data-game]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.game === g)));
+  olPaintColor();
+}
+function olPaintColor() {
+  const box = $('olCols'), pick = store.get('gs_online_color', null);
+  box.replaceChildren();
+  PCOL_BASE.forEach((c, k) => {
+    const b = document.createElement('button'); b.type = 'button'; b.style.setProperty('--c', c);
+    b.setAttribute('aria-pressed', String(pick === k)); b.setAttribute('aria-label', T(CNAME_BASE[k]));
+    b.addEventListener('click', () => { Sound.sfx('click'); store.set('gs_online_color', k); olPaintColor(); });
+    box.append(b);
+  });
+  $('olColor').hidden = olGame() !== 'friends';
 }
 function olPaintAv() {
   const kind = store.get('gs_avatar', 'person') === 'robot' ? 'robot' : 'person';
@@ -7376,10 +7407,6 @@ async function lnPaint() {
 $('loginNick').addEventListener('input', (e) => { store.set('gs_nick_pending', e.target.value.trim()); });
 setTimeout(() => { lnPaint(); }, 1500);
 $('btnOnline').addEventListener('click', () => { Sound.sfx('click'); olOpen(); });
-$('olForm').addEventListener('submit', (e) => olAuthSubmit(e, OL_MODE === 'signup'));
-$('olModeLogin').addEventListener('click', () => olSetMode('login'));
-$('olModeSignup').addEventListener('click', () => olSetMode('signup'));
-$('olEye').addEventListener('click', () => { const p = $('olPass'); p.type = p.type === 'password' ? 'text' : 'password'; });
 $('olFind').addEventListener('input', (e) => olSearchNow(e.target.value));
 document.querySelectorAll('#olGame [data-game]').forEach((b) => b.addEventListener('click', () => { Sound.sfx('click'); store.set('gs_online_game', b.dataset.game); olPaintGame(); }));
 $('olCopy').addEventListener('click', async () => {
@@ -7395,12 +7422,15 @@ document.querySelectorAll('#m-online [data-av]').forEach((b) => b.addEventListen
   const kind = b.dataset.av; store.set('gs_avatar', kind); olPaintAv();
   $('olAv').innerHTML = kind === 'robot' ? AV_ROBOT : AV_PERSON;
 }));
-if (olTok()) {
+let OL_BG = false;
+function olStartBackground() {
+  if (OL_BG) return; OL_BG = true;
   olCall('rpc/heartbeat', {}).catch(() => {});
   setInterval(() => { if (olTok()) olCall('rpc/heartbeat', {}).catch(() => {}); }, 30000);
-  setInterval(olCheckMatches, 4000);             // a new match opens by itself, even outside the online panel
+  setInterval(() => { if (olTok()) olCheckMatches(); else olEnsure(); }, 4000);   // a new match opens by itself, even outside the online panel
   olCheckMatches();
 }
+if (olTok()) olStartBackground();
 setInterval(() => {
   document.querySelectorAll('#m-online .ol-cd').forEach((el) => {
     el.textContent = Math.max(0, Math.ceil((Date.parse(el.dataset.exp) - Date.now()) / 1000)) + 's';
@@ -7410,8 +7440,8 @@ setInterval(() => {
 const OL_NAMES = {}; let OL_FRIENDS = [];   // friend names and rows, kept by the online panel
 /* ---------- online chess on the normal chess screen: this browser plays each move with the chess engine
    (the offline rules, revivals included) and the server stores the state; it checks only participation,
-   the turn owner (or an expired 20-second turn) and the version. A timed-out turn is played by the robot
-   on whichever browser sees it first, like online Ludo. ---------- */
+   the turn owner (or an expired 20-second turn) and the version. A timed-out turn simply passes to the other
+   player (on whichever browser sees it first, like online Ludo); nothing is played for an absent player. ---------- */
 const CO = { id: null, version: 0, updated: null, active: false, color: 1, oppId: null, oppName: '',
   busy: false, robotAt: 0, dismissed: null, poll: null, tick: null };
 function coTurnLeft() {
@@ -7519,7 +7549,7 @@ async function coResign() {
   try { const rows = await olCall('rpc/resign_match', { p_match_id: CO.id }); if (rows[0]) coApply(rows[0], true); }
   catch (e) { toast(olErrText(e), 2600); }
 }
-// the turn label with the seconds left; when the time is up the robot plays the move (once every 2 seconds at most)
+// the turn label with the seconds left; when the time is up the turn passes to the other player
 function chTurnLabel() {
   const turn = CG.pos.turn, chk = CH.inCheck(CG.pos, turn);
   let s = CG.over ? T('انتهت المباراة') : (chk ? T('كش! دور {n}', { n: chName(turn) }) : T('دور {n}', { n: chName(turn) }));
@@ -7529,11 +7559,17 @@ function chTurnLabel() {
 function coTick() {
   if (!CG || !CG.online || !CO.active || CG.over) return;
   $('chTurnName').textContent = chTurnLabel();
-  if (coTurnLeft() <= 0 && !CO.busy && Date.now() - CO.robotAt > 2000) {
-    CO.robotAt = Date.now();
-    const m = CH.botMove(CG.pos, 'normal');
-    if (m) coSubmit(m);
-  }
+  if (coTurnLeft() <= 0 && !CO.busy && Date.now() - CO.robotAt > 2000) { CO.robotAt = Date.now(); coSkip(); }
+}
+// the time is up: the turn passes to the other player, no move is played for the one who did not move
+function coSkip() {
+  const p = CG.pos, was = p.turn;
+  p.turn = -p.turn; p.ep = -1;
+  CO.updated = new Date(Date.now() + OL_SKEW).toISOString();
+  CG.sel = null; CG.targets = []; CG.hint = null;
+  toast(T('انتهى وقت {n}، انتقل الدور', { n: chName(was) }), 2400);
+  chRender(); chUpdateUI();
+  coSave(null, 0);
 }
 function coLeave() {
   clearInterval(CO.poll); clearInterval(CO.tick); CO.poll = CO.tick = null;
@@ -7656,7 +7692,7 @@ async function olCheckMatches() {
     const dismissed = CO.dismissed && chess && CO.dismissed.id === chess.id && CO.dismissed.version === chess.version;
     if (chess && !CG && !LD.id && !splashUp && !dismissed) { coOpen(chess); closeModal('m-online'); }
     if (ludo) { const before = LD.id; ldAutoOpen(ludo); if (LD.id && LD.id !== before) closeModal('m-online'); }
-  } catch (e) { /* offline: try again on the next check */ }
+  } catch (e) { if (String(e.message) === 'not_authenticated') store.del('gs_online_token'); /* otherwise offline: try again on the next check */ }
 }
 
 /* ---------- online Ludo match: the normal Ludo board; this browser plays each move with the Ludo engine,
@@ -7670,8 +7706,15 @@ function ldRemain() {
   if (isNaN(u)) return OL_TURN_SECONDS;
   return Math.min(OL_TURN_SECONDS, Math.max(0, OL_TURN_SECONDS - ((Date.now() + OL_SKEW) - u) / 1000));
 }
-// the turn seat's time is up: the robot plays that seat on this device (any participant's browser may do it)
-function ldRobotTurn(c) { return !!(G && G.online && LD.active && c === G.turn && G.phase !== 'over' && ldRemain() <= 0); }
+// nobody plays for a seat whose time ran out: its turn passes to the other player (see ldSkipTurn)
+function ldRobotTurn() { return false; }
+function ldSkipTurn() {
+  if (!G || !G.online || !['roll', 'move', 'bonus'].includes(G.phase)) return;
+  const who = G.phase === 'bonus' && G.bonus ? G.bonus.c : G.turn;
+  toast(T('انتهى وقت {n}، انتقل الدور', { n: pname(who) }), 2400);
+  runId++; kickId++;
+  engineEnd(G, false); startTurn();
+}
 // the part of G that goes to the server (stable phases only; nothing that belongs to this device)
 function ldSerialize() {
   return { v: 1, turn: G.turn, turnNo: G.turnNo || 0, phase: G.phase, dice: G.dice, sixes: G.sixes, extra: G.extra,
@@ -7683,6 +7726,21 @@ function ldFromState(L) {
     pos: L.pos, aim: L.aim, turn: L.turn, turnNo: L.turnNo || 0, phase: L.phase, dice: L.dice, sixes: L.sixes,
     extra: L.extra, bonus: L.bonus, winner: L.winner, ranks: L.ranks || [], caps: L.caps, sixCount: L.sixCount,
     moves: L.moves, faces: L.faces };
+}
+// the colour chosen for this player in the online panel: my seat and the opposite seat take it; other devices keep their own choice
+let PAL_ON = false;
+function ldPalette(on) {
+  const pick = store.get('gs_online_color', null), use = !!on && pick != null && pick >= 0 && pick <= 3;
+  if (!use && !PAL_ON) return;                                      // nothing to change
+  [PCOL, CNAME, PDARK, PLIGHT].forEach((a, i) => { const base = [PCOL_BASE, CNAME_BASE, PDARK_BASE, PLIGHT_BASE][i]; base.forEach((v, k) => { a[k] = v; }); });
+  if (use) {
+    const map = []; map[LD.color] = pick; map[LD.oppColor] = (pick + 2) % 4;
+    const rest = [0, 1, 2, 3].filter((x) => x !== map[LD.color] && x !== map[LD.oppColor]);
+    [0, 1, 2, 3].filter((x) => x !== LD.color && x !== LD.oppColor).forEach((sd, i) => { map[sd] = rest[i]; });
+    map.forEach((b2, sd) => { PCOL[sd] = PCOL_BASE[b2]; CNAME[sd] = CNAME_BASE[b2]; PDARK[sd] = PDARK_BASE[b2]; PLIGHT[sd] = PLIGHT_BASE[b2]; });
+  }
+  PAL_ON = use;
+  const keep = G; G = null; buildBoard(); G = keep;                 // the board is drawn again with the colours of this game
 }
 function ldPush() { if (!G || !G.online || !LD.id) return; LD.dirty = true; ldFlush(); }
 // one save at a time: a newer state replaces the queued one, and the version comes from the last accepted save
@@ -7741,6 +7799,7 @@ function ldOpen(row) {
   LD.seats[LD.color] = { name: olMe.username, type: 'human', owner: true };
   LD.seats[LD.oppColor] = { name: LD.oppName, type: 'remote', owner: false };
   LD.needInit = !(row.state && row.state.ludo);
+  ldPalette(true);
   if (LD.needInit) { G = newGame({ seats: LD.seats, first: 0, mode: 'online' }); G.online = true; G.turnNo = 0; }
   else G = ldFromState(row.state.ludo);
   runId++; kickId++; paused = false; ui.sel = null; ui.bonusSel = null; ui.swap = null; ui.flash = ''; ui.log = [];
@@ -7760,10 +7819,9 @@ function ldTickFn() {
   const r = ldRemain(), el = $('turnTimer');
   el.hidden = false; el.textContent = '⏱ ' + Math.ceil(r); el.classList.toggle('low', r <= 5);
   if (LD.needInit && !LD.busy && (LD.color === 0 || r <= 0)) { LD.dirty = true; ldFlush(); }
-  if (r <= 0 && LD.kickedVer !== LD.version && Date.now() >= LD.nextKickAt && G.phase !== 'over') {
+  if (r <= 0 && LD.kickedVer !== LD.version && Date.now() >= LD.nextKickAt && ['roll', 'move', 'bonus'].includes(G.phase)) {
     LD.kickedVer = LD.version;
-    if (LD.expShown !== LD.version) { LD.expShown = LD.version; toast(T('انتهى وقت الدور، يلعب الروبوت عنه')); }
-    kick();
+    ldSkipTurn();
   }
 }
 async function ldPresence() {
@@ -7801,7 +7859,7 @@ function ldStop() {
   clearInterval(LD.poll); clearInterval(LD.tick); clearInterval(LD.presence);
   LD.poll = LD.tick = LD.presence = null;
   if (LD.id && LD.active) LD.dismissed = { id: LD.id, version: LD.version };
-  LD.id = null; LD.active = false;
+  LD.id = null; LD.active = false; ldPalette(false);
   $('turnTimer').hidden = true; $('ldOpp').hidden = true;
 }
 function ldAutoOpen(row) {
@@ -8296,6 +8354,20 @@ Object.assign(I18N.en,{"تحدٍّ مرة أخرى": "Challenge again"});
 Object.assign(I18N.fr,{"تحدٍّ مرة أخرى": "Défier à nouveau"});
 Object.assign(I18N.en,{"للودو والشطرنج، تُشترى بالماس فقط": "For Ludo and chess, bought with diamonds only"});
 Object.assign(I18N.fr,{"للودو والشطرنج، تُشترى بالماس فقط": "Pour le Ludo et les échecs, achat en diamants uniquement"});
+Object.assign(I18N.en,{"جارٍ تسجيل دخولك أونلاين...": "Signing you in online..."});
+Object.assign(I18N.fr,{"جارٍ تسجيل دخولك أونلاين...": "Connexion en ligne en cours..."});
+Object.assign(I18N.en,{"لتفعيل الأونلاين أدخل كلمة مرور حسابك مرة واحدة.": "To turn on online play, enter your account password once."});
+Object.assign(I18N.fr,{"لتفعيل الأونلاين أدخل كلمة مرور حسابك مرة واحدة.": "Pour activer le jeu en ligne, saisissez une fois le mot de passe de votre compte."});
+Object.assign(I18N.en,{"تفعيل الأونلاين": "Turn on online"});
+Object.assign(I18N.fr,{"تفعيل الأونلاين": "Activer le jeu en ligne"});
+Object.assign(I18N.en,{"كلمة مرور حسابك": "Your account password"});
+Object.assign(I18N.fr,{"كلمة مرور حسابك": "Mot de passe de votre compte"});
+Object.assign(I18N.en,{"إعادة المحاولة": "Try again"});
+Object.assign(I18N.fr,{"إعادة المحاولة": "Réessayer"});
+Object.assign(I18N.en,{"انتهى وقت {n}، انتقل الدور": "{n} ran out of time, the turn passes"});
+Object.assign(I18N.fr,{"انتهى وقت {n}، انتقل الدور": "Temps écoulé pour {n}, le tour passe"});
+Object.assign(I18N.en,{"لونك في لودو (يظهر على شاشتك)": "Your Ludo colour (shown on your screen)"});
+Object.assign(I18N.fr,{"لونك في لودو (يظهر على شاشتك)": "Votre couleur au Ludo (affichée sur votre écran)"});
 init();
 
 /* ---------- update notice: a new version must be installed by pressing the update button; it keeps coming back until then ---------- */
