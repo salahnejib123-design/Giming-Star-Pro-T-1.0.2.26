@@ -235,6 +235,16 @@ export default async (req) => {
   if (req.method !== "POST" && req.method !== "GET") return json(405, { error: "method" });
 
   try {
+    // GET /api/health: opens in any browser and says whether the database is reachable (no secrets are returned)
+    if (path === "health" && req.method === "GET") {
+      const out = { ok: false, database_url_set: Boolean(process.env.DATABASE_URL) };
+      try {
+        const { rows } = await pool.query("SELECT to_regproc('get_login') IS NOT NULL AS migrated");
+        out.ok = true; out.migrated = rows[0].migrated;
+      } catch (e) { out.error = String(e?.code ?? e?.name ?? "error"); console.error("health", e?.message); }
+      return json(out.ok ? 200 : 503, out);
+    }
+
     if (path === "signup" && req.method === "POST") {
       const { username, password, friend_code } = await req.json();
       if (typeof password !== "string" || password.length < 6) {
