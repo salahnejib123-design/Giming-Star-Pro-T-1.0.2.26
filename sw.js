@@ -1,7 +1,7 @@
 /* Master Ludo - service worker: offline-first app shell */
 // OneSignal (phone notifications). If the file cannot load, the game keeps working.
 try { importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js'); } catch (e) { /* offline or blocked */ }
-const CACHE = 'master-ludo-1.0.2.90';
+const CACHE = 'master-ludo-1.0.2.91';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './favicon-48.png', './offline.html', './music.mp3'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {
@@ -15,11 +15,15 @@ self.addEventListener('fetch', (e) => {
   const sameOrigin = url.origin === location.origin;
   const fonts = /(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if (!sameOrigin && !fonts) return;
-  if (req.mode === 'navigate') {   // network first so updates arrive, cache as fallback
-    e.respondWith(fetch(req).then((r) => { const cp = r.clone(); caches.open(CACHE).then((c) => c.put('./index.html', cp)); return r; }).catch(() => caches.match('./index.html').then((m) => m || caches.match('./offline.html'))));
+  if (req.mode === 'navigate') {   // instant start: show the saved copy at once and refresh it in the background (a newer version is offered inside the game)
+    e.respondWith(caches.match('./index.html').then((hit) => {
+      const net = fetch(req).then((r) => { if (r.ok) { const cp = r.clone(); caches.open(CACHE).then((c) => c.put('./index.html', cp)); } return r; });
+      if (hit) { e.waitUntil(net.catch(() => {})); return hit; }
+      return net.catch(() => caches.match('./offline.html'));
+    }));
     return;
   }
-  e.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((r) => { if (r.ok) { const cp = r.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); } return r; }).catch(() => hit)));
+  e.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((r) => { if (r.ok || (fonts && r.type === 'opaque')) { const cp = r.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); } return r; }).catch(() => hit)));
 });
 
 // phone notifications: tapping one opens the game
