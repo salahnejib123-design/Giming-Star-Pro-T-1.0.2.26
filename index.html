@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl" translate="no">
 <head>
 <meta charset="utf-8">
+<meta name="google-site-verification" content="8vVfpssUxzTwk8yxWrmpteVLQDSvXtFi3DxhR9DhiJo" />
 <meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>ماستر لودو - Master Ludo</title>
@@ -104,7 +105,7 @@ button,input,select{font:inherit;color:inherit}
 @property --tc{syntax:'<color>';inherits:true;initial-value:#1f7be6}
 #s-game{position:relative;isolation:isolate}
 .turn-stars{position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none;
-  background:radial-gradient(ellipse 80% 60% at 50% 35%,color-mix(in srgb,var(--tc) 60%,transparent),transparent 72%),linear-gradient(180deg,color-mix(in srgb,var(--tc) 38%,#0b1030),#0b1030 85%);
+  background:radial-gradient(ellipse 130% 85% at 50% 50%,color-mix(in srgb,var(--tc) 26%,transparent),transparent 78%),linear-gradient(180deg,color-mix(in srgb,var(--tc) 20%,#0d1130) 0%,color-mix(in srgb,var(--tc) 15%,#0b1030) 50%,color-mix(in srgb,var(--tc) 19%,#0b1030) 100%);
   transition:--tc .9s ease}
 .turn-stars i{position:absolute;display:block;width:var(--s);height:var(--s);background:var(--sc);opacity:var(--o);
   clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);
@@ -193,6 +194,16 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .stat{background:rgba(4,22,74,.55);border:2px solid var(--line);border-radius:16px;padding:12px;text-align:center}
 .stat b{display:block;font:400 1.9rem/1.1 var(--f-head);font-variant-numeric:tabular-nums;color:var(--gold)}
 .stat span{color:var(--muted);font-size:.8rem}
+/* elegant stat cards: accent icon plate + value + label */
+.stat.sx{--a:#7ad7ff;position:relative;display:grid;justify-items:center;gap:4px;padding:14px 8px 12px;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--a) 24%,transparent),transparent 70%),linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.02)),rgba(6,12,52,.6);
+  border:1px solid color-mix(in srgb,var(--a) 45%,rgba(255,255,255,.2));box-shadow:0 0 18px color-mix(in srgb,var(--a) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.28)}
+.stat.sx .ic{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;margin-bottom:2px;
+  background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,.04)),color-mix(in srgb,var(--a) 34%,rgba(8,14,60,.6));
+  box-shadow:0 0 14px color-mix(in srgb,var(--a) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.55)}
+.stat.sx .ic svg{width:27px;height:27px;stroke:#fff;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--a) 90%,transparent))}
+.stat.sx b{color:#fff;text-shadow:0 0 14px color-mix(in srgb,var(--a) 70%,transparent)}
+.stat.sx span{font-size:.78rem;line-height:1.25}
 #toast{position:fixed;inset-inline:16px;top:calc(env(safe-area-inset-top,0px) + 12px);margin-inline:auto;width:max-content;max-width:calc(100% - 32px);z-index:90;background:rgba(5,28,86,.96);border:2px solid var(--line);border-radius:14px;padding:10px 16px;box-shadow:0 6px 0 rgba(0,0,40,.4);transition:opacity .25s,transform .25s;pointer-events:none}
 #toast:not(.on){opacity:0;transform:translateY(-12px)}
 #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:95}
@@ -256,6 +267,12 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .base .outer{transition:stroke-width .3s}
 
 .base.off{opacity:1}
+.base{transition:opacity .45s,filter .45s}
+.base.calm:not(.off){opacity:.62;filter:saturate(.75)}                       /* when it is not your turn your corner calms down... */
+.base.turn .outer{stroke:#fff;stroke-width:.2;animation:basep 1.1s ease-in-out infinite}   /* ...and it glows, like the dice, when the turn is yours */
+@keyframes basep{50%{stroke-width:.34;stroke-opacity:.5}}
+.hud:not(:has(#ldOpp:not([hidden]))){display:none}                                  /* no message bar under the board (1.0.2.90) */
+#msg{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}   /* still read aloud by screen readers */
 .pcard{cursor:default}
 .pcard .cbg{fill:rgba(5,30,94,.9);stroke:var(--c);stroke-width:.09}
 .pcard.turn .cbg{stroke:#fff;stroke-width:.14;animation:cardp 1.2s ease-in-out infinite}
@@ -732,6 +749,48 @@ button.pcard.ok:hover{transform:translateY(-14px)}
 html[data-theme=night] .splash{background-color:#04061a}
 .splash .title{text-shadow:0 0 24px rgba(255,210,58,.45)}
 
+/* ===== v1.0.2.90: emoji replaced by the game's line icons ===== */
+.ic.emo{display:inline-grid;place-items:center;vertical-align:-.3em;width:1.3em;height:1.3em;margin-inline:.12em}
+.ic.emo svg{width:1.3em;height:1.3em;stroke:var(--a,#7ad7ff);stroke-width:1.9;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--a,#7ad7ff) 65%,transparent))}
+.ic.emo svg .f{fill:var(--a,#7ad7ff)}
+.ic.emo svg .d{fill:var(--a,#7ad7ff);fill-opacity:.3}
+.edot{display:inline-block;width:.85em;height:.85em;border-radius:50%;vertical-align:-.08em;margin-inline:.15em;border:1.5px solid rgba(255,255,255,.7)}
+.edot.w{background:radial-gradient(circle at 35% 30%,#fff,#d9d2c0)}
+.edot.b{background:radial-gradient(circle at 35% 30%,#59606f,#15171f)}
+.agic.sm{width:32px;height:32px;border-radius:11px;display:inline-grid;vertical-align:middle;margin-inline-end:6px}
+.agic.sm svg{width:22px;height:22px}
+.btn.small .ic{display:grid;place-items:center}
+.btn.small .ic svg{width:22px;height:22px;stroke:#fff}
+#pScore .ic.mini{vertical-align:middle}
+/* ===== v1.0.2.90: 3D entry splash (the game's own colours and fonts); it hands over to the menu by itself after 3 s ===== */
+.splash.sp3{gap:10px;transition:opacity .45s ease,transform .45s ease}
+.splash.sp3.out{opacity:0;transform:scale(1.035);pointer-events:none}
+.sp-rays{position:absolute;left:50%;top:36%;width:190vmax;height:190vmax;margin:-95vmax 0 0 -95vmax;z-index:0;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg,rgba(150,180,255,.12) 0 5deg,transparent 5deg 12deg);
+  -webkit-mask-image:radial-gradient(circle,#000 0,transparent 24%);mask-image:radial-gradient(circle,#000 0,transparent 24%);animation:spin 140s linear infinite}
+.sp-tw{position:absolute;z-index:0;width:6px;height:6px;pointer-events:none;background:radial-gradient(circle,#fff 0,rgba(255,255,255,.9) 18%,transparent 62%);border-radius:50%;opacity:.15;animation:spTw 2.6s ease-in-out infinite}
+@keyframes spTw{50%{opacity:.95;transform:scale(1.7)}}
+.sp-logo{position:relative;width:min(54vw,232px);aspect-ratio:1;margin-bottom:14px;animation:spBob 3.4s ease-in-out infinite}
+.sp-logo::before{content:"";position:absolute;inset:-26%;z-index:-1;border-radius:50%;background:radial-gradient(circle,rgba(255,206,80,.34) 0,rgba(110,150,255,.24) 42%,transparent 68%);filter:blur(12px)}
+.sp-logo::after{content:"";position:absolute;left:8%;right:-6%;bottom:-17%;height:11%;z-index:-1;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,20,.55),transparent 70%);filter:blur(6px)}
+.sp-plate{position:absolute;inset:0;border-radius:21.9%;overflow:hidden;transform:perspective(760px) rotateY(13deg) rotateX(-4deg) rotate(-1.5deg);transform-origin:50% 50%;
+  box-shadow:-1px 1px 0 rgb(66,143,231),-2px 2px 0 rgb(62,136,223),-3px 3px 0 rgb(58,129,215),-4px 4px 0 rgb(54,122,207),-5px 5px 0 rgb(50,115,199),-6px 6px 0 rgb(46,108,191),-7px 7px 0 rgb(42,101,183),-8px 8px 0 rgb(39,95,175),-9px 9px 0 rgb(35,88,166),-10px 10px 0 rgb(31,81,158),-11px 11px 0 rgb(27,74,150),-12px 12px 0 rgb(23,67,142),-13px 13px 0 rgb(19,60,134),-14px 14px 0 rgb(15,53,126),-15px 15px 0 rgb(11,46,118),-16px 16px 0 rgb(8,40,110),-18px 22px 30px rgba(0,0,30,.45),0 0 0 1px rgba(160,205,255,.35)}
+.sp-plate .logo{display:block;width:100%;height:100%;border-radius:0;filter:none}
+.sp-plate::after{content:"";position:absolute;inset:-20% -60%;background:linear-gradient(100deg,transparent 42%,rgba(255,255,255,.38) 50%,transparent 58%);transform:translateX(-70%);animation:spGlint 3.2s ease-in-out .5s infinite}
+@keyframes spGlint{0%,12%{transform:translateX(-70%)}55%,100%{transform:translateX(70%)}}
+@keyframes spBob{50%{transform:translateY(-8px)}}
+.splash.sp3 .title.name-en{font-size:clamp(2.3rem,11.5vw,3.1rem);color:#ffd23a;
+  background:linear-gradient(180deg,#fff4ad 0%,#ffd23a 46%,#f29a00 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none;
+  filter:drop-shadow(0 2px 0 #8a4b00) drop-shadow(0 4px 0 #4f2a00) drop-shadow(0 0 20px rgba(255,210,58,.45))}
+.splash.sp3 .tag{margin-top:2px}
+.splash.sp3 .credit-mini{position:absolute;left:0;right:0;margin:0;bottom:calc(env(safe-area-inset-bottom,0px) + 38px);padding-inline:16px}
+.sp-bar{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);width:min(52vw,220px);height:6px;transform:translateX(-50%);border-radius:5px;background:rgba(255,255,255,.13);overflow:hidden}
+.sp-bar i{display:block;height:100%;transform-origin:left center;background:linear-gradient(90deg,#7ad7ff,#ffd23a);box-shadow:0 0 10px rgba(255,210,58,.6);animation:spFill 3s linear forwards}
+html[dir=rtl] .sp-bar i{transform-origin:right center}
+@keyframes spFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+[data-calm="1"] .sp-logo,[data-calm="1"] .sp-plate::after,[data-calm="1"] .sp-tw,[data-calm="1"] .sp-rays{animation:none}
+@media (prefers-reduced-motion:reduce){.sp-logo,.sp-plate::after,.sp-tw,.sp-rays{animation:none}}
+
 /* ===== v1.9: one-tap play (no confirm/cancel/skip/swap buttons), swap-ready pieces, hint bulb ===== */
 .hud{padding:12px 16px}
 #msg{min-height:2.6em;justify-content:center;text-align:center;font-size:1rem}
@@ -925,13 +984,15 @@ html[data-theme=night] .splash{background-color:#04061a}
 <svg id="gdefs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
 <div id="app" dir="rtl" lang="ar">
 
-<!-- ===== Splash (forced entry, also requests full screen) ===== -->
-<div id="splash" class="splash">
-  <img class="logo xl" alt="شعار Master Ludo" width="140" height="140">
+<!-- ===== Splash: 3D logo, continues to the menu by itself after 3 seconds (a tap skips it) ===== -->
+<div id="splash" class="splash sp3">
+  <div class="sp-rays" aria-hidden="true"></div>
+  <i class="sp-tw" style="left:14%;top:16%;animation-delay:.2s" aria-hidden="true"></i><i class="sp-tw" style="left:82%;top:12%;animation-delay:1.1s" aria-hidden="true"></i><i class="sp-tw" style="left:90%;top:46%;animation-delay:.6s" aria-hidden="true"></i><i class="sp-tw" style="left:8%;top:52%;animation-delay:1.6s" aria-hidden="true"></i><i class="sp-tw" style="left:72%;top:70%;animation-delay:.9s" aria-hidden="true"></i><i class="sp-tw" style="left:24%;top:74%;animation-delay:1.9s" aria-hidden="true"></i>
+  <div class="sp-logo"><div class="sp-plate"><img class="logo" alt="شعار Master Ludo" width="236" height="236"></div></div>
   <h1 class="title name-en">Master Ludo</h1>
   <p class="tag">لعبة النرد والقطع الاستراتيجية</p>
-  <button class="btn primary big pulse" id="btnEnter">اضغط للدخول</button>
   <p class="credit-mini">تمت صناعة اللعبة بواسطة المطور <b dir="ltr">Salah.Nejb.650</b></p>
+  <div class="sp-bar" aria-hidden="true"><i></i></div>
 </div>
 <div id="rotateGate" aria-live="polite"><div class="rg"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="22" y="6" width="20" height="38" rx="5" fill="none" stroke="#fff" stroke-width="3"/><path d="M14 54a24 24 0 0 0 36 0" fill="none" stroke="#7ad7ff" stroke-width="3" stroke-linecap="round"/><path d="m50 48 1 8-8-1" fill="none" stroke="#7ad7ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><b>أدر هاتفك إلى الوضع العمودي</b><small>اللعبة تُلعب بالوضع العمودي فقط.</small></div></div>
 <div id="fsGate" class="splash gate" hidden>
@@ -1002,18 +1063,17 @@ html[data-theme=night] .splash{background-color:#04061a}
     <button class="tile" id="tShare" style="--a:#ff7ac8"><span class="ic" data-ic="share"></span><b>مشاركة اللعبة</b></button>
   </div>
   <button class="btn primary" id="btnInstall" hidden>تثبيت اللعبة على الشاشة الرئيسية</button>
-  <button class="btn small" id="btnLogout" style="align-self:center">تسجيل الخروج</button>
 </section>
 
 <!-- ===== Game ===== -->
 <section id="s-game" class="screen" hidden>
   <div class="turn-stars" id="turnStars" aria-hidden="true"></div>
   <div class="topbar">
-    <button class="btn small" id="btnPause" aria-label="قائمة المباراة">☰</button>
+    <button class="btn small" id="btnPause" aria-label="قائمة المباراة"><i class="ic" data-ic="menu"></i></button>
     <div class="turn-chip" id="turnChip"><i></i><span id="turnName">—</span><em id="turnTimer" hidden></em></div>
     <span class="coinpill" id="coinGame"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg><b class="coinval">0</b></span>
     <button class="btn small hintbtn" id="btnHint" aria-label="تلميح" hidden><span class="ic" data-ic="bulb"></span><i class="badge" id="hintN">0</i></button>
-    <button class="btn small" id="btnMute" aria-label="كتم الصوت" aria-pressed="false">♪</button>
+    <button class="btn small" id="btnMute" aria-label="كتم الصوت" aria-pressed="false"><i class="ic" data-ic="volume"></i></button>
   </div>
   <div class="game">
     <div class="area"><div class="board-wrap"><svg id="board" viewBox="-0.5 -0.5 16 20.8" role="img" aria-label="لوحة اللعب"></svg></div></div>
@@ -1028,7 +1088,7 @@ html[data-theme=night] .splash{background-color:#04061a}
 
 <section id="s-chess" class="screen" hidden>
   <div class="topbar">
-    <button class="btn small" id="chMenu" aria-label="قائمة الشطرنج">☰</button>
+    <button class="btn small" id="chMenu" aria-label="قائمة الشطرنج"><i class="ic" data-ic="menu"></i></button>
     <div class="turn-chip" id="chTurn"><i></i><span id="chTurnName">—</span></div>
     <span class="coinpill" id="coinChess"><svg viewBox="-1 -1 2 2" width="22" height="22" aria-hidden="true"><circle r=".92" fill="#ffc21a" stroke="#b36b00" stroke-width=".12"/><circle r=".62" fill="none" stroke="#fff3b0" stroke-width=".1"/><path d="M0 -.38 L.1 -.12 L.38 -.1 L.16 .08 L.24 .36 L0 .2 L-.24 .36 L-.16 .08 L-.38 -.1 L-.1 -.12Z" fill="#fff3b0"/></svg><b class="coinval">0</b></span>
     <button class="btn small" id="chMoves" aria-label="سجل النقلات">≡</button>
@@ -1305,6 +1365,7 @@ html[data-theme=night] .splash{background-color:#04061a}
     </div>
     <div class="pane" data-pane="account" hidden>
       <div class="sw-row"><span class="rl"><i class="ic" data-ic="user"></i><span>الحساب الحالي</span></span><b id="setWho">—</b></div>
+      <button class="btn" id="btnLogout" type="button">تسجيل الخروج</button>
       <button class="btn" id="btnInfo" type="button"><span class="ic" aria-hidden="true" style="font-weight:900">!</span><span>معلومات المطور والفريق</span></button>
       <button class="btn" id="btnResetSet">استعادة الإعدادات الافتراضية</button>
       <button class="btn danger" id="btnResetStats">مسح إحصائياتي وسجل المباريات</button>
@@ -1469,7 +1530,7 @@ html[data-theme=night] .splash{background-color:#04061a}
   <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-pause">
     <h2 id="t-pause">قائمة المباراة</h2>
     <button class="btn primary" data-close="m-pause">متابعة اللعب</button>
-    <button class="btn" id="pScore">📊 نسب التقدّم والأحداث</button>
+    <button class="btn" id="pScore"><i class="ic mini" data-ic="chart"></i> <span>نسب التقدّم والأحداث</span></button>
     <button class="btn" id="pRules">دليل القواعد والرموز</button>
     <button class="btn" id="pSettings">الصوت والإعدادات</button>
     <button class="btn danger" id="pRestart">إعادة المباراة من البداية</button>
@@ -1850,7 +1911,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.2.89';
+const APP_VERSION = '1.0.2.90';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -1866,7 +1927,7 @@ const store = {
 let TIMESCALE = 1;
 const VIBE = { dice: [14], six: [30, 30, 30], capture: [45, 30, 70], home: [35], win: [80, 40, 80, 40, 140], swap: [25, 25, 25] };
 function vib(name) { try { if (settings.vibrate && VIBE[name] && navigator.vibrate) navigator.vibrate(VIBE[name]); } catch (e) { /* unsupported */ } }
-const settings = Object.assign({ music: true, musicVol: 0.4, sfx: true, sfxVol: 0.7, confirm: false, speed: 'normal', table: true, theme: 'night', textSize: 'normal', vibrate: true, autoMove: true, showPath: true, effects: true, turnTimer: 'off', autoPause: true, keepAwake: true, lang: 'ar', chessTheme: 'classic', chessHints: true, musicStyle: 'calm', fsAuto: false, bigButtons: false, reduceMotion: false }, store.get('gs_settings', {}));
+const settings = Object.assign({ music: true, musicVol: 0.4, sfx: true, sfxVol: 0.7, confirm: false, speed: 'normal', table: true, theme: 'night', textSize: 'normal', vibrate: true, autoMove: true, showPath: true, effects: true, turnTimer: 'off', autoPause: true, keepAwake: true, lang: 'en', chessTheme: 'classic', chessHints: true, musicStyle: 'calm', fsAuto: false, bigButtons: false, reduceMotion: false }, store.get('gs_settings', {}));
 const saveSettings = () => store.set('gs_settings', settings);
 /* v1.9: one-tap play, no confirmation questions */
 if ((settings.ver || 0) < 3) { settings.confirm = false; settings.autoMove = true; settings.ver = 3; saveSettings(); }
@@ -1884,7 +1945,7 @@ function rollValue() {
   } catch (e) { return 1 + Math.floor(Math.random() * 6); }
 }
 function toast(text, ms) {
-  const t = $('toast'); t.textContent = text; t.classList.add('on');
+  const t = $('toast'); setEmo(t, text); t.classList.add('on');
   clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), ms || 2200);
 }
 async function hashPass(pass, salt) {
@@ -1915,7 +1976,7 @@ function confetti() {
 
 /* ===== i18n core: Arabic (source), English, French. T('arabic source', {vars}) ===== */
 const LANGS = { ar: { name: 'العربية', dir: 'rtl' }, en: { name: 'English', dir: 'ltr' }, fr: { name: 'Français', dir: 'ltr' } };
-let LANG = LANGS[settings.lang] ? settings.lang : 'ar';
+let LANG = LANGS[settings.lang] ? settings.lang : 'en';
 const I18N = { en: {}, fr: {} };
 const MISSING = new Set();
 const AR_RE = /[؀-ۿ]/;
@@ -1966,7 +2027,7 @@ Object.assign(I18N.fr,{"نعم": "Oui", "الأحمر": "Rouge", "الأخضر":
 const N = (semi) => 440 * Math.pow(2, semi / 12);            // semitones relative to A4
 const PENTA = [0, 3, 5, 7, 10];                                // A minor pentatonic
 const Sound = {
-  duck: 1, ctx: null, master: null, mg: null, sg: null, rev: null, mrev: null, noise: null, timer: null, nextT: 0, stepI: 0, musicOn: false,
+  duck: 1.25, ctx: null, master: null, mg: null, sg: null, rev: null, mrev: null, noise: null, timer: null, nextT: 0, stepI: 0, musicOn: false,
   init() {
     try {
       if (!this.ctx) {
@@ -1999,10 +2060,14 @@ const Sound = {
     this.noise = nb;
     this.applyVolumes();
   },
+  _ramp(node, v) {   // glide to the new level (no click when the screen changes)
+    try { const t = this.ctx.currentTime; node.gain.cancelScheduledValues(t); node.gain.setTargetAtTime(v, t, 0.12); } catch (e) { node.gain.value = v; }
+  },
   applyVolumes() {
     if (!this.ctx) return;
-    this.mg.gain.value = settings.music ? settings.musicVol * (this.duck || 1) : 0;   // duck: a little quieter while a board game is on
-    this.sg.gain.value = settings.sfx ? settings.sfxVol * 3.2 : 0;   // small sounds: about +6.5 dB louder than before
+    // duck = screen balance for the song: the main menu a little louder (1.25), Ludo + chess almost silent (0.1), arcade games a little lower (0.75)
+    this._ramp(this.mg, settings.music ? settings.musicVol * (this.duck || 1) : 0);
+    this._ramp(this.sg, settings.sfx ? settings.sfxVol * 1.7 : 0);   // effects: calm and comfortable (1.0.2.90: about 5.5 dB quieter than before), still clearly audible
     // the soft ambient echo of the music: normal balance at the usual volume, and it comes forward (about +8..10 dB) as the music is turned down
     if (this.mrev) this.mrev.gain.value = 0.5 + (1 - Math.min(1, settings.musicVol / 0.6)) * 0.9;
   },
@@ -2040,9 +2105,9 @@ const Sound = {
   pluck(f, when, v, dest) { this.tone(f, 0.38, 'triangle', v, when, dest, null, 0.35); this.tone(f * 2, 0.14, 'sine', v * 0.5, when, dest); },
   bell(f, when, v, dest) { this.tone(f, 0.9, 'sine', v, when, dest, null, 0.6); this.tone(f * 2.76, 0.4, 'sine', v * 0.35, when, dest, null, 0.5); this.tone(f * 5.4, 0.18, 'sine', v * 0.15, when, dest); },
   /* a single plastic dice "clack" */
-  clack(when, v, bright) {
-    this.hiss(when, 0.06, v, (bright || 2000) * (0.65 + Math.random() * 0.5), 1.1, 'bandpass');
-    this.tone(380 + Math.random() * 260, 0.07, 'sine', v * 0.5, when);
+  clack(when, v, bright) {      // a soft, muffled tap (1.0.2.90: duller and gentler than before)
+    this.hiss(when, 0.08, v, (bright || 2000) * (0.6 + Math.random() * 0.3), 0.6, 'lowpass');
+    this.tone(210 + Math.random() * 120, 0.09, 'sine', v * 0.4, when);
   },
   sfx(name, arg) {
     vib(name);
@@ -2054,9 +2119,9 @@ const Sound = {
       case 'turn': this.bell(N(19), 0, 0.45); break;
       case 'dice': {            // soft shake in the hand, a gentle throw, tumbling to rest
         const t = (x) => x * k;
-        for (let i = 0; i < 11; i++) this.clack(t(i * 0.046 + Math.random() * 0.01), 0.045 + Math.random() * 0.03, 620);
-        [0.56, 0.66, 0.79, 0.96].forEach((at, i) => this.clack(t(at), 0.07 - i * 0.012, 560 - i * 50));
-        this.tone(110, 0.2, 'sine', 0.12, t(1.02), this.sg, 60);
+        for (let i = 0; i < 9; i++) this.clack(t(i * 0.056 + Math.random() * 0.012), 0.02 + Math.random() * 0.014, 520);
+        [0.56, 0.68, 0.82, 0.98].forEach((at, i) => this.clack(t(at), 0.036 - i * 0.007, 460 - i * 40));
+        this.tone(100, 0.22, 'sine', 0.05, t(1.02), this.sg, 58);
         break;
       }
       case 'land': this.bell(N(arg === 6 ? 24 : 14), 0, arg === 6 ? 0.42 : 0.3); break;
@@ -2907,10 +2972,11 @@ function setFace(c, n) {
 }
 async function animateDice(c, final) {   // the real result is known first: the last frame of the tumble is that result, so nothing changes after it
   const g = DICE[c]; if (!g) return;
-  g.style.setProperty('--dur', Math.round(scaleMs(1050)) + 'ms');
+  const bk = isBot(c) ? 0.6 : 1;      // the robot's dice tumbles a little faster
+  g.style.setProperty('--dur', Math.round(scaleMs(1050 * bk)) + 'ms');
   g.classList.remove('settle'); g.classList.add('rolling');
   const steps = [50, 55, 60, 70, 80, 95, 115, 140, 170, 210];
-  for (let i = 0; i < steps.length; i++) { setFace(c, i === steps.length - 1 ? final : 1 + Math.floor(Math.random() * 6)); await wait(steps[i]); }
+  for (let i = 0; i < steps.length; i++) { setFace(c, i === steps.length - 1 ? final : 1 + Math.floor(Math.random() * 6)); await wait(steps[i] * bk); }
   g.classList.remove('rolling'); g.classList.add('settle');
   setTimeout(() => g.classList.remove('settle'), 450);
 }
@@ -2948,15 +3014,15 @@ const isHuman = (c) => !!(G && G.seats[c] && G.seats[c].type === 'human' && !ldR
 function buildTurnStars() {
   const box = $('turnStars'); if (!box || box.dataset.built) return;
   box.dataset.built = '1';
-  for (let k = 0; k < 26; k++) {
+  for (let k = 0; k < 40; k++) {               // 5 x 8 cells, one small star in each: the stars cover the whole screen evenly
     const st = document.createElement('i');
     const r = (a, b) => a + Math.random() * (b - a);
-    st.style.left = r(-4, 100) + '%'; st.style.top = r(-4, 100) + '%';
-    st.style.setProperty('--s', r(8, 26).toFixed(0) + 'px');
-    st.style.setProperty('--o', r(0.25, 0.7).toFixed(2));
+    st.style.left = ((k % 5) * 20 + r(2, 18)).toFixed(1) + '%'; st.style.top = (Math.floor(k / 5) * 12.5 + r(1, 11.5)).toFixed(1) + '%';
+    st.style.setProperty('--s', r(6, 13).toFixed(0) + 'px');
+    st.style.setProperty('--o', r(0.18, 0.5).toFixed(2));
     st.style.setProperty('--sc', Math.random() < 0.7 ? '#ffffff' : 'rgba(255,255,255,.85)');
-    st.style.setProperty('--dx', r(-60, 60).toFixed(0) + 'px');
-    st.style.setProperty('--dy', r(-50, 50).toFixed(0) + 'px');
+    st.style.setProperty('--dx', r(-30, 30).toFixed(0) + 'px');
+    st.style.setProperty('--dy', r(-26, 26).toFixed(0) + 'px');
     st.style.setProperty('--r', r(-120, 120).toFixed(0) + 'deg');
     st.style.setProperty('--d', r(13, 20).toFixed(0) + 's');
     st.style.animationDelay = (-r(0, 60)).toFixed(1) + 's';
@@ -2974,6 +3040,7 @@ function updateDice() {
     CARD[c].g.classList.toggle('turn', G.turn === c && G.phase !== 'over');
     if (G.phase !== 'rolling' || G.turn !== c) setFace(c, G.faces[c]);
     gBase[c].classList.toggle('turn', G.turn === c && G.phase !== 'over');
+    gBase[c].classList.toggle('calm', G.turn !== c && G.phase !== 'over');
   }
   updateCards();
 }
@@ -3047,7 +3114,7 @@ function renderLog() {
   ui.log.forEach((e) => {
     const li = document.createElement('li');
     if (e.c != null) li.style.color = PCOL[e.c];
-    li.textContent = '• ' + T(e.k, lv(e.v)); li.style.opacity = '1';
+    setEmo(li, '• ' + T(e.k, lv(e.v))); li.style.opacity = '1';
     ul.appendChild(li);
   });
 }
@@ -3176,7 +3243,7 @@ async function doRoll() {
   }
   if (!res.legal.length) {
     G.phase = 'after'; ui.flash = () => T('لا توجد حركة متاحة لـ {n} بالرقم {d}', { n: pname(c), d }); refresh();
-    await wait(1150); if (r !== runId) return;
+    await wait(isBot(c) ? 650 : 1150); if (r !== runId) return;
     engineEnd(G, false); return startTurn();
   }
   ui.legal = res.legal; G.phase = 'move';
@@ -3190,7 +3257,7 @@ async function walk(m) {
   let k = 0;
   for (let p = m.from + 1; p <= m.to; p++) {
     G.pos[c][i] = p; layout(); Sound.sfx('step', k++);
-    await wait(215); if (r !== runId) return false;
+    await wait(isBot(c) ? 130 : 215); if (r !== runId) return false;
   }
   return true;
 }
@@ -3298,7 +3365,7 @@ function kick() {
   const c = G.phase === 'bonus' && G.bonus ? G.bonus.c : G.turn;
   if (!isBot(c)) return;
   const r = runId;
-  later(() => botAct(id, r), (G.phase === 'roll' ? 900 : 700) + swapHoldMs());
+  later(() => botAct(id, r), (G.phase === 'roll' ? 380 : 260) + swapHoldMs());   // the robot answers quickly
 }
 function botAct(id, r) {
   if (id !== kickId || r !== runId || !G) return;
@@ -3761,6 +3828,37 @@ Object.assign(ICONS, {
 });
 const icoSvg = (k, cls) => '<svg viewBox="0 0 24 24" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : '') + '>' + (ICONS[k] || '') + '</svg>';
 const icoEl = (k, cls) => { const s = document.createElement('span'); s.className = 'ic ' + (cls || ''); s.innerHTML = icoSvg(k); return s; };
+Object.assign(ICONS, {
+  gift: '<rect class="d" x="4" y="10" width="16" height="10" rx="2"/><rect x="4" y="10" width="16" height="10" rx="2"/><rect x="3" y="7" width="18" height="3.500" rx="1.200"/><path d="M12 7v13M12 7C10.600 4.500 7.500 4.200 7.500 5.800S10 7 12 7zm0 0c1.400-2.500 4.500-2.800 4.500-1.200S14 7 12 7z"/>',
+  menu: '<path d="M5 7h14M5 12h14M5 17h14"/>',
+  mute: '<path class="d" d="M4 9.500h3.400L12 5.600v12.800l-4.600-3.900H4z"/><path d="M4 9.500h3.400L12 5.600v12.800l-4.600-3.900H4z"/><path d="M16 9.500l5 5M21 9.500l-5 5"/>'
+});
+/* emoji -> the game's own line icons (toasts, titles, chips, log, rules). Content emoji (memory cards, mines, card suits) stay as they are. */
+const EMO_IC = {
+  '🏅': ['medal', '#ffd23a'], '🏆': ['trophy', '#ffd23a'], '✅': ['check', '#52e08a'], '💡': ['bulb', '#ffd23a'], '🎁': ['gift', '#ff7ac8'],
+  '🎉': ['sparkle', '#ffd23a'], '🎯': ['target', '#ff6b8a'], '🏁': ['flag', '#7cff6b'], '🚩': ['flag', '#ff6b8a'], '👤': ['user', '#7ad7ff'],
+  '🤖': ['bot', '#9be564'], '🥇': ['medal', '#ffd23a'], '🥈': ['medal', '#cfd8e8'], '🥉': ['medal', '#e08a4a'], '👁': ['eye', '#7ad7ff'],
+  '🏠': ['house', '#ffb347'], '🏹': ['arrow', '#7ad7ff'], '📊': ['chart', '#7ad7ff'], '⚪': ['dot', 'w'], '⚫': ['dot', 'b']
+};
+const EMO_RE = new RegExp('(' + Object.keys(EMO_IC).join('|') + ')\\uFE0F?', 'g');
+function emoFrag(str) {
+  const f = document.createDocumentFragment(); let last = 0; str = String(str);
+  str.replace(EMO_RE, (m, e, at) => {
+    if (at > last) f.appendChild(document.createTextNode(str.slice(last, at)));
+    const [ic, a] = EMO_IC[e];
+    if (ic === 'dot') { const d = document.createElement('i'); d.className = 'edot ' + a; f.appendChild(d); }
+    else { const sp = icoEl(ic, 'emo'); sp.style.setProperty('--a', a); f.appendChild(sp); }
+    last = at + m.length; return m;
+  });
+  if (last < str.length) f.appendChild(document.createTextNode(str.slice(last)));
+  return f;
+}
+function setEmo(el, str) { el.textContent = ''; el.appendChild(emoFrag(str)); return el; }
+function emoize(root) {      // turns emoji already inside `root` (text nodes only) into icons; safe to call again
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), list = []; let n;
+  while ((n = w.nextNode())) { EMO_RE.lastIndex = 0; if (EMO_RE.test(n.nodeValue)) list.push(n); }
+  list.forEach((t) => t.parentNode.replaceChild(emoFrag(t.nodeValue), t));
+}
 document.querySelectorAll('[data-ic]').forEach((n) => { n.innerHTML = icoSvg(n.dataset.ic); });
 
 
@@ -3779,7 +3877,7 @@ function renderLead() {
   const me = currentUser(), medals = ['🥇', '🥈', '🥉'];
   rows.slice(0, 20).forEach((r, k) => {
     const row = h('div', 'hrow' + (r.id === me ? ' won' : ''));
-    row.append(h('span', 'hic', medals[k] || String(k + 1)));
+    if (k < 3) { const mi = icoEl('medal', 'hic'); mi.style.setProperty('--a', ['#ffd23a', '#cfd8e8', '#e08a4a'][k]); row.append(mi); } else row.append(h('span', 'hic', String(k + 1)));
     const mid = h('div', 'hmid');
     mid.append(h('b', null, r.n + (r.id === me ? ' ' + T('(أنت)') : '')), h('small', null, T('المستوى {l} · {x} نقطة · {w} فوز من {g} ({p}%)', { l: r.L.level, x: r.L.xp, w: r.st.wins, g: r.st.games, p: Math.round(r.st.wins / r.st.games * 100) })));
     row.appendChild(mid); box.appendChild(row);
@@ -3896,14 +3994,14 @@ function chRenderSetup() {
   [[1, 'w', T('⚪ الأبيض (يبدأ)')], [-1, 'b', T('⚫ الأسود')]].forEach(([side, k, label]) => {
     const row = h('div', 'seatrow'); row.style.setProperty('--c', side === 1 ? '#f4efe2' : '#2a2d36');
     const head = h('div', 'sr-head'); head.appendChild(h('i'));
-    head.appendChild(h('b', null, label)); row.appendChild(head);
+    const lb = h('b'); setEmo(lb, label); head.appendChild(lb); row.appendChild(head);
     if (chs[k].t === 'human') {
       const inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 12; inp.value = chs[k].name; inp.placeholder = T('اسم اللاعب (اختياري)'); inp.id = 'chn' + k;
       inp.setAttribute('aria-label', T('اسم اللاعب (اختياري)')); inp.addEventListener('input', () => { chs[k].name = inp.value; }); row.appendChild(inp);
     }
     const box = h('div', 'chips');
     TYPES.forEach(([v, t]) => {
-      const bt = h('button', 'chip', t); bt.type = 'button'; bt.dataset.side = k; bt.dataset.type = v; bt.setAttribute('aria-pressed', String(chs[k].t === v));
+      const bt = h('button', 'chip'); setEmo(bt, t); bt.type = 'button'; bt.dataset.side = k; bt.dataset.type = v; bt.setAttribute('aria-pressed', String(chs[k].t === v));
       bt.addEventListener('click', () => { chs[k].t = v; Sound.sfx('click'); chRenderSetup(); }); box.appendChild(bt);
     });
     row.appendChild(box); body.appendChild(row);
@@ -3940,7 +4038,6 @@ $('btnChResume').addEventListener('click', () => {
 /* ---------- game lifecycle ---------- */
 function chBegin(cfg) {
   const pos = CH.newPos();
-  Sound.duck = 0.72; Sound.applyVolumes();
   CG = { pos, hist: [], seats: cfg.seats, sel: null, targets: [], last: null, flip: !!cfg.flip, over: false, busy: false, token: 0, undone: cfg.undone || 0, hints: cfg.hints || 0, hint: null, startKey: CH.posKey(pos), anim: null };
   for (const mv of cfg.moves || []) {
     const m = CH.legalMoves(pos).find((x) => x.f === mv[0] && x.t === mv[1] && x.pr === mv[2] && (mv[3] === undefined || x.fl === mv[3]));
@@ -4030,7 +4127,7 @@ function chUpdateUI() {
     el.style.setProperty('--c', side === 1 ? '#f4efe2' : '#2a2d36');
     el.classList.toggle('turn', !CG.over && CG.pos.turn === side);
     el.innerHTML = '<i></i><b></b><span class="caps"></span><em></em>';
-    el.querySelector('b').textContent = chName(side) + (CG.seats[side].type === 'bot' ? ' 🤖' : '');
+    setEmo(el.querySelector('b'), chName(side) + (CG.seats[side].type === 'bot' ? ' 🤖' : ''));
     if (CG.seats[side].type === 'remote') el.querySelector('b').after(coDots());
     el.querySelector('.caps').innerHTML = chCapturedHTML(side);
     el.querySelector('em').textContent = adv > 0 ? '+' + adv : '';
@@ -4119,7 +4216,7 @@ $('chUndo').addEventListener('click', () => {
 });
 function chHintLabel() {
   const n = getWallet().chessHints;
-  $('chHint').textContent = n > 0 ? T('💡 تلميح ({n})', { n }) : T('💡 شراء تلميح ({n} عملات)', { n: HINT_PRICE });
+  setEmo($('chHint'), n > 0 ? T('💡 تلميح ({n})', { n }) : T('💡 شراء تلميح ({n} عملات)', { n: HINT_PRICE }));
 }
 $('chHint').addEventListener('click', () => {
   if (!CG || CG.over || CG.busy || CG.seats[CG.pos.turn].type !== 'human') return;
@@ -4236,15 +4333,15 @@ function arcChips(label, items, cur, fn) {
   const box = $('agOpts'); box.innerHTML = '';
   if (label) box.appendChild(h('span', 'aglbl', label));
   const row = h('div', 'chips');
-  items.forEach(([v, text]) => { const c = h('button', 'chip', text); c.type = 'button'; c.setAttribute('aria-pressed', String(v === cur)); c.addEventListener('click', () => { Sound.sfx('click'); fn(v); }); row.appendChild(c); });
+  items.forEach(([v, text]) => { const c = h('button', 'chip'); setEmo(c, text); c.type = 'button'; c.setAttribute('aria-pressed', String(v === cur)); c.addEventListener('click', () => { Sound.sfx('click'); fn(v); }); row.appendChild(c); });
   box.appendChild(row);
 }
 function arcReward(n, why) { if (n > 0) { addCoins(n); Sound.sfx('coin'); toast(T('+{n} عملة', { n }) + (why ? ' · ' + why : ''), 2000); } }
 let arcOverAgain = null;
 function arcOver(o) {
-  $('agOverTitle').textContent = o.title;
+  setEmo($('agOverTitle'), o.title);
   const box = $('agOverLines'); box.innerHTML = '';
-  (o.lines || []).forEach((l) => box.appendChild(h('p', null, l)));
+  (o.lines || []).forEach((l) => { const p = h('p'); setEmo(p, l); box.appendChild(p); });
   if (o.coins) box.appendChild(h('p', 'agcoins', T('+{n} عملة', { n: o.coins })));
   $('agOverAgain').textContent = o.again.label; arcOverAgain = o.again.fn;
   openModal('m-ag-over');
@@ -4255,7 +4352,7 @@ function arcFillRules(el, onlyId) {
   ARC.order.forEach((id) => {
     if (onlyId && id !== onlyId) return;
     const g = ARC.games[id]; if (!g) return;
-    el.appendChild(h('h3', null, g.emoji + ' ' + T(g.name)));
+    const hd = h('h3', 'agh'); const hi = h('span', 'agic sm'); hi.style.setProperty('--a', g.accent); hi.innerHTML = g.icon; hd.append(hi, ' ' + T(g.name)); el.appendChild(hd);
     el.appendChild(h('p', 'muted', T(g.meaning)));
     const ul = h('ul'); g.rules.forEach((r) => ul.appendChild(h('li', null, T(r)))); el.appendChild(ul);
   });
@@ -7024,12 +7121,20 @@ const session = () => store.get('gs_session', null);
 const currentUser = () => { const s = session(); return s ? (s.guest ? 'guest' : s.name) : null; };
 const displayName = () => { const s = session(); return s ? (s.guest ? T('ضيف') : s.name) : T('لاعب'); };
 
+const DUCK_BY_SCREEN = { 's-game': 0.1, 's-chess': 0.1, 's-play': 0.75 };   // the song: almost silent in Ludo and chess, a little lower inside arcade games, a little louder everywhere else
 function show(id) {
   ['s-login', 's-menu', 's-game', 's-chess', 's-arcade', 's-play'].forEach((s) => { $(s).hidden = s !== id; });
+  Sound.duck = DUCK_BY_SCREEN[id] != null ? DUCK_BY_SCREEN[id] : 1.25; Sound.applyVolumes();
   window.scrollTo(0, 0);
   if (id === 's-menu') setTimeout(ensureUpdate, 500);
 }
-function openModal(id) { $(id).hidden = false; }
+function openModal(id) {
+  $(id).hidden = false;
+  if (id === 'm-settings') {           // settings always open on the first section (sound), at the top, as if nothing was touched before
+    setTab = 'sound'; syncExtra();
+    $(id).scrollTop = 0; const cd = $(id).querySelector('.card'); if (cd) cd.scrollTop = 0; const pn = $(id).querySelector('[data-pane]:not([hidden])'); if (pn) pn.scrollTop = 0;
+  }
+}
 function closeModal(id) {
   $(id).hidden = true;
   if (id === 'm-notif') { try { const m = getMeta(); if ((m.notes || []).length) { m.notes = []; saveMeta(m); } refreshNotifBadge(); } catch (e) { /* ignore */ } }
@@ -7171,7 +7276,6 @@ function afterLogin() {
 function renderMenuTexts() { $('whoami').textContent = T('مرحباً {n}', { n: displayName() }); renderLevel(); renderCoins(); updateBadges(); }
 function goMenu() {
   ldStop();
-  Sound.duck = 1; Sound.applyVolumes();
   runId++; kickId++; G = null; paused = false; keepAwake(false);
   show('s-menu');
   renderMenuTexts();
@@ -7185,7 +7289,7 @@ function goMenu() {
 $('loginForm').addEventListener('submit', doLogin);
 $('btnGuest').addEventListener('click', () => { Sound.init(); store.set('gs_session', { name: 'ضيف', guest: true }); afterLogin(); });
 $('btnAccept').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); store.set('gs_terms', true); closeModal('m-terms'); goMenu(); });
-$('btnLogout').addEventListener('click', () => { store.del('gs_session'); store.del('gs_online_token'); store.del('gs_online_cred'); Sound.sfx('click'); show('s-login'); });
+$('btnLogout').addEventListener('click', () => { store.del('gs_session'); store.del('gs_online_token'); store.del('gs_online_cred'); Sound.sfx('click'); closeModal('m-settings'); show('s-login'); });
 
 /* ---------- online: accounts, friends and challenges (needs internet) ---------- */
 const OL_BASE = '/api/';
@@ -7545,7 +7649,6 @@ function coOpen(row) {
   const u = coUnpack(row.state);
   CG = { pos: u.pos, hist: u.hist, seats, sel: null, targets: [], last: u.last, flip: false, over: false, busy: false, token: 0,
     undone: 0, hints: 0, hint: null, startKey: u.keys[0], anim: null, online: true };
-  Sound.duck = 0.72; Sound.applyVolumes();
   runId++; kickId++; show('s-chess'); chRender(); chUpdateUI(); keepAwake(true);
   clearInterval(CO.poll); clearInterval(CO.tick);
   CO.poll = setInterval(() => coFetch(false), 2000);
@@ -7905,7 +8008,7 @@ function ldOver() {
   $('turnTimer').hidden = true;
   const won = G.winner === LD.color;
   runId++; kickId++; ui.swap = null; ui.legal = []; clearSel(); refresh();
-  $('t-win').textContent = G.winner == null ? T('انتهت المباراة') : won ? T('🏆 مبروك! فزت') : T('فاز {n}', { n: LD.oppName });
+  setEmo($('t-win'), G.winner == null ? T('انتهت المباراة') : won ? T('🏆 مبروك! فزت') : T('فاز {n}', { n: LD.oppName }));
   $('winSub').textContent = won ? T('أوصلت قطعك الأربع إلى المركز أولاً.') : T('حاول مرة أخرى، المباراة القادمة لك.');
   $('winCoins').hidden = true; $('winRank').replaceChildren(); $('wAgain').hidden = false; $('wAgain').textContent = T('تحدٍّ مرة أخرى');
   Sound.sfx(won ? 'win' : 'err');
@@ -7946,10 +8049,15 @@ function renderLevel() {
 function openStats() {
   const s = getStats();
   const grid = $('statGrid'); grid.innerHTML = '';
-  [[T('المباريات'), s.games], [T('الانتصارات'), s.wins], [T('نسبة الفوز'), (s.games ? Math.round(s.wins / s.games * 100) : 0) + '%'], [T('قطع الخصوم المأكولة'), s.caps], [T('عدد الستات'), s.sixes], [T('المستوى'), levelInfo(s).level]].forEach(([l, v]) => {
-    const d = document.createElement('div'); d.className = 'stat';
+  [['gamepad', '#7ad7ff', T('المباريات'), s.games],
+   ['trophy', '#ffd23a', T('الانتصارات'), s.wins],
+   ['target', '#52e08a', T('نسبة الفوز'), (s.games ? Math.round(s.wins / s.games * 100) : 0) + '%'],
+   ['swords', '#ff6b8a', T('قطع الخصوم المأكولة'), s.caps],
+   ['six', '#b78bff', T('عدد الستات'), s.sixes],
+   ['crown', '#ffb347', T('المستوى'), levelInfo(s).level]].forEach(([ic, a, l, v]) => {
+    const d = document.createElement('div'); d.className = 'stat sx'; d.style.setProperty('--a', a);
     const b = document.createElement('b'); b.textContent = v; const sp = document.createElement('span'); sp.textContent = l;
-    d.append(b, sp); grid.appendChild(d);
+    d.append(icoEl(ic), b, sp); grid.appendChild(d);
   });
   openModal('m-stats');
 }
@@ -7976,6 +8084,7 @@ function buildRules() {
   <p class="muted">${T('تعرض نسبة تقدّم كل لاعب (من 0% إلى 100%) وعدد قطعه في المركز، وتتحدّث بعد كل حركة.')}</p>`;
   const ah = document.createElement('div'); ah.style.display = 'grid'; ah.style.gap = '8px'; ah.appendChild(h('h3', null, T('ألعاب الصالة'))); arcFillRules(ah); $('rulesBody').appendChild(ah);
   document.querySelectorAll('#rulesBody svg[data-sym]').forEach((s) => drawSym(s, s.dataset.sym, 0, 0, 1));
+  emoize($('rulesBody'));
 }
 
 /* ---------- settings ---------- */
@@ -7986,7 +8095,7 @@ function syncSettingsUI() {
   document.querySelectorAll('#speedChips .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.speed === settings.speed)));
   syncExtra();
   $('btnMute').setAttribute('aria-pressed', String(!settings.music && !settings.sfx));
-  $('btnMute').textContent = (!settings.music && !settings.sfx) ? '✕ ♪' : '♪';
+  $('btnMute').innerHTML = '<i class="ic">' + icoSvg((!settings.music && !settings.sfx) ? 'mute' : 'volume') + '</i>';
   syncSoundCycle();
 }
 function applySettings() { saveSettings(); Sound.init(); Sound.applyVolumes(); if (settings.music) Sound.startMusic(); syncSettingsUI(); }
@@ -8082,7 +8191,7 @@ function renderSetup() {
         row.appendChild(head);
         const box = document.createElement('div'); box.className = 'chips';
         TYPES.forEach(([v, t]) => {
-          const bt = document.createElement('button'); bt.type = 'button'; bt.className = 'chip'; bt.dataset.seat = c; bt.dataset.type = v; bt.textContent = t; bt.setAttribute('aria-pressed', String(setup.slots[c] === v));
+          const bt = document.createElement('button'); bt.type = 'button'; bt.className = 'chip'; bt.dataset.seat = c; bt.dataset.type = v; setEmo(bt, t); bt.setAttribute('aria-pressed', String(setup.slots[c] === v));
           bt.addEventListener('click', () => { setup.slots[c] = v; renderSetup(); }); box.appendChild(bt);
         });
         row.appendChild(box); body.appendChild(row);
@@ -8116,7 +8225,6 @@ function buildCfg() {
 }
 function openSetup(mode) { setup.mode = mode; setup.step = 1; renderSetup(); openModal('m-setup'); }
 function startGame(cfg) {
-  Sound.duck = 0.72; Sound.applyVolumes();
   runId++; kickId++; paused = false; ui.sel = null; ui.bonusSel = null; ui.swap = null; ui.legal = []; ui.flash = ''; ui.log = [];
   G = newGame(cfg); G.cfg = cfg;
   store.set('gs_setup', setup); store.del('gs_save');
@@ -8163,7 +8271,7 @@ function gameOver() {
   } else wc.hidden = true;
   Sound.sfx('win'); confetti();
   const w = G.winner, hum = isHuman(w) && !(G.mode === 'bot' && w !== owner);
-  $('t-win').textContent = (G.mode === 'bot' ? (w === owner ? T('🏆 مبروك! فزت') : T('فاز {n}', { n: pname(w) })) : T('🏆 فاز {n}', { n: pname(w) }));
+  setEmo($('t-win'), (G.mode === 'bot' ? (w === owner ? T('🏆 مبروك! فزت') : T('فاز {n}', { n: pname(w) })) : T('🏆 فاز {n}', { n: pname(w) })));
   $('winSub').textContent = G.mode === 'bot' ? (w === owner ? T('أوصلت قطعك الأربع إلى المركز أولاً.') : T('حاول مرة أخرى، المباراة القادمة لك.')) : T('أوصل قطعه الأربع إلى المركز أولاً.');
   const rank = $('winRank'); rank.innerHTML = '';
   [0, 1, 2, 3].filter((c) => G.seats[c]).sort((a, b) => (b === w) - (a === w) || progressPct(G, b) - progressPct(G, a)).forEach((c, k) => {
@@ -8285,16 +8393,31 @@ $('btnFsBack').addEventListener('click', () => {
   Sound.init();
   enterFS().then(() => { if (!document.fullscreenElement) FS.blocked = true; updateGate(); });
 });
-function enterApp() {
+function enterApp(ev) {
   if (FS.entered) return;
-  Sound.init(); Sound.sfx('click'); notifAsk();
-  if (settings.fsAuto === true) enterFS();       // must start inside the user gesture
-  FS.entered = true; $('splash').hidden = true; updateGate();
+  clearTimeout(enterApp.t);
+  const tap = !!(ev && ev.isTrusted);
+  if ($('splash').hidden && !tap) { FS.entered = true; return; }     // the splash was closed some other way: just don't navigate            // a real tap skips the splash; otherwise it ended by itself after 4 s
+  Sound.init(); if (tap) { Sound.sfx('click'); notifAsk(); }
+  if (tap && settings.fsAuto === true) enterFS();       // must start inside the user gesture
+  FS.entered = true; $('splash').classList.add('out'); setTimeout(() => { $('splash').hidden = true; }, 420); updateGate();
   setTimeout(ensureUpdate, 450); setTimeout(tryFollowGrant, 700);
   setTimeout(() => { try { if (getWallet().lastDaily !== dayStr(new Date())) sysNotify(T('المكافأة اليومية'), T('خذ مكافأتك اليوم'), 'daily'); } catch (e) { /* ignore */ } }, 2500);
   if (session()) afterLogin(); else show('s-login');
 }
-$('splash').addEventListener('click', enterApp);   // any tap on the entry screen enters + goes full screen
+$('splash').addEventListener('click', enterApp);   // a tap on the splash skips the wait (it also unlocks sound and full screen)
+// the splash hands over to the menu by itself after 3 seconds: counted from the moment the bar is first painted (animationend), with a timer as a safety net
+{ const bar = $('splash').querySelector('.sp-bar i'); if (bar) bar.addEventListener('animationend', () => enterApp()); }
+enterApp.t = setTimeout(() => enterApp(), 4200);
+// no tap happened yet: the first touch on the menu unlocks the sound (browsers keep it silent until then) and asks for notifications once
+(() => {
+  const evs = ['pointerup', 'touchend', 'click', 'mousedown', 'keydown'];
+  const unlock = () => {
+    Sound.init(); if (settings.music) Sound.startMusic();
+    if (Sound.ctx && Sound.ctx.state === 'running') { evs.forEach((e) => document.removeEventListener(e, unlock, true)); setTimeout(notifAsk, 1200); }
+  };
+  evs.forEach((e) => document.addEventListener(e, unlock, { capture: true, passive: true }));
+})();
 // the very first touch / click / key anywhere (capture phase, inside the user gesture) requests full screen at once
 ['pointerdown', 'touchstart', 'mousedown', 'click', 'touchend', 'keydown'].forEach((ev) => document.addEventListener(ev, () => {
   if (settings.fsAuto === true && (!FS.first || (!document.fullscreenElement && !FS.blocked && FS.tries < 4))) { FS.first = true; FS.tries = (FS.tries || 0) + 1; Sound.init(); enterFS(); }
@@ -8428,6 +8551,10 @@ Object.assign(I18N.en,{"لونك في لودو (يظهر على شاشتك)": "Y
 Object.assign(I18N.fr,{"لونك في لودو (يظهر على شاشتك)": "Votre couleur au Ludo (affichée sur votre écran)"});
 Object.assign(I18N.en,{"تعذّر الوصول إلى خادم اللعبة الآن. أعد المحاولة بعد قليل.": "The game server cannot be reached right now. Please try again in a moment."});
 Object.assign(I18N.fr,{"تعذّر الوصول إلى خادم اللعبة الآن. أعد المحاولة بعد قليل.": "Le serveur du jeu est inaccessible pour le moment. Réessayez dans un instant."});
+Object.assign(I18N.en,{"نسب التقدّم والأحداث": "Progress & events", "تمت صناعة اللعبة بواسطة المطور": "The game was made by"});
+Object.assign(I18N.fr,{"نسب التقدّم والأحداث": "Progression et événements"});
+Object.assign(I18N.en,{"شاشة بداية جديدة: شعار ثلاثي الأبعاد بألوان اللعبة، وتنتقل وحدها إلى الشاشة الرئيسية بعد 3 ثوانٍ (ولمسة تتخطاها)": "New start screen: a 3D logo in the game's colours. It moves on to the main screen by itself after 3 seconds (a tap skips it)", "اللغة الافتراضية للأجهزة الجديدة صارت الإنجليزية (ومن اختار لغة سابقًا تبقى لغته)": "The default language for new devices is now English (anyone who already chose a language keeps it)", "زر تسجيل الخروج انتقل من الشاشة الرئيسية إلى الإعدادات داخل قسم الحساب": "The log-out button moved from the main screen to Settings, inside the Account section", "الأغنية شبه صامتة داخل لودو والشطرنج، وأعلى قليلًا في الشاشة الرئيسية، وأهدأ قليلًا داخل ألعاب الصالة؛ والمؤثرات الصوتية أهدأ وأريح للأذن، ورمي النرد أنعم بكثير": "The song is almost silent inside Ludo and chess, a little louder on the main screen and a little softer inside arcade games; sound effects are calmer and easier on the ears, and the dice roll is much softer", "الإعدادات تفتح دائمًا على القسم الأول (الصوت) في الأعلى": "Settings always open on the first section (Sound), at the top", "لودو: أُزيل الشريط السفلي، وخلفية النجوم الملونة تغطي الشاشة كلها بنجوم أصغر وألوان أهدأ": "Ludo: the bottom bar is gone, and the colourful starry background now covers the whole screen with smaller stars and calmer colours", "لودو: عند دورك تتوهج قاعدتك ونردك، وعند دور غيرك تخفت قاعدتك. والروبوت صار أسرع في اللعب": "Ludo: on your turn your base and dice glow, and on other players' turns your base dims. The robot now plays faster", "الإحصائيات بتصميم أنيق بأيقونات ملونة، وصارت الرموز التعبيرية في الأزرار والإشعارات والمتصدرين أيقونات أنيقة بدل الإيموجي": "Statistics have an elegant design with coloured icons, and emoji in buttons, notifications and the leaderboard are now elegant icons", "إضافة وسم التحقق من ملكية الموقع لدى Google": "Added the site-ownership verification tag for Google"});
+Object.assign(I18N.fr,{"شاشة بداية جديدة: شعار ثلاثي الأبعاد بألوان اللعبة، وتنتقل وحدها إلى الشاشة الرئيسية بعد 3 ثوانٍ (ولمسة تتخطاها)": "Nouvel écran de démarrage : logo 3D aux couleurs du jeu. Il passe seul à l'écran principal après 3 secondes (un toucher le saute)", "اللغة الافتراضية للأجهزة الجديدة صارت الإنجليزية (ومن اختار لغة سابقًا تبقى لغته)": "La langue par défaut des nouveaux appareils est désormais l'anglais (ceux qui ont déjà choisi une langue la gardent)", "زر تسجيل الخروج انتقل من الشاشة الرئيسية إلى الإعدادات داخل قسم الحساب": "Le bouton de déconnexion est passé de l'écran principal aux Paramètres, dans la section Compte", "الأغنية شبه صامتة داخل لودو والشطرنج، وأعلى قليلًا في الشاشة الرئيسية، وأهدأ قليلًا داخل ألعاب الصالة؛ والمؤثرات الصوتية أهدأ وأريح للأذن، ورمي النرد أنعم بكثير": "La chanson est presque muette dans le Ludo et les échecs, un peu plus forte sur l'écran principal et un peu plus douce dans les jeux d'arcade ; les effets sonores sont plus calmes et le lancer de dé est bien plus doux", "الإعدادات تفتح دائمًا على القسم الأول (الصوت) في الأعلى": "Les Paramètres s'ouvrent toujours sur la première section (Son), en haut", "لودو: أُزيل الشريط السفلي، وخلفية النجوم الملونة تغطي الشاشة كلها بنجوم أصغر وألوان أهدأ": "Ludo : la barre du bas a disparu, et le fond étoilé coloré couvre tout l'écran avec des étoiles plus petites et des couleurs plus calmes", "لودو: عند دورك تتوهج قاعدتك ونردك، وعند دور غيرك تخفت قاعدتك. والروبوت صار أسرع في اللعب": "Ludo : à votre tour votre base et votre dé brillent, et au tour des autres votre base s'atténue. Le robot joue plus vite", "الإحصائيات بتصميم أنيق بأيقونات ملونة، وصارت الرموز التعبيرية في الأزرار والإشعارات والمتصدرين أيقونات أنيقة بدل الإيموجي": "Les statistiques ont un design élégant avec des icônes colorées, et les emojis des boutons, notifications et du classement sont devenus de belles icônes", "إضافة وسم التحقق من ملكية الموقع لدى Google": "Ajout de la balise de vérification de propriété du site pour Google"});
 setTimeout(() => { try { Sound.preload().catch(() => {}); } catch (e) { /* no network yet */ } }, 1200);   // the song file is fetched in the background
 init();
 
