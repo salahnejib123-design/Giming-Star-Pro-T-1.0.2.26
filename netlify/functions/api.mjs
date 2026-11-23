@@ -266,7 +266,7 @@ export default async (req) => {
       let finalName = String(username ?? ""), renameError = null;
       if (typeof new_username === "string" && new_username.trim() !== "" && new_username.trim() !== finalName) {
         const want = new_username.trim();
-        if (!/^[A-Za-z0-9_]{3,20}$/.test(want)) renameError = "invalid_username";
+        if (want.length < 4 || want.length > 40) renameError = "invalid_username";
         else {
           try { await pool.query("UPDATE profiles SET username = $1 WHERE id = $2", [want, row.user_id]); finalName = want; }
           catch (e) { renameError = e?.code === "23505" ? "username_taken" : "rename_failed"; console.error("rename", e?.message); }
