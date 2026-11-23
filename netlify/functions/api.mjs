@@ -256,15 +256,25 @@ export default async (req) => {
     }
 
     if (path === "login" && req.method === "POST") {
-      const { username, password } = await req.json();
+      const { username, password, new_username } = await req.json();
       const { rows } = await pool.query("SELECT * FROM get_login($1)", [String(username ?? "")]);
       const row = rows[0];
       // Same response whether the user is missing or the password is wrong.
       const ok = row && typeof password === "string" && verifyPassword(password, row.password_hash);
       if (!ok) return json(401, { error: "invalid_credentials" });
+      // 1.0.2.94: after the password is checked, the owner may choose a new online nickname (optional, never required to sign in)
+      let finalName = String(username ?? ""), renameError = null;
+      if (typeof new_username === "string" && new_username.trim() !== "" && new_username.trim() !== finalName) {
+        const want = new_username.trim();
+        if (!/^[A-Za-z0-9_]{3,20}$/.test(want)) renameError = "invalid_username";
+        else {
+          try { await pool.query("UPDATE profiles SET username = $1 WHERE id = $2", [want, row.user_id]); finalName = want; }
+          catch (e) { renameError = e?.code === "23505" ? "username_taken" : "rename_failed"; console.error("rename", e?.message); }
+        }
+      }
       const token = crypto.randomBytes(32).toString("base64url");
       await pool.query("SELECT create_session($1, $2)", [row.user_id, sha256(token)]);
-      return json(200, { token });
+      return json(200, renameError ? { token, username: finalName, rename_error: renameError } : { token, username: finalName });
     }
 
     if (path === "logout" && req.method === "POST") {
