@@ -1,8 +1,17 @@
 -- 0008: online nickname = at least 4 characters, any characters (1.0.2.95).
 -- Run once in the database SQL editor. Safe to run on the existing data.
 
-ALTER TABLE profiles DROP CONSTRAINT IF EXISTS profiles_username_check;
-ALTER TABLE profiles ADD CONSTRAINT profiles_username_check
+-- Remove every old check on profiles.username (whatever its name), e.g. the ASCII-only rule from 0001.
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN SELECT conname FROM pg_constraint
+           WHERE conrelid = 'profiles'::regclass AND contype = 'c'
+             AND pg_get_constraintdef(oid) ILIKE '%username%' LOOP
+    EXECUTE format('ALTER TABLE profiles DROP CONSTRAINT %I', r.conname);
+  END LOOP;
+END $$;
+ALTER TABLE profiles ADD CONSTRAINT profiles_username_length
   CHECK (char_length(username) BETWEEN 3 AND 40);   -- 3 keeps old accounts valid
 
 CREATE OR REPLACE FUNCTION sign_up(p_username text, p_friend_code text, p_password_hash text)
