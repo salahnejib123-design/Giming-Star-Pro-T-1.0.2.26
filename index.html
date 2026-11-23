@@ -270,7 +270,6 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 
 .base.off{opacity:1}
 .base{transition:opacity .25s,filter .25s}
-.base.calm:not(.off){filter:saturate(.9) brightness(.86)}                    /* when it is not your turn your corner only gets a little darker (1.0.2.92: never faded to white) */
 .base.turn .outer{stroke:#fff;stroke-width:.2;animation:basep 1.1s ease-in-out infinite}   /* ...and it glows, like the dice, when the turn is yours */
 @keyframes basep{50%{stroke-width:.34;stroke-opacity:.5}}
 .hud:not(:has(#ldOpp:not([hidden]))){display:none}                                  /* no message bar under the board (1.0.2.90) */
@@ -1017,7 +1016,7 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
   <form id="loginForm" class="glass pad" autocomplete="off" style="display:flex;flex-direction:column;gap:14px" novalidate>
     <label class="f" for="inUser">اسم المستخدم<input id="inUser" type="text" maxlength="16" autocomplete="username" placeholder="مثال: نجم_الليل"></label>
     <label class="f" for="inPass">كلمة المرور<input id="inPass" type="password" maxlength="40" autocomplete="current-password" placeholder="4 أحرف على الأقل"></label>
-    <label class="f" for="loginNick">لقبك أونلاين<input id="loginNick" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="Night_Star"></label>
+    <label class="f" for="loginNick">لقبك أونلاين (اختياري)<input id="loginNick" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="Night_Star"></label>
     <small id="loginNickInfo" class="muted" style="margin-top:-6px"></small>
     <div id="loginErr" class="err" role="alert"></div>
     <button class="btn primary" type="submit" id="btnLogin">دخول / إنشاء حساب</button>
@@ -1913,7 +1912,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.2.93';
+const APP_VERSION = '1.0.2.94';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -2811,7 +2810,7 @@ const BASEORG = [[0, 0], [0, 9], [9, 9], [9, 0]];
 const SLOT = [[2.15, 2.15], [3.85, 2.15], [2.15, 3.85], [3.85, 3.85]];   // four pieces sit close together
 const DIRS = [[-1, 0], [0, -1], [1, 0], [0, 1]];
 const SYMCOL = { eye: '#0a9fbd', arrow: '#ef7d00', aim: '#d6208a', house: '#8a5a2b' };
-const PDARK = ['#8c0f20', '#0b6a2f', '#b97c00', '#123f8c'];
+const PDARK = ['#8c0f20', '#0b6a2f', '#a06b00', '#123f8c'];
 const PLIGHT = ['#ff7a89', '#58e592', '#ffe27a', '#7fbcff'];
 const PDARK_BASE = PDARK.slice(), PLIGHT_BASE = PLIGHT.slice();
 const INK = '#26306a';
@@ -2846,9 +2845,6 @@ function drawSym(parent, type, x, y, scale) {
   }
 }
 
-// board tones (1.0.2.93): a natural neutral light grey instead of pure white, so the coloured cells stand out clearly
-const PAPER = '#e2e1dc', PAPER_IN = '#ebeae5', PAPER_DK = '#cdccc4';
-const mixHex = (a, b, t) => { const n = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); const x = n(a), y = n(b); return '#' + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
 function buildBoard() {
   board.innerHTML = '';
   const defs = document.querySelector('#gdefs defs'); defs.innerHTML = '';
@@ -2857,8 +2853,8 @@ function buildBoard() {
   lg('frame', 0, 1, [[0, '#3d92f2'], [1, '#0a3590']]);
   lg('dg', 1, 1, [[0, '#ffffff'], [1, '#d3cbff']]);
   PCOL.forEach((c, k) => {
-    lg('bs' + k, 1, 1, [[0, mixHex(PLIGHT[k], c, 0.4)], [0.45, c], [1, PDARK[k]]]);   // yard / avatar
-    lg('cs' + k, 0, 1, [[0, mixHex(PLIGHT[k], c, 0.55)], [1, c]]);                    // coloured cells
+    lg('bs' + k, 1, 1, [[0, PLIGHT[k]], [0.45, c], [1, PDARK[k]]]);                // yard / avatar
+    lg('cs' + k, 0, 1, [[0, PLIGHT[k]], [1, c]]);                                  // coloured cells
     lg('pg' + k, 1, 0, [[0, PDARK[k]], [0.3, c], [0.5, PLIGHT[k]], [1, PDARK[k]]]); // pawn body (cylinder)
     const rg = el('radialGradient', { id: 'ph' + k, cx: 0.35, cy: 0.3, r: 0.8 }, defs);
     [[0, '#ffffff'], [0.3, PLIGHT[k]], [0.75, c], [1, PDARK[k]]].forEach(([o, col]) => el('stop', { offset: o, 'stop-color': col }, rg));
@@ -2871,21 +2867,21 @@ function buildBoard() {
   gRoot = el('g', {}, board);
   el('rect', { x: -0.5, y: -0.5, width: 16, height: 16, rx: 0.9, fill: 'url(#frame)', stroke: '#ffffff', 'stroke-width': 0.1, filter: 'url(#bshadow)' }, gRoot);
   el('rect', { x: -0.3, y: -0.3, width: 15.6, height: 15.6, rx: 0.7, fill: 'none', stroke: '#fff', 'stroke-opacity': 0.45, 'stroke-width': 0.05 }, gRoot);
-  el('rect', { x: 0, y: 0, width: 15, height: 15, fill: PAPER, stroke: INK, 'stroke-width': 0.08 }, gRoot);
+  el('rect', { x: 0, y: 0, width: 15, height: 15, fill: '#ffffff', stroke: INK, 'stroke-width': 0.08 }, gRoot);
   gBase = [];
   for (let c = 0; c < 4; c++) {
     const [r0, c0] = BASEORG[c], col = PCOL[c];
     const g = el('g', { class: 'base' }, gRoot); gBase.push(g);
     el('rect', { class: 'outer', x: c0, y: r0, width: 6, height: 6, fill: 'url(#bs' + c + ')', stroke: INK, 'stroke-width': 0.09 }, g);
-    el('rect', { x: c0 + 1.05, y: r0 + 1.05, width: 3.9, height: 3.9, rx: 0.55, fill: PAPER_IN, stroke: INK, 'stroke-width': 0.06 }, g);
+    el('rect', { x: c0 + 1.05, y: r0 + 1.05, width: 3.9, height: 3.9, rx: 0.55, fill: '#ffffff', stroke: INK, 'stroke-width': 0.06 }, g);
     SLOT.forEach((s) => {
-      el('circle', { cx: c0 + s[0], cy: r0 + s[1], r: 0.7, fill: PAPER_DK, stroke: INK, 'stroke-width': 0.06 }, g);
-      el('circle', { cx: c0 + s[0], cy: r0 + s[1], r: 0.5, fill: col, 'fill-opacity': 0.62 }, g);
+      el('circle', { cx: c0 + s[0], cy: r0 + s[1], r: 0.7, fill: '#f4f1ff', stroke: INK, 'stroke-width': 0.06 }, g);
+      el('circle', { cx: c0 + s[0], cy: r0 + s[1], r: 0.5, fill: col, 'fill-opacity': 0.45 }, g);
     });
   }
   const cells = el('g', {}, gRoot);
   const cellRect = (r, c, fill, sw) => el('rect', { x: c, y: r, width: 1, height: 1, fill, stroke: INK, 'stroke-width': sw || 0.05 }, cells);
-  TRACK.forEach(([r, c]) => cellRect(r, c, PAPER_IN));
+  TRACK.forEach(([r, c]) => cellRect(r, c, '#ffffff'));
   HOME.forEach((h, k) => h.forEach(([r, c]) => cellRect(r, c, 'url(#cs' + k + ')')));
   HOME.forEach((h, k) => {                     // chevrons on the home column pointing at the centre
     const d = DIRS[k], ang = Math.atan2(-d[0], d[1]) * 180 / Math.PI;
@@ -2897,7 +2893,7 @@ function buildBoard() {
   });
   const tri = [[[6, 6], [6, 9]], [[6, 6], [9, 6]], [[9, 6], [9, 9]], [[6, 9], [9, 9]]];
   tri.forEach((t, k) => el('polygon', { points: `${t[0][0]},${t[0][1]} ${t[1][0]},${t[1][1]} 7.5,7.5`, fill: 'url(#bs' + k + ')', stroke: INK, 'stroke-width': 0.07, 'stroke-linejoin': 'round' }, gRoot));
-  el('circle', { cx: 7.5, cy: 7.5, r: 0.5, fill: PAPER_IN, stroke: INK, 'stroke-width': 0.06 }, gRoot);
+  el('circle', { cx: 7.5, cy: 7.5, r: 0.5, fill: '#fff', stroke: INK, 'stroke-width': 0.06 }, gRoot);
   el('path', { d: 'M0 -.34 L.1 -.1 L.34 -.08 L.16 .08 L.21 .32 L0 .19 L-.21 .32 L-.16 .08 L-.34 -.08 L-.1 -.1Z', transform: 'translate(7.5 7.5)', fill: '#ffb400', stroke: '#b36b00', 'stroke-width': 0.03 }, gRoot);
   const sg = el('g', {}, gRoot);
   Object.keys(SYM).forEach((a) => {
@@ -7225,9 +7221,16 @@ async function olProvision(name, secret, legacyPass, nick) {
   const key = name.toLowerCase(), map = store.get('gs_online_names', {}), base = olNickOk(nick) ? nick : olBaseName(name, secret);
   const pws = [secret].concat(legacyPass && legacyPass.length >= 6 ? [legacyPass] : []);   // accounts made before 1.0.2.86 used the plain password
   const cands = [map[key] || base].concat([0, 3, 6].map((i) => base.slice(0, 16) + '_' + secret.slice(i, i + 3)));
+  const renameTo = (map[key] && olNickOk(nick) && nick.toLowerCase() !== map[key].toLowerCase()) ? nick : '';   // 1.0.2.94: a new nickname typed with the same name and password
   for (const uname of cands) {
     for (const pw of pws) {
-      try { const r = await olCall('login', { username: uname, password: pw }); return olSaved(key, name, uname, pw, r.token, map); }
+      try {
+        const body = { username: uname, password: pw };
+        if (renameTo && uname === map[key] && pw === secret) body.new_username = renameTo;
+        const r = await olCall('login', body);
+        if (r.rename_error) toast(T(r.rename_error === 'username_taken' ? 'هذا اللقب محجوز، بقي لقبك الأونلاين الحالي' : 'تعذّر تغيير اللقب الآن، بقي لقبك الحالي'), 3600);
+        return olSaved(key, name, r.username || uname, pw, r.token, map);
+      }
       catch (e) { if (olCode(e) !== 'invalid_credentials') return { ok: false, err: olCode(e) }; }
     }
     let taken = false;                                                              // unknown name, or it belongs to another player
@@ -7280,8 +7283,7 @@ async function doLogin(e) {
   if (name.length < 3 || name.length > 16 || /[<>&"']/.test(name)) { err.textContent = T('اسم المستخدم يجب أن يكون من 3 إلى 16 حرفاً دون رموز خاصة.'); return; }
   if (pass.length < 4) { err.textContent = T('كلمة المرور يجب ألا تقل عن 4 أحرف.'); return; }
   const nick = $('loginNick').value.trim();
-  if (!nick) { err.textContent = T('اكتب لقبك الأونلاين لتتمكن من الدخول.'); $('loginNick').focus(); Sound.sfx('err'); return; }
-  if (!olNickOk(nick)) { err.textContent = T('اللقب الأونلاين: من 3 إلى 20 حرفاً إنجليزياً أو أرقاماً أو _ فقط.'); $('loginNick').focus(); Sound.sfx('err'); return; }
+  if (nick && !olNickOk(nick)) { err.textContent = T('اللقب الأونلاين: من 3 إلى 20 حرفاً إنجليزياً أو أرقاماً أو _ فقط.'); $('loginNick').focus(); Sound.sfx('err'); return; }
   const users = store.get('gs_users', {}), key = name.toLowerCase();
   if (users[key]) {
     const h = await hashPass(pass, users[key].s);
@@ -7586,22 +7588,22 @@ function olPlayCard() {
 }
 function lnInfo(msg) { const el = $('loginNickInfo'); if (el) el.textContent = msg; }
 const LN_HINT = 'يراك أصدقاؤك بهذا اللقب: إنجليزي أو أرقام أو _ (من 3 إلى 20).';
-function lnFollowName() {          // an account that already has an online nickname shows it (it cannot change); a new one types its own
+function lnFollowName() {
   const nick = $('loginNick'), key = $('inUser').value.trim().toLowerCase(), have = (store.get('gs_online_names', {}) || {})[key];
-  if (have) { nick.value = have; nick.readOnly = true; lnInfo(T('هذا لقبك الأونلاين المسجّل لهذا الحساب.')); }
-  else { if (nick.readOnly) nick.value = store.get('gs_nick_pending', ''); nick.readOnly = false; lnInfo(T(LN_HINT)); }
+  if (have) { if (!nick.value.trim()) nick.value = have; lnInfo(T('لقبك الأونلاين الحالي: {n}. اكتب لقباً جديداً لتغييره ثم سجّل الدخول.', { n: have })); }
+  else { nick.readOnly = false; lnInfo(T(LN_HINT)); }
 }
 $('inUser').addEventListener('input', lnFollowName);
 // the nickname: friends find a signed-in player by it and see whether they are online
 async function lnPaint() {
   const nick = $('loginNick');
-  if (!olTok()) { lnFollowName(); if (!nick.readOnly && !nick.value) nick.value = store.get('gs_nick_pending', ''); return; }
+  if (!olTok()) { lnFollowName(); if (!nick.value.trim()) nick.value = store.get('gs_nick_pending', ''); return; }
   try {
     const me = await olCall('rpc/get_my_profile', {});
     const p = Array.isArray(me) ? me[0] : me;
     if (!p || !p.username) return;
-    nick.value = p.username; nick.readOnly = true;
-    lnInfo(T('أنت متصل باسم {n}. يراك أصدقاؤك بهذا اللقب ويرون حالة اتصالك.', { n: p.username }));
+    nick.value = p.username; nick.readOnly = false;
+    lnInfo(T('أنت متصل باسم {n}. لتغيير لقبك اكتب لقباً جديداً ثم سجّل الدخول بنفس الاسم وكلمة المرور.', { n: p.username }));
   } catch (e) { lnInfo(''); }
 }
 $('loginNick').addEventListener('input', (e) => { store.set('gs_nick_pending', e.target.value.trim()); });
@@ -8595,6 +8597,8 @@ Object.assign(I18N.en,{"نسب التقدّم والأحداث": "Progress & eve
 Object.assign(I18N.fr,{"نسب التقدّم والأحداث": "Progression et événements"});
 Object.assign(I18N.en,{"شاشة بداية جديدة: شعار ثلاثي الأبعاد بألوان اللعبة، وتنتقل وحدها إلى الشاشة الرئيسية بعد 3 ثوانٍ (ولمسة تتخطاها)": "New start screen: a 3D logo in the game's colours. It moves on to the main screen by itself after 3 seconds (a tap skips it)", "اللغة الافتراضية للأجهزة الجديدة صارت الإنجليزية (ومن اختار لغة سابقًا تبقى لغته)": "The default language for new devices is now English (anyone who already chose a language keeps it)", "زر تسجيل الخروج انتقل من الشاشة الرئيسية إلى الإعدادات داخل قسم الحساب": "The log-out button moved from the main screen to Settings, inside the Account section", "الأغنية شبه صامتة داخل لودو والشطرنج، وأعلى قليلًا في الشاشة الرئيسية، وأهدأ قليلًا داخل ألعاب الصالة؛ والمؤثرات الصوتية أهدأ وأريح للأذن، ورمي النرد أنعم بكثير": "The song is almost silent inside Ludo and chess, a little louder on the main screen and a little softer inside arcade games; sound effects are calmer and easier on the ears, and the dice roll is much softer", "الإعدادات تفتح دائمًا على القسم الأول (الصوت) في الأعلى": "Settings always open on the first section (Sound), at the top", "لودو: أُزيل الشريط السفلي، وخلفية النجوم الملونة تغطي الشاشة كلها بنجوم أصغر وألوان أهدأ": "Ludo: the bottom bar is gone, and the colourful starry background now covers the whole screen with smaller stars and calmer colours", "لودو: عند دورك تتوهج قاعدتك ونردك، وعند دور غيرك تخفت قاعدتك. والروبوت صار أسرع في اللعب": "Ludo: on your turn your base and dice glow, and on other players' turns your base dims. The robot now plays faster", "الإحصائيات بتصميم أنيق بأيقونات ملونة، وصارت الرموز التعبيرية في الأزرار والإشعارات والمتصدرين أيقونات أنيقة بدل الإيموجي": "Statistics have an elegant design with coloured icons, and emoji in buttons, notifications and the leaderboard are now elegant icons", "إضافة وسم التحقق من ملكية الموقع لدى Google": "Added the site-ownership verification tag for Google"});
 Object.assign(I18N.fr,{"شاشة بداية جديدة: شعار ثلاثي الأبعاد بألوان اللعبة، وتنتقل وحدها إلى الشاشة الرئيسية بعد 3 ثوانٍ (ولمسة تتخطاها)": "Nouvel écran de démarrage : logo 3D aux couleurs du jeu. Il passe seul à l'écran principal après 3 secondes (un toucher le saute)", "اللغة الافتراضية للأجهزة الجديدة صارت الإنجليزية (ومن اختار لغة سابقًا تبقى لغته)": "La langue par défaut des nouveaux appareils est désormais l'anglais (ceux qui ont déjà choisi une langue la gardent)", "زر تسجيل الخروج انتقل من الشاشة الرئيسية إلى الإعدادات داخل قسم الحساب": "Le bouton de déconnexion est passé de l'écran principal aux Paramètres, dans la section Compte", "الأغنية شبه صامتة داخل لودو والشطرنج، وأعلى قليلًا في الشاشة الرئيسية، وأهدأ قليلًا داخل ألعاب الصالة؛ والمؤثرات الصوتية أهدأ وأريح للأذن، ورمي النرد أنعم بكثير": "La chanson est presque muette dans le Ludo et les échecs, un peu plus forte sur l'écran principal et un peu plus douce dans les jeux d'arcade ; les effets sonores sont plus calmes et le lancer de dé est bien plus doux", "الإعدادات تفتح دائمًا على القسم الأول (الصوت) في الأعلى": "Les Paramètres s'ouvrent toujours sur la première section (Son), en haut", "لودو: أُزيل الشريط السفلي، وخلفية النجوم الملونة تغطي الشاشة كلها بنجوم أصغر وألوان أهدأ": "Ludo : la barre du bas a disparu, et le fond étoilé coloré couvre tout l'écran avec des étoiles plus petites et des couleurs plus calmes", "لودو: عند دورك تتوهج قاعدتك ونردك، وعند دور غيرك تخفت قاعدتك. والروبوت صار أسرع في اللعب": "Ludo : à votre tour votre base et votre dé brillent, et au tour des autres votre base s'atténue. Le robot joue plus vite", "الإحصائيات بتصميم أنيق بأيقونات ملونة، وصارت الرموز التعبيرية في الأزرار والإشعارات والمتصدرين أيقونات أنيقة بدل الإيموجي": "Les statistiques ont un design élégant avec des icônes colorées, et les emojis des boutons, notifications et du classement sont devenus de belles icônes", "إضافة وسم التحقق من ملكية الموقع لدى Google": "Ajout de la balise de vérification de propriété du site pour Google"});
+Object.assign(I18N.en,{"اللقب الأونلاين اختياري عند تسجيل الدخول، ولا يُطلب في كل مرة. وإن كتبت لقباً جديداً مع اسمك وكلمة مرورك يتغير لقبك، حتى بعد تسجيل الخروج": "The online nickname is optional at sign-in and is not asked every time. If you type a new one with your name and password, your nickname changes, even after signing out", "عند إنشاء الحساب يمكنك اختيار لقبك الأونلاين، وإن تركته يُختار لك تلقائياً": "When you create the account you can choose your online nickname; if you leave it empty one is chosen for you", "ألوان طاولات لودو صارت مطابقة تماماً لألوان الإصدار 59": "Ludo table colours now match the 1.0.2.59 colours exactly", "لقبك أونلاين (اختياري)": "Your online nickname (optional)", "لقبك الأونلاين الحالي: {n}. اكتب لقباً جديداً لتغييره ثم سجّل الدخول.": "Your current online nickname: {n}. Type a new one to change it, then sign in.", "أنت متصل باسم {n}. لتغيير لقبك اكتب لقباً جديداً ثم سجّل الدخول بنفس الاسم وكلمة المرور.": "You are signed in as {n}. To change your nickname, type a new one and sign in with the same name and password.", "هذا اللقب محجوز، بقي لقبك الأونلاين الحالي": "This nickname is taken, your current online nickname stays", "تعذّر تغيير اللقب الآن، بقي لقبك الحالي": "Could not change the nickname now, your current one stays"});
+Object.assign(I18N.fr,{"اللقب الأونلاين اختياري عند تسجيل الدخول، ولا يُطلب في كل مرة. وإن كتبت لقباً جديداً مع اسمك وكلمة مرورك يتغير لقبك، حتى بعد تسجيل الخروج": "Le pseudo en ligne est facultatif à la connexion et n'est plus demandé à chaque fois. Si vous saisissez un nouveau pseudo avec votre nom et votre mot de passe, il change, même après la déconnexion", "عند إنشاء الحساب يمكنك اختيار لقبك الأونلاين، وإن تركته يُختار لك تلقائياً": "À la création du compte, vous pouvez choisir votre pseudo en ligne ; si vous le laissez vide, un pseudo est choisi pour vous", "ألوان طاولات لودو صارت مطابقة تماماً لألوان الإصدار 59": "Les couleurs des plateaux Ludo sont désormais identiques à celles de la version 1.0.2.59", "لقبك أونلاين (اختياري)": "Votre pseudo en ligne (facultatif)", "لقبك الأونلاين الحالي: {n}. اكتب لقباً جديداً لتغييره ثم سجّل الدخول.": "Votre pseudo en ligne actuel : {n}. Saisissez-en un nouveau pour le changer, puis connectez-vous.", "أنت متصل باسم {n}. لتغيير لقبك اكتب لقباً جديداً ثم سجّل الدخول بنفس الاسم وكلمة المرور.": "Vous êtes connecté sous {n}. Pour changer de pseudo, saisissez-en un nouveau et connectez-vous avec le même nom et mot de passe.", "هذا اللقب محجوز، بقي لقبك الأونلاين الحالي": "Ce pseudo est déjà pris, votre pseudo en ligne actuel reste", "تعذّر تغيير اللقب الآن، بقي لقبك الحالي": "Impossible de changer le pseudo maintenant, l'actuel reste"});
 Object.assign(I18N.en,{"الأصوات: صوت الفوز في لودو والشطرنج عاد كما كان": "Sounds: the win sound in Ludo and chess is back to how it was", "ألوان طاولات لودو صارت طبيعية محايدة بدل الدافئة، مع تباين واضح": "Ludo table colours are now natural and neutral instead of warm, with clear contrast"});
 Object.assign(I18N.fr,{"الأصوات: صوت الفوز في لودو والشطرنج عاد كما كان": "Sons : le son de victoire dans Ludo et aux échecs est revenu comme avant", "ألوان طاولات لودو صارت طبيعية محايدة بدل الدافئة، مع تباين واضح": "Les couleurs des plateaux Ludo sont naturelles et neutres au lieu de chaudes, avec un contraste net"});
 Object.assign(I18N.en,{"الليدو: كل الطاولات الأربع بألوان متباينة وطبيعية (ورقي دافئ بدل الأبيض)، والزوايا لا تبهت عند دور غيرك": "Ludo: all four tables now use contrasting, natural colours (warm paper instead of white), and corners no longer fade on the other players' turns", "المؤثرات الصوتية كلها أنعم وأحدث: نغمات ناعمة مستديرة بلا حدة في لودو والشطرنج وصالة الألعاب، ورمي النرد أهدأ": "Sound effects are all softer and more modern: rounded, gentle tones in Ludo, chess and the arcade hall; dice are calmer", "حركة القطع في لودو أنعم وأطول قليلًا في كل خانة": "Piece movement in Ludo is smoother, with a slightly longer glide per square", "شاشة البداية: الشريط يمتد بسلاسة لمدة 4 ثوانٍ، وتحته سطر \"جارٍ التحميل\" يتغير حسب اللغة فقط": "Splash screen: the bar fills smoothly over 4 seconds, with a \"Loading…\" line under it that changes only with the language", "الموسيقى في لودو والشطرنج أعلى قليلًا من الصمت": "Music in Ludo and chess is a little louder than near-silent", "تسجيل الدخول: حقل \"لقبك أونلاين\" داخل نفس البطاقة مع اسم المستخدم وكلمة المرور، ولا يمكن الدخول بدونه": "Login: the \"Your online nickname\" field sits in the same card as username and password, and login requires it", "رابط تيك توك الرسمي صار @master_ludo_w_seven": "The official TikTok link is now @master_ludo_w_seven"});
