@@ -1,4 +1,4 @@
-// Master Ludo backend: one Netlify Function serving /api/*.
+// Master Ludo online backend: one handler serving /api/* (run by Vercel through api/[...path].mjs).
 // Every player request runs inside a transaction that switches to the
 // restricted ludo_app role and sets app.user_id, so Row Level Security and
 // the RPC functions in the migration decide what each player may do.
@@ -8,7 +8,7 @@ import pg from "pg";
 import { Chess } from "chess.js";
 import crypto from "node:crypto";
 
-// Supabase Postgres. DATABASE_URL is set in Netlify environment variables (never in code).
+// Supabase Postgres. DATABASE_URL is set in the Vercel project's environment variables (never in code).
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: /supabase\.(co|com)/.test(process.env.DATABASE_URL ?? "") ? { rejectUnauthorized: false } : false,   // Supabase needs SSL
@@ -318,4 +318,3 @@ export default async (req) => {
   }
 };
 
-export const config = { path: "/api/*" };
