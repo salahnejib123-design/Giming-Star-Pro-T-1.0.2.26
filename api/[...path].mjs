@@ -1,6 +1,5 @@
-// Vercel entry point for the online API. The same handler that runs on Netlify
-// (netlify/functions/api.mjs) serves every /api/* request here.
-import handler from "../netlify/functions/api.mjs";
+// Vercel entry point for the online API: every /api/* request goes to the handler in server/api.mjs.
+import handler from "../server/api.mjs";
 
 export const config = { maxDuration: 30 };
 
