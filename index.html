@@ -893,6 +893,9 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
 .ol-dots i.green.on{background:#38d07a;box-shadow:0 0 8px rgba(56,208,122,.7)}
 .ol-row{transition:transform .2s ease,background .2s ease;border:1px solid rgba(255,255,255,.1)}
 .ol-row:hover{background:rgba(255,255,255,.13);transform:translateY(-1px)}
+.ol-row .ol-del{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;margin-inline-start:auto;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,120,130,.45);background:rgba(255,80,95,.14);color:#ffb3b9;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.ol-row .ol-del:active{transform:scale(.96)}
+.ol-row .ol-chal{flex:1 1 100%;min-height:44px}
 #m-online .card{transition:opacity .25s ease}
 /* ---- online panel: sign-in, search and the friends lists ---- */
 #m-online .card.ol-card{width:min(440px,calc(100vw - 32px));max-height:88vh;overflow:auto;gap:14px;display:flex;flex-direction:column}
@@ -1919,7 +1922,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.3.9';
+const APP_VERSION = '1.0.3.10';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -7477,10 +7480,13 @@ function olDraw(friends, chal) {
   const rank = { green: 0, red: 1, gray: 2 };
   friends.filter((f) => f.status === 'accepted').sort((a, b) => rank[olState(a)] - rank[olState(b)] || a.username.localeCompare(b.username)).forEach((f) => {
     const row = olRow(f.username, olState(f), AV_PERSON);
-    row.append(olBtn(T('تحدٍّ'), 'btn small primary', () => {
+    const del = h('button', 'ol-del'); del.type = 'button'; del.setAttribute('aria-label', T('حذف الصديق'));
+    del.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></svg><span>' + T('حذف') + '</span>';
+    del.addEventListener('click', () => chAsk(T('حذف الصديق'), T('هل تريد حذف {n} من أصدقائك؟', { n: f.username }), T('حذف'), () => olAct('rpc/remove_friend', { p_friend: f.user_id }, T('أُزيل الصديق'))));
+    row.append(del);
+    row.append(olBtn(T('تحدٍّ'), 'btn small primary ol-chal', () => {
       olAct('rpc/create_challenge', { p_to_user: f.user_id, p_game_type: olGame() }, T('أُرسل التحدي، لديك 30 ثانية'));
     }));
-    row.append(olBtn(T('حذف'), 'btn small', () => olAct('rpc/remove_friend', { p_friend: f.user_id }, T('أُزيل الصديق'))));
     fl.append(row);
   });
   if (!fl.children.length) fl.append(h('small', 'muted', T('لا يوجد أصدقاء بعد')));
@@ -7559,11 +7565,14 @@ function olAddedText(r) {
   const st = Array.isArray(r) && r[0] ? Object.values(r[0])[0] : r;
   return st === 'accepted' ? T('أصبحتما صديقين') : T('أُرسل طلب الصداقة');
 }
-async function olAddUser(id) {
+async function olAddUser(id, row) {
+  // 1.0.3.10: only this card changes; the other search results stay in place
   try {
     const r = await olCall('rpc/add_friend_by_id', { p_user: id });
-    $('olFind').value = ''; $('olResults').replaceChildren();
-    olMsg(olAddedText(r)); olRefresh();
+    const txt = olAddedText(r);
+    const btn = row && row.querySelector('button');
+    if (btn) btn.replaceWith(h('small', 'muted', txt));
+    olMsg(txt); olRefresh();
   } catch (e) { olMsg(olErrText(e), true); }
 }
 function olSearchNow(v) {
@@ -7611,7 +7620,7 @@ async function olSearch(q) {
     if (u.relation === 'friend') row.append(h('small', 'muted', T('صديق')));
     else if (u.relation === 'sent') row.append(h('small', 'muted', T('بانتظار الرد')));
     else if (u.relation === 'incoming') row.append(olBtn(T('قبول'), 'btn small primary', () => olAct('rpc/respond_friend_request', { p_requester: u.id, p_accept: true }, T('تمت إضافته صديقًا'))));
-    else row.append(olBtn(T('إضافة'), 'btn small primary', () => olAddUser(u.id)));
+    else row.append(olBtn(T('إضافة'), 'btn small primary', () => olAddUser(u.id, row)));
     box.append(row);
   });
 }
@@ -8489,7 +8498,8 @@ function enterApp(ev) {
   clearTimeout(enterApp.t);
   const tap = !!(ev && ev.isTrusted);
   if ($('splash').hidden && !tap) { FS.entered = true; return; }     // the splash was closed some other way: just don't navigate            // a real tap skips the splash; otherwise it ended by itself after 4 s
-  Sound.init(); if (tap) { Sound.sfx('click'); notifAsk(); }
+  Sound.init(); if (settings.music) Sound.startMusic();   // 1.0.3.10: the song starts at once when the splash ends
+  if (tap) { Sound.sfx('click'); notifAsk(); }
   if (tap && settings.fsAuto === true) enterFS();       // must start inside the user gesture
   FS.entered = true; $('splash').classList.add('out'); setTimeout(() => { $('splash').hidden = true; }, 260); updateGate();
   setTimeout(ensureUpdate, 450); setTimeout(tryFollowGrant, 700);
@@ -8504,7 +8514,8 @@ enterApp.t = setTimeout(() => enterApp(), 5200);
 (() => {
   const evs = ['pointerup', 'touchend', 'click', 'mousedown', 'keydown'];
   const unlock = () => {
-    Sound.init(); if (settings.music) Sound.startMusic();
+    Sound.init(); if (!$('splash').hidden) return;      // 1.0.3.10: the splash is silent; the music starts when it ends
+    if (settings.music) Sound.startMusic();
     if (Sound.ctx && Sound.ctx.state === 'running') { evs.forEach((e) => document.removeEventListener(e, unlock, true)); setTimeout(notifAsk, 1200); }
   };
   evs.forEach((e) => document.addEventListener(e, unlock, { capture: true, passive: true }));
@@ -8679,7 +8690,9 @@ Object.assign(I18N.en,{"الإصدار 1.0.3.7: زر مشاركة اسمك ون�
 Object.assign(I18N.fr,{"الإصدار 1.0.3.7: زر مشاركة اسمك ونسخه بجانب اسمك في أعلى الأونلاين": "Version 1.0.3.7 : boutons partager et copier à côté de votre pseudo en haut du mode en ligne"});
 Object.assign(I18N.en,{"الإصدار 1.0.3.8: كل وظائف الأونلاين تمر عبر عنوان واحد واضح، لإصلاح البطاقات والحالة والصداقات والبحث": "Version 1.0.3.8: all online functions go through one clear address, fixing cards, status, friends and search"});
 Object.assign(I18N.fr,{"الإصدار 1.0.3.8: كل وظائف الأونلاين تمر عبر عنوان واحد واضح، لإصلاح البطاقات والحالة والصداقات والبحث": "Version 1.0.3.8 : toutes les fonctions en ligne passent par une seule adresse claire, pour corriger cartes, statut, amis et recherche"});
+Object.assign(I18N.en,{"حذف الصديق": "Remove friend", "حذف": "Remove", "هل تريد حذف {n} من أصدقائك؟": "Remove {n} from your friends?", "الإصدار 1.0.3.10: الموسيقى تبدأ فور انتهاء شاشة البداية، وحذف الصديق بتأكيد، وإضافة لاعب من البحث لا تمسح بقية النتائج": "Version 1.0.3.10: the music starts as soon as the opening screen ends, friends are removed after confirmation, and adding a player from search keeps the other results"});
 Object.assign(I18N.en,{"الإصدار 1.0.3.9: رسالة النسخ والإشعارات في الأونلاين تظهر لحظات ثم تختفي وحدها": "Version 1.0.3.9: copy and online notices appear for a moment, then disappear by themselves"});
+Object.assign(I18N.fr,{"حذف الصديق": "Supprimer l'ami", "حذف": "Supprimer", "هل تريد حذف {n} من أصدقائك؟": "Supprimer {n} de vos amis ?", "الإصدار 1.0.3.10: الموسيقى تبدأ فور انتهاء شاشة البداية، وحذف الصديق بتأكيد، وإضافة لاعب من البحث لا تمسح بقية النتائج": "Version 1.0.3.10 : la musique démarre dès la fin de l'écran d'accueil, un ami est supprimé après confirmation, et ajouter un joueur depuis la recherche garde les autres résultats"});
 Object.assign(I18N.fr,{"الإصدار 1.0.3.9: رسالة النسخ والإشعارات في الأونلاين تظهر لحظات ثم تختفي وحدها": "Version 1.0.3.9 : la copie et les notices en ligne apparaissent un instant puis disparaissent seules"});
 Object.assign(I18N.en,{"الأصوات: صوت الفوز في لودو والشطرنج عاد كما كان": "Sounds: the win sound in Ludo and chess is back to how it was", "ألوان طاولات لودو صارت طبيعية محايدة بدل الدافئة، مع تباين واضح": "Ludo table colours are now natural and neutral instead of warm, with clear contrast"});
 Object.assign(I18N.fr,{"الأصوات: صوت الفوز في لودو والشطرنج عاد كما كان": "Sons : le son de victoire dans Ludo et aux échecs est revenu comme avant", "ألوان طاولات لودو صارت طبيعية محايدة بدل الدافئة، مع تباين واضح": "Les couleurs des plateaux Ludo sont naturelles et neutres au lieu de chaudes, avec un contraste net"});
