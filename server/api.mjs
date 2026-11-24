@@ -307,6 +307,14 @@ export default async (req) => {
       return json(200, await handleLudoSave(uid, await req.json()));
     }
 
+    // 1.0.3.7: every player function also goes through this one plain address: POST /api/call {name, ...args}
+    if (path === "call" && req.method === "POST") {
+      const b = await req.json().catch(() => ({}));
+      const name = String(b.name ?? "");
+      if (!Object.prototype.hasOwnProperty.call(RPC, name)) return json(404, { error: "unknown_rpc" });
+      return json(200, await asPlayer(uid, (client) => callRpc(client, name, b)));
+    }
+
     if (path.startsWith("rpc/") && req.method === "POST") {
       const name = path.slice(4);
       if (!(name in RPC)) return json(404, { error: "unknown_rpc" });
