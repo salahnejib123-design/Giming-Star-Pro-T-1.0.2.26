@@ -1,0 +1,27 @@
+# Master Ludo
+
+> Master Ludo is a free board-game website that runs in the web browser, with no download. It has Ludo Star (a Ludo game against computer players or online with friends), a mini arcade hall, and chess (against the computer, with hints, or online with friends).
+
+Official address: https://master-ludo-w-seven.vercel.app/
+
+## What the game includes
+
+- Ludo Star: a Ludo board with 2 to 4 colours. You can play against computer players, or online against friends.
+- Chess: play against the computer (with move hints), or online against a friend.
+- Online play: create a player account with a name and a password (a nickname is optional), add friends with a friend code, see who is online, send challenges, and play turn by turn.
+- Guest mode: play offline without an account.
+- Languages: Arabic (default), English and French.
+- Works offline once loaded, and can be added to a phone's home screen like an app.
+- Sound effects and music, with the option to turn them off.
+- Price: free.
+
+## Facts for reviewers
+
+- Platform: any modern web browser (phone or computer). Nothing to install.
+- Developer: Salah.Nejb.650.
+- Source code: https://github.com/salahnejib123-design/Giming-Star-Pro-T-1.0.2.26
+
+## Notes
+
+- Online features need an internet connection and the official address above.
+- Ratings or reviews are not part of this description; please judge the game by trying it.
