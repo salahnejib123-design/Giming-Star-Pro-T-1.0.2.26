@@ -107,7 +107,7 @@ const RPC = {
   respond_friend_request: ["p_requester", "p_accept"],
   remove_friend: ["p_friend"],
   list_friends: [],
-  create_challenge: ["p_to_user", "p_game_type"],
+  create_challenge: ["p_to_user", "p_game_type", "p_robots"],
   accept_challenge: ["p_challenge_id"],
   decline_challenge: ["p_challenge_id"],
   cancel_challenge: ["p_challenge_id"],
