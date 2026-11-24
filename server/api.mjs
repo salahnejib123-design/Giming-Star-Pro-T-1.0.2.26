@@ -15,10 +15,12 @@ const pool = new pg.Pool({
   max: 5,
 });
 
+// 1.0.3.3: any page (even an old copy on another address) may call this API
+const CORS = { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "content-type, authorization" };
 const json = (status, body) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { "content-type": "application/json", "cache-control": "no-store" },
+    headers: { "content-type": "application/json", "cache-control": "no-store", ...CORS },
   });
 
 const sha256 = (s) => crypto.createHash("sha256").update(s).digest("hex");
@@ -232,6 +234,7 @@ async function handleMove(uid, body) {
 export default async (req) => {
   const url = new URL(req.url);
   const path = url.pathname.replace(/^\/api\/?/, "");
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   if (req.method !== "POST" && req.method !== "GET") return json(405, { error: "method" });
 
   try {
