@@ -6,10 +6,10 @@
 <meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Master Ludo ws</title>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Master Ludo ws", "alternateName": ["Master Ludo", "ماستر لودو", "Master Ludo ws", "Master Ludo w seven", "ماستر لودو"], "url": "https://master-ludo-w-seven.vercel.app/", "inLanguage": "ar"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Master Ludo ws", "description": "لعبة ليدو وشطرنج مجانية تعمل من المتصفح بدون تحميل. تلعب ليدو بقواعد كاملة، وتتحدى أصدقاءك أونلاين، وتضيف روبوتات بثلاث قوى (سهل، متوسط، صعب)، وتلعب الشطرنج أونلاين، وفيها صالة ألعاب مصغّرة وإنجازات ومهام يومية وسجل للمباريات. تدعم العربية والإنجليزية والفرنسية والإسبانية والكورية.", "alternateName": ["Master Ludo", "ماستر لودو", "Master Ludo ws", "Master Ludo w seven", "ماستر لودو"], "url": "https://master-ludo-w-seven.vercel.app/", "inLanguage": "ar"}</script>
 <meta name="robots" content="index,follow">
 <meta name="google-site-verification" content="vg9xHK12pdZE-18hPjQ5stEiOeEEj-1WRtIe7cxsWUc" />
-<meta name="description" content="Master Ludo ws (ماستر لودو): العب ليدو وشطرنج أونلاين مع أصدقائك، تحدَّ صديقاً وأضف روبوتات، أو العب ضد الروبوت مباشرة من المتصفح بدون تحميل، مع صالة ألعاب مصغّرة.">
+<meta name="description" content="Master Ludo ws (ماستر لودو): لعبة ليدو وشطرنج مجانية من المتصفح بدون تحميل، تحدَّ أصدقاءك أونلاين، أضف روبوتات بثلاث قوى، والعب ضد الروبوت، مع صالة ألعاب مصغّرة.">
 <link rel="canonical" href="https://master-ludo-w-seven.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Master Ludo ws">
@@ -183,6 +183,20 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .sw[aria-pressed=true]{border-color:#fff;transform:scale(1.15)}
 .modal{position:fixed;inset:0;display:grid;place-items:center;padding:16px;background:rgba(3,14,56,.72);z-index:50}
 #m-ask,#m-robots{z-index:60}
+.ast-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:flex-start}
+.ast-w{display:inline-flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;color:inherit;cursor:pointer;font:inherit}
+.ast-w small{font-size:.74rem;opacity:.85}
+.ast{position:relative;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;color:#fff;font:800 13px/1 system-ui,sans-serif;letter-spacing:.6px;display:grid;place-items:center;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.75) 0,transparent 24%),radial-gradient(circle at 66% 72%,rgba(0,0,0,.30) 0 14%,transparent 15%),radial-gradient(circle at 44% 56%,rgba(0,0,0,.18) 0 9%,transparent 10%),radial-gradient(circle at 40% 40%,#9aa3b8,#4b5164 62%,#2a2f3e);box-shadow:inset -6px -8px 14px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.35);transition:transform .2s ease,box-shadow .2s ease;animation:astFloat 5s ease-in-out infinite}
+.ast-w:nth-child(2n) .ast{animation-delay:-1.3s}.ast-w:nth-child(3n) .ast{animation-delay:-2.6s}
+.ast[aria-pressed=true]{box-shadow:0 0 0 3px #ffd23a,0 0 18px rgba(255,210,58,.6),inset -6px -8px 14px rgba(0,0,0,.45)}
+.ast:hover{transform:scale(1.07)}
+.big-row .ast{width:72px;height:72px;font-size:15px}
+.lang-btns{display:flex;gap:10px;justify-content:center;margin-top:14px}
+@keyframes astFloat{50%{transform:translateY(-5px)}}
+@media (prefers-reduced-motion:reduce){.ast{animation:none}}
+.ol-tabs{width:100%;margin:10px 0}.ol-tabs button{flex:1;justify-content:center;gap:6px;font-size:.84rem}
+.ol-pane[hidden]{display:none!important}
+
 .rbg{display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:.88rem;width:100%}.rbg .chips{justify-content:center}   /* 1.0.3.12-13: confirmations and the robot pick sit above the online panel */
 .modal .card{width:100%;max-width:540px;max-height:90dvh;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:14px;animation:pop .14s ease-out;
   background:linear-gradient(#2a82ee,#0e46ad);border:3px solid #a9d6ff;border-radius:26px;box-shadow:0 10px 0 #082866,0 20px 40px rgba(0,0,30,.55),inset 0 3px 0 rgba(255,255,255,.35)}
@@ -791,7 +805,7 @@ html[data-theme=night] .splash{background-color:#04061a}
 .sp-load{position:absolute;left:0;right:0;margin:0;text-align:center;font-size:.82rem;color:#b9c8ee;letter-spacing:.02em;bottom:calc(env(safe-area-inset-bottom,0px) + max(150px,18vh) - 30px)}
 .splash.sp3 .credit-mini{position:absolute;left:0;right:0;margin:0;bottom:calc(env(safe-area-inset-bottom,0px) + 38px);padding-inline:16px}
 .sp-bar{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + max(150px,18vh));width:min(52vw,220px);height:6px;transform:translateX(-50%);border-radius:5px;background:rgba(255,255,255,.13);overflow:hidden}
-.sp-bar i{display:block;height:100%;transform-origin:left center;background:linear-gradient(90deg,#7ad7ff,#ffd23a);box-shadow:0 0 10px rgba(255,210,58,.6);will-change:transform;animation:spFill 6s linear forwards}
+.sp-bar i{display:block;height:100%;transform-origin:left center;background:linear-gradient(90deg,#7ad7ff,#ffd23a);box-shadow:0 0 10px rgba(255,210,58,.6);will-change:transform;animation:spFill 7s linear forwards}
 html[dir=rtl] .sp-bar i{transform-origin:right center}
 @keyframes spFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 [data-calm="1"] .sp-logo,[data-calm="1"] .sp-plate::after,[data-calm="1"] .sp-tw,[data-calm="1"] .sp-rays{animation:none}
@@ -1023,7 +1037,7 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
 
 <!-- ===== Login ===== -->
 <section id="s-login" class="screen" hidden>
-  <div class="langrow" role="group" aria-label="اللغة"><button class="lchip" data-setlang="ar" type="button" lang="ar">العربية</button><button class="lchip" data-setlang="en" type="button" lang="en">English</button><button class="lchip" data-setlang="fr" type="button" lang="fr">Français</button></div>
+  <div class="langrow ast-row" id="lnLangs" role="group" aria-label="اللغات"></div>
   <div class="brand">
     <svg class="logo" viewBox="0 0 512 512" width="96" height="96" role="img" aria-label="شعار Master Ludo"><use href="#lgSym"/></svg>
     <h1 class="title name-en">Master Ludo</h1>
@@ -1247,6 +1261,13 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
   </div>
 </div>
 
+<div class="modal" id="m-lang" hidden>
+  <div class="card glass" role="dialog" aria-modal="true" aria-labelledby="t-lang">
+    <h2 id="t-lang">اللغات</h2>
+    <div class="langrow ast-row big-row" id="mLangs" role="group" aria-label="اللغات"></div>
+    <div class="lang-btns"><button class="btn" type="button" id="langCancel">إلغاء</button><button class="btn primary" type="button" id="langOk">تم</button></div>
+  </div>
+</div>
 <div class="modal" id="m-online" hidden>
   <div class="card glass ol-card" role="dialog" aria-modal="true" aria-labelledby="t-online">
     <header class="ol-head">
@@ -1280,7 +1301,13 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
         </div>
         <button class="btn small" id="olLogout">خروج</button>
       </section>
-
+      <nav class="seg ol-tabs" role="tablist" aria-label="أقسام الأونلاين">
+        <button type="button" role="tab" data-olpane="chal" aria-pressed="false"><span class="ic" data-ic="swords"></span><span>التحديات</span></button>
+        <button type="button" role="tab" data-olpane="req" aria-pressed="false"><span class="ic" data-ic="user"></span><span>الطلبات</span></button>
+        <button type="button" role="tab" data-olpane="fri" aria-pressed="false"><span class="ic" data-ic="group"></span><span>أصدقائي</span></button>
+        <button type="button" role="tab" data-olpane="me" aria-pressed="false"><span class="ic" data-ic="gamepad"></span><span>حسابي</span></button>
+      </nav>
+      <div class="ol-pane" data-pane="chal">
       <section class="ol-section">
         <h3><span class="ic" data-ic="gamepad"></span>نوع المباراة</h3>
         <div class="seg" id="olGame" role="group" aria-label="نوع المباراة">
@@ -1293,32 +1320,35 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
           <div class="olcols" id="olCols"></div>
         </div>
       </section>
-
+      <section class="ol-section">
+        <h3><span class="ic" data-ic="swords"></span>التحديات<em class="ol-count" id="olChalN"></em></h3>
+        <div id="olChallenges" class="ol-list"></div>
+      </section>
+      </div>
+      <div class="ol-pane" data-pane="req">
+      <section class="ol-section">
+        <h3><span class="ic" data-ic="user"></span>طلبات الصداقة<em class="ol-count" id="olPendN"></em></h3>
+        <div id="olPending" class="ol-list"></div>
+      </section>
+      </div>
+      <div class="ol-pane" data-pane="fri">
       <section class="ol-section">
         <h3><span class="ic" data-ic="eye"></span>ابحث عن لاعب</h3>
         <label class="inp"><span class="ic" data-ic="search"></span><input id="olFind" type="text" maxlength="40" autocomplete="off" placeholder="اسم اللاعب أو رمزه"></label>
         <div id="olResults" class="ol-list"></div>
       </section>
-
-      <div class="ol-msg" id="olMsg" role="status"></div>
-
-      <section class="ol-section">
-        <h3><span class="ic" data-ic="user"></span>طلبات الصداقة<em class="ol-count" id="olPendN"></em></h3>
-        <div id="olPending" class="ol-list"></div>
-      </section>
-      <section class="ol-section">
-        <h3><span class="ic" data-ic="swords"></span>التحديات<em class="ol-count" id="olChalN"></em></h3>
-        <div id="olChallenges" class="ol-list"></div>
-      </section>
       <section class="ol-section">
         <h3><span class="ic" data-ic="group"></span>أصدقاؤك<em class="ol-count" id="olFriN"></em></h3>
         <div id="olFriends" class="ol-list"></div>
       </section>
-
+      </div>
+      <div class="ol-pane" data-pane="me">
       <div class="seg ol-avsel" role="group" aria-label="شكل صورتك">
         <button type="button" data-av="person" aria-pressed="true"><span class="ic" data-ic="user"></span>شخص</button>
         <button type="button" data-av="robot" aria-pressed="false"><span class="ic" data-ic="bot"></span>روبوت</button>
       </div>
+      </div>
+      <div class="ol-msg" id="olMsg" role="status"></div>
     </div>
     <button class="btn primary" data-close="m-online">إغلاق</button>
   </div>
@@ -1377,8 +1407,8 @@ html[dir=rtl] .sp-bar i{transform-origin:right center}
       <button class="btn blue" id="btnFsToggle">ملء الشاشة</button>
     </div>
     <div class="pane" data-pane="look" hidden>
-      <div class="f" style="gap:8px"><span class="rl"><i class="ic" data-ic="globe"></i><span>اللغة</span></span>
-        <div class="chips"><button class="chip" data-setlang="ar" aria-pressed="false" lang="ar">العربية</button><button class="chip" data-setlang="en" aria-pressed="false" lang="en">English</button><button class="chip" data-setlang="fr" aria-pressed="false" lang="fr">Français</button></div>
+      <div class="f" style="gap:8px"><span class="rl"><i class="ic" data-ic="globe"></i><span>اللغات</span></span>
+        <div class="langrow ast-row" id="stLangs" role="group" aria-label="اللغات"></div>
       </div>
       <div class="f" style="gap:8px"><span class="rl"><i class="ic" data-ic="moon"></i><span>وضع الألوان</span></span>
         <div class="chips"><button class="chip" data-key="theme" data-val="day" aria-pressed="false">نهاري</button><button class="chip" data-key="theme" data-val="night" aria-pressed="false">ليلي</button><button class="chip" data-key="theme" data-val="auto" aria-pressed="false">تلقائي</button></div>
@@ -1939,7 +1969,7 @@ if (false) module.exports = { TRACK, HOME, START, SYM, FIN, absIdx, isSafe, newG
 
 const APP_NAME = 'Master Ludo';       // fixed English name: never translated
 const ONESIGNAL_APP_ID = 'a65eeca1-05fa-40ae-a172-ddbd75fc14f0';   // OneSignal app id (public)
-const APP_VERSION = '1.0.3.20';
+const APP_VERSION = '1.0.3.21';
 /* ===== App infrastructure: storage, audio, helpers ===== */
 const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"512\" height=\"512\">\n<defs>\n<radialGradient id=\"lbg\" cx=\"50%\" cy=\"32%\" r=\"80%\"><stop offset=\"0\" stop-color=\"#6ccaff\"/><stop offset=\"0.5\" stop-color=\"#1f7be6\"/><stop offset=\"1\" stop-color=\"#0a2c80\"/></radialGradient>\n<linearGradient id=\"lstar\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6b0\"/><stop offset=\"0.5\" stop-color=\"#ffcf2e\"/><stop offset=\"1\" stop-color=\"#f29a00\"/></linearGradient>\n<linearGradient id=\"lpawn\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff8a95\"/><stop offset=\"0.55\" stop-color=\"#ef3347\"/><stop offset=\"1\" stop-color=\"#a5132b\"/></linearGradient>\n<linearGradient id=\"lgloss\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0.55\"/><stop offset=\"1\" stop-color=\"#fff\" stop-opacity=\"0\"/></linearGradient>\n<filter id=\"lsh\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"9\" flood-color=\"#04174f\" flood-opacity=\"0.55\"/></filter>\n</defs>\n<rect width=\"512\" height=\"512\" rx=\"112\" fill=\"url(#lbg)\"/>\n<g opacity=\"0.16\" fill=\"#fff\"><path d=\"M256 256 L120 -20 L200 -20Z\"/><path d=\"M256 256 L330 -20 L410 -20Z\"/><path d=\"M256 256 L532 120 L532 200Z\"/><path d=\"M256 256 L-20 330 L-20 410Z\"/><path d=\"M256 256 L390 532 L310 532Z\"/><path d=\"M256 256 L60 532 L140 532Z\"/></g>\n<rect x=\"9\" y=\"9\" width=\"494\" height=\"494\" rx=\"104\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.7\" stroke-width=\"7\"/>\n<path d=\"M24 150 Q24 24 150 24 H362 Q488 24 488 150 Q256 120 24 150Z\" fill=\"url(#lgloss)\" opacity=\"0.5\"/>\n<g filter=\"url(#lsh)\">\n<polygon points=\"256,46 305,168 436,176 335,260 368,388 256,318 144,388 177,260 76,176 207,168\" fill=\"url(#lstar)\" stroke=\"#b36b00\" stroke-width=\"9\" stroke-linejoin=\"round\"/>\n</g>\n<polygon points=\"256,86 291,176 387,182 313,243 337,336 256,285\" fill=\"#fff\" opacity=\"0.22\"/>\n<g filter=\"url(#lsh)\" stroke=\"#6a0e20\" stroke-width=\"8\" stroke-linejoin=\"round\" fill=\"url(#lpawn)\">\n<circle cx=\"256\" cy=\"232\" r=\"38\"/>\n<rect x=\"218\" y=\"268\" width=\"76\" height=\"17\" rx=\"8.5\"/>\n<path d=\"M226 285 Q242 330 232 380 L280 380 Q270 330 286 285 Z\"/>\n<ellipse cx=\"256\" cy=\"392\" rx=\"66\" ry=\"19\"/>\n</g>\n<ellipse cx=\"243\" cy=\"219\" rx=\"12\" ry=\"9\" fill=\"#fff\" opacity=\"0.7\"/>\n<g filter=\"url(#lsh)\"><rect x=\"332\" y=\"330\" width=\"126\" height=\"126\" rx=\"30\" fill=\"#fff\" stroke=\"#1d4fb0\" stroke-width=\"8\"/></g>\n<g fill=\"#1b2f7a\"><circle cx=\"364\" cy=\"362\" r=\"12\"/><circle cx=\"426\" cy=\"362\" r=\"12\"/><circle cx=\"395\" cy=\"393\" r=\"12\"/><circle cx=\"364\" cy=\"424\" r=\"12\"/><circle cx=\"426\" cy=\"424\" r=\"12\"/></g>\n</svg>";
 const PCOL = ['#ef3347', '#1fb85a', '#ffc21a', '#2b7de9'];
@@ -2003,14 +2033,15 @@ function confetti() {
 }
 
 /* ===== i18n core: Arabic (source), English, French. T('arabic source', {vars}) ===== */
-const LANGS = { ar: { name: 'العربية', dir: 'rtl' }, en: { name: 'English', dir: 'ltr' }, fr: { name: 'Français', dir: 'ltr' } };
+const LANGS = { ar: { name: 'العربية', dir: 'rtl' }, en: { name: 'English', dir: 'ltr' }, fr: { name: 'Français', dir: 'ltr' }, es: { name: 'Español', dir: 'ltr' }, ko: { name: '한국어', dir: 'ltr' } };
+const LANG_LIST = [['ar', 'العربية', 'AR'], ['en', 'English', 'EN'], ['fr', 'Français', 'FR'], ['es', 'Español', 'ES'], ['ko', '한국어', 'KO']];
 let LANG = LANGS[settings.lang] ? settings.lang : 'en';
-const I18N = { en: {}, fr: {} };
+const I18N = { en: {}, fr: {}, es: {}, ko: {} };
 const MISSING = new Set();
 const AR_RE = /[؀-ۿ]/;
 function T(s, v) {
   let r = s;
-  if (LANG !== 'ar') { const d = I18N[LANG]; if (d && Object.prototype.hasOwnProperty.call(d, s)) r = d[s]; else if (AR_RE.test(s)) MISSING.add(s); }
+  if (LANG !== 'ar') { const d = I18N[LANG]; if (d && Object.prototype.hasOwnProperty.call(d, s)) r = d[s]; else if (I18N.en && Object.prototype.hasOwnProperty.call(I18N.en, s)) r = I18N.en[s]; if (AR_RE.test(r) && AR_RE.test(s)) MISSING.add(s); }
   if (v) {
     r = r.replace(/\{(\w+)\?([^:}]*):([^}]*)\}/g, (m, k, one, many) => ((LANG === 'fr' ? +v[k] < 2 : +v[k] === 1) ? one : many));
     r = r.replace(/\{(\w+)\}/g, (m, k) => (k in v ? v[k] : m));
@@ -3043,7 +3074,7 @@ function layout() {
     if (!G.seats[c]) continue;
     for (let i = 0; i < 4; i++) { const s = spotOf(c, i, G.pos[c][i]); s.c = c; s.i = i; (groups[s.k] = groups[s.k] || []).push(s); }
   }
-  board.style.setProperty('--step', (settings.speed === 'fast' ? 0.14 : 0.26) + 's');
+  board.style.setProperty('--step', ((CG && CG.online) ? 0.1 : settings.speed === 'fast' ? 0.14 : 0.26) + 's');
   for (const k in groups) {
     const arr = groups[k], n = arr.length;
     arr.forEach((s, idx) => {
@@ -4329,8 +4360,8 @@ function chEnd(st) {
   if (CG.online) {
     const winSide = st.result === 'w' ? 1 : st.result === 'b' ? -1 : 0;
     $('chAgain').hidden = false; $('chAgain').textContent = T('تحدٍّ مرة أخرى'); $('chOverCoins').hidden = true;
-    chRender(); chUpdateUI();
     if (winSide && winSide === CO.color) { Sound.sfx('win'); confetti(); } else Sound.sfx('shield');
+    chRender(); chUpdateUI();
     setTimeout(() => { if (CG && CG.over) openModal('m-chess-over'); }, 700);
     return;
   }
@@ -4346,8 +4377,8 @@ function chEnd(st) {
   if (humans.length === 1 && bots.length === 1 && win === humans[0]) m.cnt.chessWins = (m.cnt.chessWins || 0) + 1;
   saveMeta(m); updateBadges();
   const wc = $('chOverCoins'); wc.textContent = msg; wc.hidden = !msg;
-  chRender(); chUpdateUI();
   if (win) { Sound.sfx('win'); confetti(); } else Sound.sfx('shield');
+  chRender(); chUpdateUI();
   setTimeout(() => { if (CG && CG.over) openModal('m-chess-over'); }, 700);
 }
 $('chAgain').addEventListener('click', () => {
@@ -7815,7 +7846,7 @@ function coOpen(row) {
     undone: 0, hints: 0, hint: null, startKey: u.keys[0], anim: null, online: true };
   runId++; kickId++; show('s-chess'); chRender(); chUpdateUI(); keepAwake(true);
   clearInterval(CO.poll); clearInterval(CO.tick);
-  CO.poll = setInterval(() => coFetch(false), 2000);
+  CO.poll = setInterval(() => coFetch(false), 700);
   CO.tick = setInterval(coTick, 250);
 }
 // the other side's move (or any newer state from the server) replaces the board
@@ -8644,9 +8675,9 @@ function enterApp(ev) {
   if (session()) afterLogin(); else show('s-login');
 }
 // 1.0.3.3: the splash is not skipped by a touch: it ends when its line finishes or after its time
-// the splash hands over to the menu by itself after 6 seconds: counted from the moment the bar is first painted (animationend), with a timer as a safety net
+// the splash hands over to the menu by itself after 7 seconds: counted from the moment the bar is first painted (animationend), with a timer as a safety net
 { const bar = $('splash').querySelector('.sp-bar i'); if (bar) bar.addEventListener('animationend', () => enterApp()); }
-enterApp.t = setTimeout(() => enterApp(), 6400);   // safety net, a little after the 6 s bar
+enterApp.t = setTimeout(() => enterApp(), 7400);   // safety net, a little after the 7 s bar
 // no tap happened yet: the first touch on the menu unlocks the sound (browsers keep it silent until then) and asks for notifications once
 (() => {
   const evs = ['pointerup', 'touchend', 'click', 'mousedown', 'keydown'];
@@ -8671,6 +8702,8 @@ function relang() {
   document.querySelectorAll('[data-setlang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.setlang === LANG)));
   const run = (f) => { try { f(); } catch (e) { /* screen not ready */ } };
   run(() => { $('olShareName').setAttribute('aria-label', T('مشاركة الاسم')); $('olCopyName').setAttribute('aria-label', T('نسخ الاسم')); });
+  run(renderLangRows);
+  run(() => document.querySelector('#olHome .ol-tabs').setAttribute('aria-label', T('أقسام الأونلاين')));
   run(buildRules); run(renderFollow); run(renderMenuTexts); run(syncSettingsUI); run(arcRelang); run(lnFollowName);
   if (typeof G !== 'undefined' && G) { run(renderLog); run(refresh); }
   if (typeof CG !== 'undefined' && CG && !$('s-chess').hidden) { run(chUpdateUI); run(chRenderMoves); }
@@ -8682,7 +8715,33 @@ function setLang(l) {
   if (!LANGS[l]) return;
   LANG = l; settings.lang = l; saveSettings(); relang();
 }
-document.querySelectorAll('[data-setlang]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); Sound.init(); Sound.sfx('click'); setLang(b.dataset.setlang); }));
+// 1.0.3.21: language asteroids: the login and settings rows open the picker; inside the picker a tap applies the language at once
+let LANG_BEFORE = null;
+function langAstHTML(big, pressedOnly) {
+  return LANG_LIST.map(([c, n, code]) => `<button class="ast-w" type="button" data-setlang="${c}" lang="${c}" aria-label="${n}" aria-pressed="${LANG === c}"><span class="ast${big ? ' big' : ''}" aria-hidden="true">${code}</span><small>${n}</small></button>`).join('');
+}
+function renderLangRows() {
+  const rows = ['lnLangs', 'stLangs'].map((i) => document.getElementById(i)).filter(Boolean);
+  rows.forEach((el) => { el.innerHTML = LANG_LIST.map(([c, n, code]) => `<button class="ast-w" type="button" data-openlang="1" lang="${c}" aria-label="${n}" aria-pressed="${LANG === c}"><span class="ast" aria-hidden="true">${code}</span><small>${n}</small></button>`).join(''); });
+  const big = $('mLangs'); if (big) big.innerHTML = langAstHTML(true);
+}
+function openLangPicker() { LANG_BEFORE = LANG; renderLangRows(); openModal('m-lang'); }
+document.addEventListener('click', (e) => {
+  const open = e.target.closest && e.target.closest('[data-openlang]');
+  if (open) { e.stopPropagation(); Sound.init(); Sound.sfx('click'); openLangPicker(); return; }
+  const b = e.target.closest && e.target.closest('[data-setlang]');
+  if (b && b.closest('#m-lang')) { e.stopPropagation(); Sound.init(); Sound.sfx('click'); setLang(b.dataset.setlang); renderLangRows(); }
+});
+$('langOk').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); LANG_BEFORE = null; closeModal('m-lang'); });
+$('langCancel').addEventListener('click', () => { Sound.init(); Sound.sfx('click'); if (LANG_BEFORE && LANG_BEFORE !== LANG) setLang(LANG_BEFORE); LANG_BEFORE = null; closeModal('m-lang'); });
+// online sections (tabs), remembered like the settings tabs
+function olSetPane(name, save) {
+  document.querySelectorAll('#olHome .ol-pane').forEach((p) => { p.hidden = p.dataset.pane !== name; });
+  document.querySelectorAll('#olHome [data-olpane]').forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.olpane === name)));
+  if (save !== false) { settings.olPane = name; saveSettings(); }
+}
+document.querySelectorAll('[data-olpane]').forEach((t) => t.addEventListener('click', (e) => { e.stopPropagation(); Sound.init(); Sound.sfx('click'); olSetPane(t.dataset.olpane); }));
+olSetPane(['chal', 'req', 'fri', 'me'].includes(settings.olPane) ? settings.olPane : 'chal', false);
 
 // loads the OneSignal page SDK only when an App ID is set; the game works the same without it
 function startOneSignal() {
@@ -9107,6 +9166,10 @@ document.addEventListener('contextmenu', (e) => { if (!e.target.closest || !e.ta
 document.addEventListener('dragstart', (e) => e.preventDefault());
 Object.assign(I18N.en, { 'عدد الروبوتات': 'Number of robots', 'قوة الروبوتات': 'Robot strength', 'أرسل التحدي': 'Send challenge' });
 Object.assign(I18N.fr, { 'عدد الروبوتات': 'Nombre de robots', 'قوة الروبوتات': 'Force des robots', 'أرسل التحدي': 'Envoyer le défi' });
+Object.assign(I18N.es, { 'أقسام الأونلاين': 'Secciones en línea', 'اللغات': 'Idiomas', 'تم': 'Listo', 'إلغاء': 'Cancelar', 'التحديات': 'Desafíos', 'الطلبات': 'Solicitudes', 'أصدقائي': 'Amigos', 'حسابي': 'Cuenta', 'الخروج من المباراة': 'Abandonar la partida', 'نعم، اخرج': 'Sí, salir', 'هل تخرج؟ ستنتهي المباراة نهائياً.': '¿Salir? La partida terminará definitivamente.', 'هل تخرج؟ سيكمل صديقك مع الروبوتات إن أراد.': '¿Salir? Tu amigo puede seguir con los robots si quiere.', 'هل تخرج؟ سينتهي اللعب وسيفوز صديقك.': '¿Salir? La partida termina y gana tu amigo.', 'عدد الروبوتات': 'Número de robots', 'قوة الروبوتات': 'Fuerza de los robots', 'أرسل التحدي': 'Enviar desafío' });
+Object.assign(I18N.ko, { 'أقسام الأونلاين': '온라인 메뉴', 'اللغات': '언어', 'تم': '완료', 'إلغاء': '취소', 'التحديات': '도전', 'الطلبات': '요청', 'أصدقائي': '친구', 'حسابي': '계정', 'الخروج من المباراة': '대국 나가기', 'نعم، اخرج': '네, 나갑니다', 'هل تخرج؟ ستنتهي المباراة نهائياً.': '나가시겠습니까? 대국이 완전히 끝납니다.', 'هل تخرج؟ سيكمل صديقك مع الروبوتات إن أراد.': '나가시겠습니까? 친구가 원하면 로봇과 계속할 수 있습니다.', 'هل تخرج؟ سينتهي اللعب وسيفوز صديقك.': '나가시겠습니까? 게임이 끝나고 친구가 이깁니다.', 'عدد الروبوتات': '로봇 수', 'قوة الروبوتات': '로봇 강도', 'أرسل التحدي': '도전 보내기' });
+Object.assign(I18N.en, { 'أقسام الأونلاين': 'Online sections', 'اللغات': 'Languages', 'حسابي': 'Account', 'أصدقائي': 'Friends', 'الطلبات': 'Requests', 'التحديات': 'Challenges' });
+Object.assign(I18N.fr, { 'أقسام الأونلاين': 'Sections en ligne', 'اللغات': 'Langues', 'حسابي': 'Compte', 'أصدقائي': 'Amis', 'الطلبات': 'Demandes', 'التحديات': 'Défis' });
 Object.assign(I18N.en, { 'الخروج من المباراة': 'Leave the match', 'هل تخرج؟ ستنتهي المباراة نهائياً.': 'Leave? The match will end for good.', 'هل تخرج؟ سيكمل صديقك مع الروبوتات إن أراد.': 'Leave? Your friend can continue with the robots if they want.', 'هل تخرج؟ سينتهي اللعب وسيفوز صديقك.': 'Leave? The game ends and your friend wins.', 'نعم، اخرج': 'Yes, leave' });
 Object.assign(I18N.fr, { 'الخروج من المباراة': 'Quitter la partie', 'هل تخرج؟ ستنتهي المباراة نهائياً.': 'Quitter ? La partie se termine définitivement.', 'هل تخرج؟ سيكمل صديقك مع الروبوتات إن أراد.': 'Quitter ? Votre ami peut continuer avec les robots s’il le souhaite.', 'هل تخرج؟ سينتهي اللعب وسيفوز صديقك.': 'Quitter ? La partie se termine et votre ami gagne.', 'نعم، اخرج': 'Oui, quitter' });
 // 1.0.3.19: the last Arabic-only texts in English and French
