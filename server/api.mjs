@@ -99,6 +99,7 @@ async function asPlayer(uid, fn) {
 // Whitelisted player RPCs: name -> ordered parameter names.
 const RPC = {
   heartbeat: [],
+  leaderboard: [],
   get_my_profile: [],
   find_user_by_username: ["p_username"],
   search_users: ["p_query"],
