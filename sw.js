@@ -1,7 +1,7 @@
 /* Master Ludo - service worker: offline-first app shell */
 // OneSignal (phone notifications). If the file cannot load, the game keeps working.
 try { importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js'); } catch (e) { /* offline or blocked */ }
-const CACHE = 'master-ludo-1.0.3.29';
+const CACHE = 'master-ludo-1.0.3.30';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './favicon-48.png', './offline.html', './music.mp3'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {
@@ -11,7 +11,7 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.pathname.endsWith('version.json') || url.pathname.endsWith('notifications.json')) return;   // always ask the network for these two
+  if (url.pathname.endsWith('version.json') || url.pathname.endsWith('version.txt') || url.pathname.endsWith('notifications.json')) return;   // always ask the network for these
   const sameOrigin = url.origin === location.origin;
   const fonts = /(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if (!sameOrigin && !fonts) return;

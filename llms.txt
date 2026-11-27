@@ -24,4 +24,5 @@ Official address: https://master-ludo-w-seven.vercel.app/
 ## Notes
 
 - Online features need an internet connection and the official address above.
+- Current version: read the plain text file https://master-ludo-w-seven.vercel.app/version.txt (it holds only the version number, and it changes with every release). The same version is also in https://master-ludo-w-seven.vercel.app/version.json.
 - Ratings or reviews are not part of this description; please judge the game by trying it.
