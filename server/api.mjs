@@ -291,6 +291,16 @@ export default async (req) => {
     const uid = await authUser(req);
     if (!uid) return json(401, { error: "not_authenticated" });
 
+    // 1.0.3.28: the signed-in player sets a new password (6 characters at least, like sign-up)
+    if (path === "change-password" && req.method === "POST") {
+      const { new_password } = await req.json().catch(() => ({}));
+      if (typeof new_password !== "string" || new_password.length < 6 || new_password.length > 64) {
+        return json(400, { error: "weak_password" });
+      }
+      await pool.query("SELECT change_password($1, $2)", [uid, hashPassword(new_password)]);
+      return json(200, { ok: true });
+    }
+
     if (path === "move" && req.method === "POST") {
       return json(200, await handleMove(uid, await req.json()));
     }
