@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
 Sitemap: https://master-ludo-w-seven.vercel.app/sitemap.xml
-Sitemap: https://master-ludo-w-seven.vercel.app/sitemap2.xml
